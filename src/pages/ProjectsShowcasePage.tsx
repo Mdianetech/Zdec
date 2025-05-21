@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   Heart, 
   MessageCircle, 
@@ -8,12 +8,9 @@ import {
   Image as ImageIcon,
   Play,
   Plus,
-  Send,
-  X,
-  ChevronLeft,
-  ChevronRight
+  Send
 } from 'lucide-react';
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, updateDoc, doc, arrayUnion, arrayRemove, where } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, updateDoc, doc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -26,14 +23,11 @@ export default function ProjectsShowcasePage() {
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(true);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [filter, setFilter] = useState('all');
   const { currentUser } = useAuth();
 
   useEffect(() => {
     const q = query(
       collection(db, 'projects'),
-      filter !== 'all' ? where('category', '==', filter) : undefined,
       orderBy('createdAt', 'desc')
     );
 
@@ -50,7 +44,7 @@ export default function ProjectsShowcasePage() {
     });
 
     return () => unsubscribe();
-  }, [currentUser, filter]);
+  }, [currentUser]);
 
   const handleLike = async (projectId: string) => {
     if (!currentUser) return;
@@ -61,12 +55,12 @@ export default function ProjectsShowcasePage() {
     if (project?.hasLiked) {
       await updateDoc(projectRef, {
         likes: arrayRemove(currentUser.uid),
-        likesCount: (project.likesCount || 0) - 1
+        likesCount: (project.likes || 0) - 1
       });
     } else {
       await updateDoc(projectRef, {
         likes: arrayUnion(currentUser.uid),
-        likesCount: ((project?.likesCount || 0) + 1)
+        likesCount: ((project?.likes || 0) + 1)
       });
     }
   };
@@ -100,26 +94,6 @@ export default function ProjectsShowcasePage() {
       console.log('Erreur lors du partage:', error);
     }
   };
-
-  const handleImageNavigation = (direction: 'prev' | 'next', project: Project) => {
-    if (direction === 'prev') {
-      setCurrentImageIndex(prev => 
-        prev === 0 ? project.images.length - 1 : prev - 1
-      );
-    } else {
-      setCurrentImageIndex(prev => 
-        prev === project.images.length - 1 ? 0 : prev + 1
-      );
-    }
-  };
-
-  const categories = [
-    { id: 'all', name: 'Tous' },
-    { id: 'electrical', name: 'Installation électrique' },
-    { id: 'irve', name: 'Bornes IRVE' },
-    { id: 'domotics', name: 'Domotique' },
-    { id: 'network', name: 'Réseaux' }
-  ];
 
   if (loading) {
     return (
@@ -155,25 +129,6 @@ export default function ProjectsShowcasePage() {
         </div>
       </section>
 
-      {/* Filters */}
-      <div className="container py-8">
-        <div className="flex gap-4 overflow-x-auto pb-4">
-          {categories.map(category => (
-            <button
-              key={category.id}
-              onClick={() => setFilter(category.id)}
-              className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
-                filter === category.id
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              {category.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Projects Grid */}
       <section className="py-12">
         <div className="container">
@@ -192,46 +147,11 @@ export default function ProjectsShowcasePage() {
               >
                 {/* Image Gallery */}
                 <div className="relative aspect-video">
-                  <AnimatePresence mode="wait">
-                    <motion.img
-                      key={currentImageIndex}
-                      src={project.images[currentImageIndex]}
-                      alt={project.title}
-                      className="w-full h-full object-cover"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  </AnimatePresence>
-
-                  {project.images.length > 1 && (
-                    <>
-                      <button
-                        onClick={() => handleImageNavigation('prev', project)}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 p-1 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
-                      >
-                        <ChevronLeft className="h-5 w-5" />
-                      </button>
-                      <button
-                        onClick={() => handleImageNavigation('next', project)}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
-                      >
-                        <ChevronRight className="h-5 w-5" />
-                      </button>
-                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-                        {project.images.map((_, idx) => (
-                          <div
-                            key={idx}
-                            className={`h-1.5 w-1.5 rounded-full transition-colors ${
-                              idx === currentImageIndex ? 'bg-white' : 'bg-white/50'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    </>
-                  )}
-
+                  <img
+                    src={project.images[0]}
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                  />
                   {project.video && (
                     <button className="absolute inset-0 flex items-center justify-center bg-black/30 group hover:bg-black/40 transition-colors">
                       <Play className="h-12 w-12 text-white opacity-80 group-hover:opacity-100 transition-opacity" />
@@ -263,7 +183,7 @@ export default function ProjectsShowcasePage() {
                         }`}
                       >
                         <Heart className={`h-5 w-5 ${project.hasLiked ? 'fill-current' : ''}`} />
-                        <span>{project.likesCount || 0}</span>
+                        <span>{project.likes}</span>
                       </button>
                       
                       <button 
