@@ -7,36 +7,16 @@ import {
   Clock, 
   Image as ImageIcon,
   Play,
-  Plus
+  Plus,
+  Send
 } from 'lucide-react';
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, updateDoc, doc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useAuth } from '../contexts/AuthContext';
-
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  images: string[];
-  video?: string;
-  likes: number;
-  hasLiked: boolean;
-  comments: Comment[];
-  createdAt: Date;
-  category: string;
-  location: string;
-}
-
-interface Comment {
-  id: string;
-  userId: string;
-  userName: string;
-  userImage?: string;
-  content: string;
-  createdAt: Date;
-}
+import { Project, Comment } from '../types/project';
+import { Link } from 'react-router-dom';
 
 export default function ProjectsShowcasePage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -56,6 +36,7 @@ export default function ProjectsShowcasePage() {
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate(),
+        hasLiked: doc.data().likes?.includes(currentUser?.uid)
       })) as Project[];
       
       setProjects(projectData);
@@ -63,10 +44,25 @@ export default function ProjectsShowcasePage() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [currentUser]);
 
   const handleLike = async (projectId: string) => {
-    // Implémenter la logique de like
+    if (!currentUser) return;
+
+    const projectRef = doc(db, 'projects', projectId);
+    const project = projects.find(p => p.id === projectId);
+    
+    if (project?.hasLiked) {
+      await updateDoc(projectRef, {
+        likes: arrayRemove(currentUser.uid),
+        likesCount: (project.likes || 0) - 1
+      });
+    } else {
+      await updateDoc(projectRef, {
+        likes: arrayUnion(currentUser.uid),
+        likesCount: ((project?.likes || 0) + 1)
+      });
+    }
   };
 
   const handleComment = async (projectId: string) => {
@@ -87,9 +83,16 @@ export default function ProjectsShowcasePage() {
     }
   };
 
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+  const handleShare = async (project: Project) => {
+    try {
+      await navigator.share({
+        title: project.title,
+        text: project.description,
+        url: window.location.href
+      });
+    } catch (error) {
+      console.log('Erreur lors du partage:', error);
+    }
   };
 
   if (loading) {
@@ -116,7 +119,7 @@ export default function ProjectsShowcasePage() {
               Découvrez nos projets d'installation électrique, de bornes de recharge 
               et de domotique à travers la France.
             </p>
-            {currentUser?.uid === 'ADMIN_UID' && (
+            {currentUser?.uid === process.env.VITE_ADMIN_UID && (
               <button className="btn btn-primary inline-flex items-center gap-2">
                 <Plus className="h-5 w-5" />
                 Ajouter un projet
@@ -131,20 +134,15 @@ export default function ProjectsShowcasePage() {
         <div className="container">
           <motion.div 
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { 
-                opacity: 1,
-                transition: { staggerChildren: 0.1 }
-              }
-            }}
-            initial="hidden"
-            animate="visible"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, staggerChildren: 0.1 }}
           >
             {projects.map((project) => (
               <motion.div
                 key={project.id}
-                variants={fadeInUp}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 className="bg-white rounded-xl shadow-md overflow-hidden"
               >
                 {/* Image Gallery */}
@@ -189,7 +187,7 @@ export default function ProjectsShowcasePage() {
                       </button>
                       
                       <button 
-                        onClick={() => setSelectedProject(project.id)}
+                        onClick={() => setSelectedProject(selectedProject === project.id ? null : project.id)}
                         className="flex items-center gap-1 text-gray-500 hover:text-gray-700"
                       >
                         <MessageCircle className="h-5 w-5" />
@@ -197,7 +195,10 @@ export default function ProjectsShowcasePage() {
                       </button>
                     </div>
                     
-                    <button className="text-gray-500 hover:text-gray-700">
+                    <button 
+                      onClick={() => handleShare(project)}
+                      className="text-gray-500 hover:text-gray-700"
+                    >
                       <Share2 className="h-5 w-5" />
                     </button>
                   </div>
@@ -205,19 +206,20 @@ export default function ProjectsShowcasePage() {
                   {selectedProject === project.id && (
                     <div className="mt-6 pt-6 border-t">
                       <div className="mb-4">
-                        <textarea
-                          value={comment}
-                          onChange={(e) => setComment(e.target.value)}
-                          placeholder="Ajouter un commentaire..."
-                          className="input w-full"
-                          rows={3}
-                        />
-                        <div className="mt-2 flex justify-end">
+                        <div className="flex gap-4">
+                          <textarea
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            placeholder="Ajouter un commentaire..."
+                            className="input flex-1"
+                            rows={2}
+                          />
                           <button 
                             onClick={() => handleComment(project.id)}
-                            className="btn btn-primary"
+                            className="btn btn-primary self-end"
+                            disabled={!comment.trim()}
                           >
-                            Commenter
+                            <Send className="h-4 w-4" />
                           </button>
                         </div>
                       </div>
@@ -229,10 +231,10 @@ export default function ProjectsShowcasePage() {
                               <img
                                 src={comment.userImage}
                                 alt={comment.userName}
-                                className="h-8 w-8 rounded-full"
+                                className="h-8 w-8 rounded-full object-cover"
                               />
                             ) : (
-                              <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                              <div className="h-8 w-8 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center font-semibold">
                                 {comment.userName[0]}
                               </div>
                             )}
