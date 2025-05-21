@@ -4,12 +4,14 @@ export interface Project {
   description: string;
   images: string[];
   video?: string;
-  likes: number;
+  likes: string[];
+  likesCount: number;
   hasLiked: boolean;
   comments: Comment[];
   createdAt: Date;
   category: string;
   location: string;
+  userId: string;
 }
 
 export interface Comment {
