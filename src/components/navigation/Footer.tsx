@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Linkedin, Mail, Phone, MapPin, Zap } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -9,8 +9,8 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Zap className="h-6 w-6 text-primary-500" />
-              <span className="font-bold text-xl text-white">Zdec</span>
+              <img src="/logo.svg" alt="ZDEC" className="h-8 w-8" />
+              <span className="font-bold text-xl text-white">ZDEC</span>
             </div>
             <p className="mb-4 max-w-xs">
               Électricien certifié IRVE à Lyon. Spécialistes en installation électrique, bornes de recharge et réseaux.
@@ -101,7 +101,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-12 pt-8 border-t border-gray-800 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} Zdec. Tous droits réservés.</p>
+          <p>&copy; {new Date().getFullYear()} ZDEC. Tous droits réservés.</p>
           <div className="mt-2 space-x-4">
             <Link to="/privacy" className="hover:text-white hover:underline transition-colors">
               Politique de confidentialité

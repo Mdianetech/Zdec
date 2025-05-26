@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Zap, X, Menu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '../../utils/cn';
 
@@ -37,8 +37,8 @@ const Navbar = () => {
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
-              <Zap className="h-8 w-8 text-primary-600" />
-              <span className="font-bold text-xl text-gray-900">Zdec</span>
+              <img src="/logo.svg" alt="ZDEC" className="h-10 w-10" />
+              <span className="font-bold text-xl text-gray-900">ZDEC</span>
             </Link>
           </div>
 
@@ -102,8 +102,8 @@ const Navbar = () => {
               className="flex items-center gap-2"
               onClick={() => setMobileMenuOpen(false)}
             >
-              <Zap className="h-8 w-8 text-primary-600" />
-              <span className="font-bold text-xl text-gray-900">Zdec</span>
+              <img src="/logo.svg" alt="ZDEC" className="h-8 w-8" />
+              <span className="font-bold text-xl text-gray-900">ZDEC</span>
             </Link>
             <button
               type="button"

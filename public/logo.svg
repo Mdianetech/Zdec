@@ -1,3 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap" style="color:#3b66fb;">
-  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="1200" version="1.1" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
+ <g>
+  <path d="m600 100c-276.14 0-500 223.86-500 500s223.86 500 500 500 500-223.86 500-500-223.86-500-500-500zm0 50c248.53 0 450 201.47 450 450s-201.47 450-450 450-450-201.47-450-450 201.47-450 450-450z" fill="#1d2d8a"/>
+  <path d="m600 200-250 433.01 250 433.01 250-433.01zm0 86.603 176.78 306.22-176.78 306.22-176.78-306.22z" fill="#3498db"/>
+  <path d="m600 400-150 259.81 150 259.81 150-259.81zm0 51.962 106.07 183.85-106.07 183.85-106.07-183.85z" fill="#e67e22"/>
+ </g>
 </svg>
