@@ -8,11 +8,15 @@ import {
   Award, 
   Zap, 
   Clock, 
-  ShieldCheck 
+  ShieldCheck,
+  ChevronDown
 } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { useState } from 'react';
 
 const IrvePage = () => {
+  const [openFaqId, setOpenFaqId] = useState<number | null>(null);
+
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -84,22 +88,30 @@ const IrvePage = () => {
 
   const faqItems = [
     {
+      id: 1,
       question: 'Quelle est la différence entre les différentes puissances de charge ?',
       answer: 'Les bornes domestiques proposent généralement 3.7kW (charge lente) à 22kW (charge rapide). Le temps de charge varie en fonction de la puissance : une charge complète peut prendre de 1h à 8h selon la capacité de votre borne et de votre véhicule.'
     },
     {
+      id: 2,
       question: 'Suis-je éligible aux aides financières pour l\'installation d\'une borne ?',
       answer: 'Oui, plusieurs aides sont disponibles : crédit d\'impôt (jusqu\'à 300€), programme ADVENIR (jusqu\'à 960€ pour les particuliers, davantage pour les professionnels), et certaines aides locales. Notre certification IRVE vous permet d\'accéder à ces subventions.'
     },
     {
+      id: 3,
       question: 'L\'installation d\'une borne nécessite-t-elle des travaux importants ?',
       answer: 'Cela dépend de votre installation électrique actuelle. Dans certains cas, une simple connexion au tableau électrique suffit. Dans d\'autres situations, une mise aux normes ou un renforcement du système électrique peut être nécessaire. Nous réalisons systématiquement une visite technique pour évaluer ces besoins.'
     },
     {
+      id: 4,
       question: 'Combien de temps dure l\'installation d\'une borne de recharge ?',
       answer: 'Pour une installation standard dans une maison individuelle, comptez généralement une demi-journée à une journée. Pour des installations en copropriété ou plus complexes, les délais peuvent être plus importants, notamment en raison des validations administratives nécessaires.'
     },
   ];
+
+  const toggleFaq = (id: number) => {
+    setOpenFaqId(openFaqId === id ? null : id);
+  };
 
   return (
     <>
@@ -192,146 +204,7 @@ const IrvePage = () => {
         </div>
       </section>
 
-      {/* Certification */}
-      <section className="py-16 bg-gray-50">
-        <div className="container">
-          <motion.div 
-            className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <div>
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary-100 text-primary-700 text-sm font-medium mb-6">
-                <Award className="h-4 w-4 mr-2" />
-                Certification officielle
-              </div>
-              <h2 className="text-3xl font-bold mb-6">Pourquoi choisir un installateur certifié IRVE ?</h2>
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 bg-primary-100 rounded-full p-0.5">
-                    <Check className="h-4 w-4 text-primary-700" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Sécurité garantie</h4>
-                    <p className="text-gray-600">
-                      Une installation aux normes qui garantit la sécurité de votre domicile et de votre véhicule.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 bg-primary-100 rounded-full p-0.5">
-                    <Check className="h-4 w-4 text-primary-700" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Accès aux aides financières</h4>
-                    <p className="text-gray-600">
-                      Notre certification vous permet de bénéficier des subventions de l'État et des collectivités.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 bg-primary-100 rounded-full p-0.5">
-                    <Check className="h-4 w-4 text-primary-700" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Conformité aux exigences légales</h4>
-                    <p className="text-gray-600">
-                      Respect des normes NF C 15-100 et des réglementations spécifiques aux IRVE.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 bg-primary-100 rounded-full p-0.5">
-                    <Check className="h-4 w-4 text-primary-700" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Expertise et conseil</h4>
-                    <p className="text-gray-600">
-                      Un accompagnement personnalisé pour choisir la solution adaptée à vos besoins spécifiques.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <Link to="/contact" className="btn btn-primary">
-                Demander un devis gratuit
-              </Link>
-            </div>
-            <div className="rounded-xl overflow-hidden shadow-lg">
-              <img 
-                src="https://images.pexels.com/photos/6968428/pexels-photo-6968428.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-                alt="Installation borne de recharge"
-                className="w-full h-auto object-cover"
-              />
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Solutions for different clients */}
-      <section className="py-16 md:py-24 bg-white">
-        <div className="container">
-          <motion.div 
-            className="text-center max-w-3xl mx-auto mb-16"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Des solutions adaptées à tous les besoins
-            </h2>
-            <p className="text-lg text-gray-600">
-              Que vous soyez un particulier, une entreprise ou un gestionnaire de copropriété, 
-              nous proposons des solutions sur mesure pour répondre à vos besoins spécifiques.
-            </p>
-          </motion.div>
-
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            {clientTypes.map((type, index) => (
-              <motion.div 
-                key={index} 
-                variants={fadeInUp}
-                className="card overflow-hidden"
-              >
-                <div className="h-48 overflow-hidden">
-                  <img 
-                    src={type.image}
-                    alt={type.title}
-                    className="w-full h-full object-cover transition-transform hover:scale-105 duration-700"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">{type.title}</h3>
-                  <ul className="space-y-3 mb-6">
-                    {type.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <Check className="h-5 w-5 text-primary-600 flex-shrink-0 mt-0.5" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Link 
-                    to="/contact" 
-                    className="btn btn-outline w-full text-center"
-                  >
-                    En savoir plus
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* FAQ */}
+      {/* FAQ Section */}
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="container">
           <motion.div 
@@ -357,20 +230,43 @@ const IrvePage = () => {
 
           <div className="max-w-3xl mx-auto">
             <motion.div 
-              className="space-y-6"
+              className="space-y-4"
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
             >
-              {faqItems.map((item, index) => (
+              {faqItems.map((item) => (
                 <motion.div 
-                  key={index}
+                  key={item.id}
                   variants={fadeInUp}
-                  className="card p-6"
+                  className="bg-white rounded-lg shadow-sm overflow-hidden"
                 >
-                  <h3 className="text-lg font-semibold mb-2">{item.question}</h3>
-                  <p className="text-gray-600">{item.answer}</p>
+                  <button
+                    onClick={() => toggleFaq(item.id)}
+                    className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50"
+                  >
+                    <span className="font-medium">{item.question}</span>
+                    <ChevronDown 
+                      className={cn(
+                        "h-5 w-5 text-gray-500 transition-transform duration-200",
+                        openFaqId === item.id && "transform rotate-180"
+                      )} 
+                    />
+                  </button>
+                  <motion.div 
+                    initial={false}
+                    animate={{ 
+                      height: openFaqId === item.id ? "auto" : 0,
+                      opacity: openFaqId === item.id ? 1 : 0
+                    }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-6 pb-4 text-gray-600">
+                      {item.answer}
+                    </div>
+                  </motion.div>
                 </motion.div>
               ))}
             </motion.div>
