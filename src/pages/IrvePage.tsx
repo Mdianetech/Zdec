@@ -205,7 +205,7 @@ const IrvePage = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 md:py-24 bg-gray-50">
+      <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
         <div className="container">
           <motion.div 
             className="text-center max-w-3xl mx-auto mb-16"
@@ -215,11 +215,11 @@ const IrvePage = () => {
             viewport={{ once: true }}
           >
             <div className="flex justify-center mb-4">
-              <div className="bg-primary-100 p-2 rounded-full">
-                <HelpCircle className="h-8 w-8 text-primary-600" />
+              <div className="bg-primary-600 p-3 rounded-xl shadow-lg">
+                <HelpCircle className="h-8 w-8 text-white" />
               </div>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-800">
               Questions fréquentes
             </h2>
             <p className="text-lg text-gray-600">
@@ -240,17 +240,34 @@ const IrvePage = () => {
                 <motion.div 
                   key={item.id}
                   variants={fadeInUp}
-                  className="bg-white rounded-lg shadow-sm overflow-hidden"
+                  className={cn(
+                    "bg-white rounded-xl border-2 transition-all duration-200",
+                    openFaqId === item.id 
+                      ? "border-primary-500 shadow-lg" 
+                      : "border-transparent shadow-md hover:shadow-lg hover:border-primary-200"
+                  )}
                 >
                   <button
                     onClick={() => toggleFaq(item.id)}
-                    className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50"
+                    className={cn(
+                      "w-full px-6 py-4 text-left flex items-center justify-between transition-colors duration-200",
+                      openFaqId === item.id 
+                        ? "bg-primary-50" 
+                        : "hover:bg-gray-50"
+                    )}
                   >
-                    <span className="font-medium">{item.question}</span>
+                    <span className={cn(
+                      "font-semibold transition-colors duration-200",
+                      openFaqId === item.id ? "text-primary-700" : "text-gray-900"
+                    )}>
+                      {item.question}
+                    </span>
                     <ChevronDown 
                       className={cn(
-                        "h-5 w-5 text-gray-500 transition-transform duration-200",
-                        openFaqId === item.id && "transform rotate-180"
+                        "h-5 w-5 transition-all duration-300",
+                        openFaqId === item.id 
+                          ? "text-primary-600 transform rotate-180" 
+                          : "text-gray-400"
                       )} 
                     />
                   </button>
@@ -260,10 +277,13 @@ const IrvePage = () => {
                       height: openFaqId === item.id ? "auto" : 0,
                       opacity: openFaqId === item.id ? 1 : 0
                     }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ 
+                      height: { duration: 0.3, ease: "easeOut" },
+                      opacity: { duration: 0.2, ease: "easeIn" }
+                    }}
                     className="overflow-hidden"
                   >
-                    <div className="px-6 pb-4 text-gray-600">
+                    <div className="px-6 pb-4 text-gray-600 leading-relaxed">
                       {item.answer}
                     </div>
                   </motion.div>
