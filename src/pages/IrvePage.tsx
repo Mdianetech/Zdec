@@ -1,6 +1,16 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { BatteryCharging, Check, CreditCard, HelpCircle, Award, Zap, Clock, ShieldCheck } from 'lucide-react';
+import { 
+  BatteryCharging, 
+  Check, 
+  CreditCard, 
+  HelpCircle, 
+  Award, 
+  Zap, 
+  Clock, 
+  ShieldCheck 
+} from 'lucide-react';
+import { cn } from '../utils/cn';
 
 const IrvePage = () => {
   const fadeInUp = {
@@ -112,19 +122,19 @@ const IrvePage = () => {
               <div className="bg-white/20 p-1.5 rounded-full">
                 <BatteryCharging className="h-5 w-5 text-white" />
               </div>
-              <span className="text-primary-100 font-medium">Installateur certifié IRVE</span>
+              <span className="text-white font-medium">Installateur certifié IRVE</span>
             </motion.div>
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6 text-white">
               Installation de bornes de recharge pour véhicules électriques
             </h1>
-            <p className="text-lg md:text-xl text-primary-100 mb-8">
+            <p className="text-lg md:text-xl text-white mb-8">
               Confiez l'installation de votre borne de recharge à un professionnel certifié IRVE pour une solution sûre, efficace et éligible aux aides financières.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/contact" className="btn bg-white text-primary-600 hover:bg-gray-100 px-6 py-3 font-medium">
                 Demander un devis
               </Link>
-              <Link to="/contact" className="btn bg-primary-600 text-white hover:bg-primary-700 border border-primary-500 px-6 py-3 font-medium">
+              <Link to="/contact" className="btn bg-transparent text-white hover:bg-white/10 border border-white px-6 py-3 font-medium">
                 Nous contacter
               </Link>
             </div>
