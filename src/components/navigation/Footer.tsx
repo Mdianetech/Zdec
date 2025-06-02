@@ -57,15 +57,21 @@ const Footer = () => {
             <h4 className="font-semibold text-lg text-white mb-4">Contact</h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 mt-0.5 flex-shrink-0 text-primary-500" />
+                <div className="rounded-full bg-primary-600 p-2">
+                  <MapPin className="h-5 w-5 text-white" />
+                </div>
                 <span>Lyon, France</span>
               </li>
               <li className="flex items-start gap-3">
-                <Phone className="h-5 w-5 mt-0.5 flex-shrink-0 text-primary-500" />
+                <div className="rounded-full bg-primary-600 p-2">
+                  <Phone className="h-5 w-5 text-white" />
+                </div>
                 <span>+33 06 22 80 26 45</span>
               </li>
               <li className="flex items-start gap-3">
-                <Mail className="h-5 w-5 mt-0.5 flex-shrink-0 text-primary-500" />
+                <div className="rounded-full bg-primary-600 p-2">
+                  <Mail className="h-5 w-5 text-white" />
+                </div>
                 <span>contact@zdec.fr</span>
               </li>
               <li className="mt-4 pt-4 border-t border-gray-800">
