@@ -10,7 +10,7 @@ const firebaseConfig = {
   projectId: "newbrain-7955f",
   storageBucket: "newbrain-7955f.appspot.com",
   messagingSenderId: "331779110246",
-  appId: "1:331779110246:web:f1a0ea176e2f716fee44a7"
+  appId: "1:331779110246:web:190d973de808b847ee44a7"
 };
 
 // Initialize Firebase
