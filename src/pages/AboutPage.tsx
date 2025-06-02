@@ -7,7 +7,7 @@ const AboutPage = () => {
   const [teamMembers, setTeamMembers] = useState([
     {
       name: 'AZZOUZ MOUFID',
-      role: 'Directeur Général',
+      role: 'Président',
       image: '/Photo Moufid (1).jpg',
       description: 'Expert en installations électriques avec plus de 15 ans d\'expérience dans le secteur.',
       linkedin: 'https://www.linkedin.com/in/azzouz-moufid',
