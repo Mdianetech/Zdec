@@ -26,13 +26,13 @@ export const analytics = getAnalytics(app);
 try {
   enableIndexedDbPersistence(db).catch((err) => {
     if (err.code === 'failed-precondition') {
-      console.warn('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+      console.warn('Plusieurs onglets ouverts, la persistance ne peut être activée que dans un seul onglet à la fois.');
     } else if (err.code === 'unimplemented') {
-      console.warn('The current browser does not support persistence.');
+      console.warn('Le navigateur actuel ne prend pas en charge la persistance.');
     }
   });
 } catch (err) {
-  console.warn('Error enabling persistence:', err);
+  console.warn('Erreur lors de l\'activation de la persistance:', err);
 }
 
 export default app;
