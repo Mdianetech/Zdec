@@ -11,7 +11,7 @@ const AboutPage = () => {
       image: '/Photo Moufid (1).jpg',
       description: 'Expert en installations électriques avec plus de 15 ans d\'expérience dans le secteur.',
       linkedin: 'https://www.linkedin.com/in/azzouz-moufid',
-      cropPosition: { x: 50, y: 50 } // Center by default
+      cropPosition: { x: 50, y: 50 }
     },
     {
       name: 'Rami Bouchedda',
@@ -19,7 +19,7 @@ const AboutPage = () => {
       image: '/files_2655144-1748866352955-files_2655144-1748866279307-1W9A4080.jpg',
       description: 'Spécialiste des relations clients et de la coordination des projets.',
       linkedin: 'https://www.linkedin.com/in/rami-bouchedda-7b03a318a/',
-      cropPosition: { x: 50, y: 30 } // Slightly towards top
+      cropPosition: { x: 50, y: 30 }
     }
   ]);
 
@@ -66,7 +66,7 @@ const AboutPage = () => {
   const adjustCropPosition = (index: number, direction: 'up' | 'down' | 'left' | 'right') => {
     const updatedMembers = [...teamMembers];
     const member = { ...updatedMembers[index] };
-    const step = 5; // Percentage step for each adjustment
+    const step = 5;
 
     switch (direction) {
       case 'up':
