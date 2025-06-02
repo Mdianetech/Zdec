@@ -15,7 +15,7 @@ const AboutPage = () => {
     {
       name: 'Rami Bouchedda',
       role: 'Gestion des Relations',
-      image: 'https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      image: '/files_2655144-1748866352955-files_2655144-1748866279307-1W9A4080.jpg',
       description: 'Spécialiste des relations clients et de la coordination des projets.',
       linkedin: 'https://www.linkedin.com/in/rami-bouchedda-7b03a318a/'
     }
