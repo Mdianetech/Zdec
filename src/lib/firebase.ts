@@ -5,13 +5,12 @@ import { getStorage } from 'firebase/storage';
 import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA7D7fOekYqLk54kgDc3Jb5i2JIk_YR-2A",
-  authDomain: "handia.firebaseapp.com",
-  projectId: "handia",
-  storageBucket: "handia.firebasestorage.app",
-  messagingSenderId: "470473562206",
-  appId: "1:470473562206:web:2f594748da1783069f7ccf",
-  measurementId: "G-KKFLR4BLFN"
+  apiKey: "AIzaSyBy_SW66GyuLZwqs0DX4jPaKUHsGHTqjHE",
+  authDomain: "newbrain-7955f.firebaseapp.com",
+  projectId: "newbrain-7955f",
+  storageBucket: "newbrain-7955f.firebasestorage.app",
+  messagingSenderId: "331779110246",
+  appId: "1:331779110246:web:f1a0ea176e2f716fee44a7"
 };
 
 // Initialize Firebase
