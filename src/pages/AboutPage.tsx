@@ -8,7 +8,7 @@ const AboutPage = () => {
     {
       name: 'AZZOUZ MOUFID',
       role: 'PDG & Chef Exécution',
-      image: 'https://images.pexels.com/photos/18530982/pexels-photo-18530982.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      image: '/Photo Moufid (1).jpg',
       description: 'Expert en installations électriques avec plus de 15 ans d\'expérience dans le secteur.',
       linkedin: 'https://www.linkedin.com/in/azzouz-moufid'
     },
@@ -27,6 +27,14 @@ const AboutPage = () => {
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1, 
+      transition: { staggerChildren: 0.1 } 
+    },
   };
 
   const handleEdit = (index: number) => {
