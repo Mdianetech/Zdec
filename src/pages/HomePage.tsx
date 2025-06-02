@@ -300,65 +300,6 @@ const HomePage = () => {
       {/* Add HomeTestimonials component */}
       <HomeTestimonials />
 
-      {/* Client Portal CTA */}
-      <section className="bg-gray-50 py-16">
-        <div className="container">
-          <motion.div 
-            className="bg-white rounded-xl shadow-lg overflow-hidden"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex flex-col lg:flex-row items-center">
-              <div className="lg:w-1/2 p-8 md:p-12">
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">Accédez à votre espace client</h2>
-                <p className="mb-8 text-gray-600">
-                  Suivez vos projets, consultez vos devis, prenez rendez-vous et communiquez facilement avec notre équipe depuis votre espace client personnalisé.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link to="/login" className="btn btn-primary">
-                    Se connecter
-                  </Link>
-                  <Link to="/register" className="btn btn-outline">
-                    Créer un compte
-                  </Link>
-                </div>
-              </div>
-              <div className="lg:w-1/2 p-6 md:p-12 bg-gray-50">
-                <div className="relative bg-white rounded-lg shadow-md p-6 overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-primary-600"></div>
-                  <h4 className="font-semibold mb-4">Dans votre espace client:</h4>
-                  <ul className="space-y-3">
-                    <li className="flex items-start">
-                      <span className="flex-shrink-0 h-5 w-5 rounded-full bg-success-100 text-success-600 flex items-center justify-center mr-3 mt-0.5">✓</span>
-                      <span>Suivi en temps réel de vos projets</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="flex-shrink-0 h-5 w-5 rounded-full bg-success-100 text-success-600 flex items-center justify-center mr-3 mt-0.5">✓</span>
-                      <span>Demande de devis personnalisés</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="flex-shrink-0 h-5 w-5 rounded-full bg-success-100 text-success-600 flex items-center justify-center mr-3 mt-0.5">✓</span>
-                      <span>Prise de rendez-vous en ligne</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="flex-shrink-0 h-5 w-5 rounded-full bg-success-100 text-success-600 flex items-center justify-center mr-3 mt-0.5">✓</span>
-                      <span>Messagerie directe avec nos techniciens</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="flex-shrink-0 h-5 w-5 rounded-full bg-success-100 text-success-600 flex items-center justify-center mr-3 mt-0.5">✓</span>
-                      <span>Ressources techniques et conseils</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Contact CTA */}
       <section className="py-16 md:py-24">
         <div className="container text-center">
