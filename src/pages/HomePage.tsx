@@ -143,7 +143,7 @@ const HomePage = () => {
             >
               Électricien certifié IRVE
             </motion.span>
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
+            <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6 text-white drop-shadow-lg [text-shadow:_2px_2px_10px_rgb(0_0_0_/_20%)]">
               Solutions électriques professionnelles à Lyon et partout en France
             </h1>
             <p className="text-lg md:text-xl text-primary-100 mb-8">
