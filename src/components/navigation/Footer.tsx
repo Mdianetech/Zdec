@@ -9,8 +9,7 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <img src="/logo.svg" alt="ZDEC" className="h-8 w-8" />
-              <span className="font-bold text-xl text-white">ZDEC</span>
+              <img src="/image.png" alt="ZDEC" className="h-10" />
             </div>
             <p className="mb-4 max-w-xs">
               Électricien certifié IRVE à Lyon. Spécialistes en installation électrique, bornes de recharge et réseaux.

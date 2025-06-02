@@ -37,8 +37,7 @@ const Navbar = () => {
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
-              <img src="/logo.svg" alt="ZDEC" className="h-10 w-10" />
-              <span className="font-bold text-xl text-gray-900">ZDEC</span>
+              <img src="/image.png" alt="ZDEC" className="h-12" />
             </Link>
           </div>
 
@@ -102,8 +101,7 @@ const Navbar = () => {
               className="flex items-center gap-2"
               onClick={() => setMobileMenuOpen(false)}
             >
-              <img src="/logo.svg" alt="ZDEC" className="h-8 w-8" />
-              <span className="font-bold text-xl text-gray-900">ZDEC</span>
+              <img src="/image.png" alt="ZDEC" className="h-10" />
             </Link>
             <button
               type="button"
