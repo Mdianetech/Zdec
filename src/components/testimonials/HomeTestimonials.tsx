@@ -1,35 +1,36 @@
-import { useEffect, useState } from 'react';
-import { collection, query, where, orderBy, limit, onSnapshot } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
-import { Testimonial } from '../../types/testimonial';
+import { useState } from 'react';
 import { Star, Quote } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+const testimonials = [
+  {
+    id: '1',
+    userName: 'Jean Dupont',
+    userImage: null,
+    rating: 5,
+    comment: 'Installation professionnelle de ma borne de recharge. Service rapide et efficace.',
+    service: 'Installation IRVE'
+  },
+  {
+    id: '2',
+    userName: 'Marie Martin',
+    userImage: null,
+    rating: 5,
+    comment: 'Excellent travail pour la mise aux normes de mon installation électrique.',
+    service: 'Mise aux normes'
+  },
+  {
+    id: '3',
+    userName: 'Pierre Dubois',
+    userImage: null,
+    rating: 5,
+    comment: 'Très satisfait de l\'installation domotique. Équipe compétente et à l\'écoute.',
+    service: 'Domotique'
+  }
+];
+
 export default function HomeTestimonials() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const q = query(
-      collection(db, 'testimonials'),
-      where('approved', '==', true),
-      orderBy('rating', 'desc'),
-      limit(3)
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const testimonialData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate()
-      })) as Testimonial[];
-      
-      setTestimonials(testimonialData);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const [loading] = useState(false);
 
   if (loading) {
     return (
@@ -37,10 +38,6 @@ export default function HomeTestimonials() {
         <div className="animate-spin h-8 w-8 border-4 border-primary-500 border-t-transparent rounded-full mx-auto"></div>
       </div>
     );
-  }
-
-  if (testimonials.length === 0) {
-    return null;
   }
 
   return (
