@@ -57,21 +57,6 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="hidden md:flex md:items-center md:space-x-4">
-            <Link 
-              to="/login"
-              className="btn btn-outline"
-            >
-              Connexion
-            </Link>
-            <Link 
-              to="/register"
-              className="btn btn-primary"
-            >
-              Inscription
-            </Link>
-          </div>
-
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
@@ -126,22 +111,6 @@ const Navbar = () => {
                 {link.name}
               </NavLink>
             ))}
-            <div className="pt-6 flex flex-col space-y-4">
-              <Link 
-                to="/login"
-                className="btn btn-outline w-full justify-center"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Connexion
-              </Link>
-              <Link 
-                to="/register"
-                className="btn btn-primary w-full justify-center"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Inscription
-              </Link>
-            </div>
           </div>
         </motion.div>
       )}
