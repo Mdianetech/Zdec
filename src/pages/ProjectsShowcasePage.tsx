@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Plus, Edit2, Trash2, Image as ImageIcon, Video, Type, Save, X } from 'lucide-react';
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 interface Project {
   id: string;
@@ -21,18 +23,47 @@ export default function ProjectsShowcasePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [newContent, setNewContent] = useState<ProjectContent | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleAddProject = () => {
-    const newProject: Project = {
-      id: Date.now().toString(),
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'projects'));
+      const projectsData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Project[];
+      setProjects(projectsData);
+    } catch (err) {
+      setError('Error loading projects');
+      console.error('Error fetching projects:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddProject = async () => {
+    const newProject: Omit<Project, 'id'> = {
       title: 'Nouveau projet',
       description: 'Description du projet',
       content: [],
       date: new Date().toISOString().split('T')[0]
     };
-    setProjects([...projects, newProject]);
-    setEditingProject(newProject);
-    setIsEditing(true);
+
+    try {
+      const docRef = await addDoc(collection(db, 'projects'), newProject);
+      const projectWithId = { ...newProject, id: docRef.id };
+      setProjects([...projects, projectWithId]);
+      setEditingProject(projectWithId);
+      setIsEditing(true);
+    } catch (err) {
+      setError('Error creating project');
+      console.error('Error adding project:', err);
+    }
   };
 
   const handleEditProject = (project: Project) => {
@@ -40,19 +71,36 @@ export default function ProjectsShowcasePage() {
     setIsEditing(true);
   };
 
-  const handleDeleteProject = (projectId: string) => {
-    setProjects(projects.filter(p => p.id !== projectId));
+  const handleDeleteProject = async (projectId: string) => {
+    try {
+      await deleteDoc(doc(db, 'projects', projectId));
+      setProjects(projects.filter(p => p.id !== projectId));
+    } catch (err) {
+      setError('Error deleting project');
+      console.error('Error deleting project:', err);
+    }
   };
 
-  const handleSaveProject = () => {
+  const handleSaveProject = async () => {
     if (!editingProject) return;
     
-    setProjects(projects.map(p => 
-      p.id === editingProject.id ? editingProject : p
-    ));
-    setIsEditing(false);
-    setEditingProject(null);
-    setNewContent(null);
+    try {
+      await updateDoc(doc(db, 'projects', editingProject.id), {
+        title: editingProject.title,
+        description: editingProject.description,
+        content: editingProject.content
+      });
+
+      setProjects(projects.map(p => 
+        p.id === editingProject.id ? editingProject : p
+      ));
+      setIsEditing(false);
+      setEditingProject(null);
+      setNewContent(null);
+    } catch (err) {
+      setError('Error saving project');
+      console.error('Error updating project:', err);
+    }
   };
 
   const handleAddContent = (type: 'text' | 'image' | 'video') => {
@@ -111,9 +159,23 @@ export default function ProjectsShowcasePage() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-500 border-t-transparent"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
+        {error && (
+          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
+
         <div className="flex justify-between items-center mb-8">
           <div className="text-center flex-1">
             <Code2 className="mx-auto h-12 w-12 text-primary-600" />
