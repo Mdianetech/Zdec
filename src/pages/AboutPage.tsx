@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Award, Users, Zap, Shield, Pencil, Linkedin, X, Check } from 'lucide-react';
+import { Award, Users, Zap, Shield, Pencil, Linkedin, X, Check, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
 
 const AboutPage = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -10,14 +10,16 @@ const AboutPage = () => {
       role: 'PDG & Chef Exécution',
       image: '/Photo Moufid (1).jpg',
       description: 'Expert en installations électriques avec plus de 15 ans d\'expérience dans le secteur.',
-      linkedin: 'https://www.linkedin.com/in/azzouz-moufid'
+      linkedin: 'https://www.linkedin.com/in/azzouz-moufid',
+      cropPosition: { x: 50, y: 50 } // Center by default
     },
     {
       name: 'Rami Bouchedda',
       role: 'Gestion des Relations',
       image: '/files_2655144-1748866352955-files_2655144-1748866279307-1W9A4080.jpg',
       description: 'Spécialiste des relations clients et de la coordination des projets.',
-      linkedin: 'https://www.linkedin.com/in/rami-bouchedda-7b03a318a/'
+      linkedin: 'https://www.linkedin.com/in/rami-bouchedda-7b03a318a/',
+      cropPosition: { x: 50, y: 30 } // Slightly towards top
     }
   ]);
 
@@ -59,6 +61,30 @@ const AboutPage = () => {
       ...tempMember,
       [e.target.name]: e.target.value
     });
+  };
+
+  const adjustCropPosition = (index: number, direction: 'up' | 'down' | 'left' | 'right') => {
+    const updatedMembers = [...teamMembers];
+    const member = { ...updatedMembers[index] };
+    const step = 5; // Percentage step for each adjustment
+
+    switch (direction) {
+      case 'up':
+        member.cropPosition.y = Math.max(0, member.cropPosition.y - step);
+        break;
+      case 'down':
+        member.cropPosition.y = Math.min(100, member.cropPosition.y + step);
+        break;
+      case 'left':
+        member.cropPosition.x = Math.max(0, member.cropPosition.x - step);
+        break;
+      case 'right':
+        member.cropPosition.x = Math.min(100, member.cropPosition.x + step);
+        break;
+    }
+
+    updatedMembers[index] = member;
+    setTeamMembers(updatedMembers);
   };
 
   return (
@@ -169,19 +195,60 @@ const AboutPage = () => {
               >
                 <div className="aspect-w-16 aspect-h-9 relative h-64">
                   {editingMember === index ? (
-                    <input
-                      type="text"
-                      name="image"
-                      value={(tempMember as any).image || member.image}
-                      onChange={(e) => handleChange(e, index)}
-                      className="absolute inset-0 p-2 bg-black/50 text-white"
-                      placeholder="URL de l'image"
-                    />
+                    <div className="absolute inset-0 flex flex-col">
+                      <input
+                        type="text"
+                        name="image"
+                        value={(tempMember as any).image || member.image}
+                        onChange={(e) => handleChange(e, index)}
+                        className="p-2 bg-black/50 text-white mb-2"
+                        placeholder="URL de l'image"
+                      />
+                      <div className="flex-1 bg-black/50 p-4">
+                        <div className="grid grid-cols-3 gap-2 h-full">
+                          <div className="col-start-2">
+                            <button
+                              onClick={() => adjustCropPosition(index, 'up')}
+                              className="w-full bg-white/20 hover:bg-white/30 p-2 rounded"
+                            >
+                              <ArrowUp className="h-5 w-5 mx-auto text-white" />
+                            </button>
+                          </div>
+                          <div className="col-start-1 row-start-2">
+                            <button
+                              onClick={() => adjustCropPosition(index, 'left')}
+                              className="w-full bg-white/20 hover:bg-white/30 p-2 rounded"
+                            >
+                              <ArrowLeft className="h-5 w-5 mx-auto text-white" />
+                            </button>
+                          </div>
+                          <div className="col-start-3 row-start-2">
+                            <button
+                              onClick={() => adjustCropPosition(index, 'right')}
+                              className="w-full bg-white/20 hover:bg-white/30 p-2 rounded"
+                            >
+                              <ArrowRight className="h-5 w-5 mx-auto text-white" />
+                            </button>
+                          </div>
+                          <div className="col-start-2 row-start-3">
+                            <button
+                              onClick={() => adjustCropPosition(index, 'down')}
+                              className="w-full bg-white/20 hover:bg-white/30 p-2 rounded"
+                            >
+                              <ArrowDown className="h-5 w-5 mx-auto text-white" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   ) : (
                     <img 
                       src={member.image}
                       alt={member.name}
-                      className="w-full h-full object-cover object-top"
+                      className="w-full h-full object-cover"
+                      style={{
+                        objectPosition: `${member.cropPosition.x}% ${member.cropPosition.y}%`
+                      }}
                     />
                   )}
                 </div>
