@@ -139,7 +139,7 @@ export default function ProjectsShowcasePage() {
     switch (content.type) {
       case 'image':
         return (
-          <div className="relative group cursor-pointer" onClick={() => setSelectedImage(content.content)}>
+          <div className="relative group cursor-pointer\" onClick={() => setSelectedImage(content.content)}>
             <img 
               src={content.content} 
               alt="" 
