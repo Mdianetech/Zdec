@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Code2, Plus, Edit2, Trash2, Image as ImageIcon, Video, Type, Save, X } from 'lucide-react';
+import { Code2, Plus, Edit2, Trash2, Image as ImageIcon, Video, Type, Save, X, ExternalLink } from 'lucide-react';
 import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
@@ -25,6 +25,7 @@ export default function ProjectsShowcasePage() {
   const [newContent, setNewContent] = useState<ProjectContent | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProjects();
@@ -138,22 +139,29 @@ export default function ProjectsShowcasePage() {
     switch (content.type) {
       case 'image':
         return (
-          <img 
-            src={content.content} 
-            alt="" 
-            className="w-full h-64 object-cover rounded-lg"
-          />
+          <div className="relative group cursor-pointer" onClick={() => setSelectedImage(content.content)}>
+            <img 
+              src={content.content} 
+              alt="" 
+              className="w-full h-64 object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 rounded-lg flex items-center justify-center">
+              <ExternalLink className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-8 w-8" />
+            </div>
+          </div>
         );
       case 'video':
         return (
-          <video 
-            src={content.content}
-            controls
-            className="w-full rounded-lg"
-          />
+          <div className="relative rounded-lg overflow-hidden">
+            <video 
+              src={content.content}
+              controls
+              className="w-full rounded-lg"
+            />
+          </div>
         );
       case 'text':
-        return <p className="text-gray-600">{content.content}</p>;
+        return <p className="text-gray-600 leading-relaxed">{content.content}</p>;
       default:
         return null;
     }
@@ -195,7 +203,12 @@ export default function ProjectsShowcasePage() {
           </button>
         </div>
         
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <motion.div 
+          className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           {projects.map((project) => (
             <motion.div
               key={project.id}
@@ -227,20 +240,22 @@ export default function ProjectsShowcasePage() {
                     placeholder="Description du projet"
                   />
                   
-                  {editingProject.content.map((content) => (
-                    <div key={content.id} className="mb-4 relative group">
-                      {renderContent(content)}
-                      <button
-                        onClick={() => handleDeleteContent(content.id)}
-                        className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  ))}
+                  <div className="space-y-4">
+                    {editingProject.content.map((content) => (
+                      <div key={content.id} className="relative group">
+                        {renderContent(content)}
+                        <button
+                          onClick={() => handleDeleteContent(content.id)}
+                          className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
 
                   {newContent ? (
-                    <div className="mb-4">
+                    <div className="mt-4 p-4 border border-gray-200 rounded-lg">
                       {newContent.type === 'text' ? (
                         <textarea
                           value={newContent.content}
@@ -280,7 +295,7 @@ export default function ProjectsShowcasePage() {
                       </div>
                     </div>
                   ) : (
-                    <div className="flex gap-2 mb-4">
+                    <div className="flex gap-2 mt-4">
                       <button
                         onClick={() => handleAddContent('text')}
                         className="btn btn-outline flex-1"
@@ -305,7 +320,7 @@ export default function ProjectsShowcasePage() {
                     </div>
                   )}
 
-                  <div className="flex justify-end">
+                  <div className="flex justify-end mt-4">
                     <button
                       onClick={handleSaveProject}
                       className="btn btn-primary"
@@ -319,13 +334,15 @@ export default function ProjectsShowcasePage() {
                   <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
                   <p className="text-gray-600 mb-4">{project.description}</p>
                   
-                  {project.content.map((content) => (
-                    <div key={content.id} className="mb-4">
-                      {renderContent(content)}
-                    </div>
-                  ))}
+                  <div className="space-y-4">
+                    {project.content.map((content) => (
+                      <div key={content.id} className="relative">
+                        {renderContent(content)}
+                      </div>
+                    ))}
+                  </div>
 
-                  <div className="flex justify-end gap-2">
+                  <div className="flex justify-end gap-2 mt-4">
                     <button
                       onClick={() => handleEditProject(project)}
                       className="btn btn-outline"
@@ -343,8 +360,31 @@ export default function ProjectsShowcasePage() {
               )}
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
+
+      {/* Modal d'affichage d'image */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-4xl w-full">
+            <img 
+              src={selectedImage} 
+              alt="" 
+              className="w-full h-auto rounded-lg"
+              style={{ maxHeight: '90vh' }}
+            />
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors"
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
