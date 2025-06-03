@@ -25,6 +25,7 @@ const AboutPage = () => {
 
   const [editingMember, setEditingMember] = useState<number | null>(null);
   const [tempMember, setTempMember] = useState({});
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -189,11 +190,15 @@ const AboutPage = () => {
             viewport={{ once: true }}
           >
             {teamMembers.map((member, index) => (
-              <div 
+              <motion.div 
                 key={index}
-                className="bg-white rounded-lg shadow-md overflow-hidden"
+                className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.2 }}
               >
-                <div className="aspect-w-16 aspect-h-9 relative h-64">
+                <div className="aspect-w-16 aspect-h-9 relative h-80 overflow-hidden group cursor-pointer"
+                     onClick={() => !isEditing && setSelectedImage(member.image)}>
                   {editingMember === index ? (
                     <div className="absolute inset-0 flex flex-col">
                       <input
@@ -242,14 +247,17 @@ const AboutPage = () => {
                       </div>
                     </div>
                   ) : (
-                    <img 
-                      src={member.image}
-                      alt={member.name}
-                      className="w-full h-full object-cover"
-                      style={{
-                        objectPosition: `${member.cropPosition.x}% ${member.cropPosition.y}%`
-                      }}
-                    />
+                    <>
+                      <img 
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        style={{
+                          objectPosition: `${member.cropPosition.x}% ${member.cropPosition.y}%`
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    </>
                   )}
                 </div>
                 <div className="p-6">
@@ -308,7 +316,7 @@ const AboutPage = () => {
                     <>
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
+                          <h3 className="text-2xl font-semibold mb-2">{member.name}</h3>
                           <p className="text-primary-600 font-medium mb-4">{member.role}</p>
                         </div>
                         {isEditing && (
@@ -320,12 +328,12 @@ const AboutPage = () => {
                           </button>
                         )}
                       </div>
-                      <p className="text-gray-600 mb-4">{member.description}</p>
+                      <p className="text-gray-600 mb-6 leading-relaxed">{member.description}</p>
                       <a 
                         href={member.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center text-primary-600 hover:text-primary-700"
+                        className="inline-flex items-center text-primary-600 hover:text-primary-700 transition-colors"
                       >
                         <Linkedin className="h-5 w-5 mr-2" />
                         Voir le profil LinkedIn
@@ -333,7 +341,7 @@ const AboutPage = () => {
                     </>
                   )}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
         </div>
@@ -412,6 +420,29 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-4xl w-full">
+            <img 
+              src={selectedImage} 
+              alt="" 
+              className="w-full h-auto rounded-lg"
+              style={{ maxHeight: '90vh' }}
+            />
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors"
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };
