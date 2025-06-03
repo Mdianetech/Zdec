@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Award, Users, Zap, Shield, Pencil, Linkedin, X, Check, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Award, Users, Zap, Shield, Linkedin, X } from 'lucide-react';
 
 const AboutPage = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [teamMembers, setTeamMembers] = useState([
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [teamMembers] = useState([
     {
       name: 'AZZOUZ MOUFID',
       role: 'Président',
@@ -23,10 +23,6 @@ const AboutPage = () => {
     }
   ]);
 
-  const [editingMember, setEditingMember] = useState<number | null>(null);
-  const [tempMember, setTempMember] = useState({});
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
@@ -38,54 +34,6 @@ const AboutPage = () => {
       opacity: 1, 
       transition: { staggerChildren: 0.1 } 
     },
-  };
-
-  const handleEdit = (index: number) => {
-    setEditingMember(index);
-    setTempMember(teamMembers[index]);
-  };
-
-  const handleSave = (index: number) => {
-    const updatedMembers = [...teamMembers];
-    updatedMembers[index] = tempMember as typeof teamMembers[0];
-    setTeamMembers(updatedMembers);
-    setEditingMember(null);
-  };
-
-  const handleCancel = () => {
-    setEditingMember(null);
-    setTempMember({});
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
-    setTempMember({
-      ...tempMember,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const adjustCropPosition = (index: number, direction: 'up' | 'down' | 'left' | 'right') => {
-    const updatedMembers = [...teamMembers];
-    const member = { ...updatedMembers[index] };
-    const step = 5;
-
-    switch (direction) {
-      case 'up':
-        member.cropPosition.y = Math.max(0, member.cropPosition.y - step);
-        break;
-      case 'down':
-        member.cropPosition.y = Math.min(100, member.cropPosition.y + step);
-        break;
-      case 'left':
-        member.cropPosition.x = Math.max(0, member.cropPosition.x - step);
-        break;
-      case 'right':
-        member.cropPosition.x = Math.min(100, member.cropPosition.x + step);
-        break;
-    }
-
-    updatedMembers[index] = member;
-    setTeamMembers(updatedMembers);
   };
 
   return (
@@ -165,18 +113,9 @@ const AboutPage = () => {
               <Users className="h-4 w-4 mr-2" />
               Notre Équipe
             </div>
-            <div className="flex items-center justify-center gap-4">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Une équipe d&apos;experts à votre service
-              </h2>
-              <button
-                onClick={() => setIsEditing(!isEditing)}
-                className="btn btn-outline flex items-center gap-2"
-              >
-                <Pencil className="h-4 w-4" />
-                {isEditing ? 'Terminer' : 'Éditer'}
-              </button>
-            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Une équipe d&apos;experts à votre service
+            </h2>
             <p className="text-lg text-gray-600">
               Des professionnels qualifiés et passionnés, dédiés à la réussite de vos projets électriques.
             </p>
@@ -184,162 +123,46 @@ const AboutPage = () => {
 
           <motion.div 
             className="grid md:grid-cols-2 gap-8"
-            variants={fadeInUp}
+            variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
             {teamMembers.map((member, index) => (
-              <motion.div 
+              <motion.div
                 key={index}
+                variants={fadeInUp}
                 className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 }}
               >
-                <div className="aspect-w-16 aspect-h-9 relative h-80 overflow-hidden group cursor-pointer"
-                     onClick={() => !isEditing && setSelectedImage(member.image)}>
-                  {editingMember === index ? (
-                    <div className="absolute inset-0 flex flex-col">
-                      <input
-                        type="text"
-                        name="image"
-                        value={(tempMember as any).image || member.image}
-                        onChange={(e) => handleChange(e, index)}
-                        className="p-2 bg-black/50 text-white mb-2"
-                        placeholder="URL de l'image"
-                      />
-                      <div className="flex-1 bg-black/50 p-4">
-                        <div className="grid grid-cols-3 gap-2 h-full">
-                          <div className="col-start-2">
-                            <button
-                              onClick={() => adjustCropPosition(index, 'up')}
-                              className="w-full bg-white/20 hover:bg-white/30 p-2 rounded"
-                            >
-                              <ArrowUp className="h-5 w-5 mx-auto text-white" />
-                            </button>
-                          </div>
-                          <div className="col-start-1 row-start-2">
-                            <button
-                              onClick={() => adjustCropPosition(index, 'left')}
-                              className="w-full bg-white/20 hover:bg-white/30 p-2 rounded"
-                            >
-                              <ArrowLeft className="h-5 w-5 mx-auto text-white" />
-                            </button>
-                          </div>
-                          <div className="col-start-3 row-start-2">
-                            <button
-                              onClick={() => adjustCropPosition(index, 'right')}
-                              className="w-full bg-white/20 hover:bg-white/30 p-2 rounded"
-                            >
-                              <ArrowRight className="h-5 w-5 mx-auto text-white" />
-                            </button>
-                          </div>
-                          <div className="col-start-2 row-start-3">
-                            <button
-                              onClick={() => adjustCropPosition(index, 'down')}
-                              className="w-full bg-white/20 hover:bg-white/30 p-2 rounded"
-                            >
-                              <ArrowDown className="h-5 w-5 mx-auto text-white" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <img 
-                        src={member.image}
-                        alt={member.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        style={{
-                          objectPosition: `${member.cropPosition.x}% ${member.cropPosition.y}%`
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </>
-                  )}
+                <div 
+                  className="aspect-w-16 aspect-h-9 relative h-80 overflow-hidden group cursor-pointer"
+                  onClick={() => setSelectedImage(member.image)}
+                >
+                  <img 
+                    src={member.image}
+                    alt={member.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    style={{
+                      objectPosition: `${member.cropPosition.x}% ${member.cropPosition.y}%`
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
                 <div className="p-6">
-                  {editingMember === index ? (
-                    <div className="space-y-4">
-                      <input
-                        type="text"
-                        name="name"
-                        value={(tempMember as any).name || member.name}
-                        onChange={(e) => handleChange(e, index)}
-                        className="input w-full"
-                        placeholder="Nom"
-                      />
-                      <input
-                        type="text"
-                        name="role"
-                        value={(tempMember as any).role || member.role}
-                        onChange={(e) => handleChange(e, index)}
-                        className="input w-full"
-                        placeholder="Rôle"
-                      />
-                      <textarea
-                        name="description"
-                        value={(tempMember as any).description || member.description}
-                        onChange={(e) => handleChange(e, index)}
-                        className="input w-full"
-                        placeholder="Description"
-                        rows={3}
-                      />
-                      <input
-                        type="text"
-                        name="linkedin"
-                        value={(tempMember as any).linkedin || member.linkedin}
-                        onChange={(e) => handleChange(e, index)}
-                        className="input w-full"
-                        placeholder="URL LinkedIn"
-                      />
-                      <div className="flex justify-end gap-2">
-                        <button
-                          onClick={handleCancel}
-                          className="btn btn-outline"
-                        >
-                          <X className="h-4 w-4" />
-                          Annuler
-                        </button>
-                        <button
-                          onClick={() => handleSave(index)}
-                          className="btn btn-primary"
-                        >
-                          <Check className="h-4 w-4" />
-                          Sauvegarder
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="text-2xl font-semibold mb-2">{member.name}</h3>
-                          <p className="text-primary-600 font-medium mb-4">{member.role}</p>
-                        </div>
-                        {isEditing && (
-                          <button
-                            onClick={() => handleEdit(index)}
-                            className="btn btn-outline p-2"
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </button>
-                        )}
-                      </div>
-                      <p className="text-gray-600 mb-6 leading-relaxed">{member.description}</p>
-                      <a 
-                        href={member.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center text-primary-600 hover:text-primary-700 transition-colors"
-                      >
-                        <Linkedin className="h-5 w-5 mr-2" />
-                        Voir le profil LinkedIn
-                      </a>
-                    </>
-                  )}
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-2">{member.name}</h3>
+                    <p className="text-primary-600 font-medium mb-4">{member.role}</p>
+                  </div>
+                  <p className="text-gray-600 mb-6 leading-relaxed">{member.description}</p>
+                  <a 
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-primary-600 hover:text-primary-700 transition-colors"
+                  >
+                    <Linkedin className="h-5 w-5 mr-2" />
+                    Voir le profil LinkedIn
+                  </a>
                 </div>
               </motion.div>
             ))}
