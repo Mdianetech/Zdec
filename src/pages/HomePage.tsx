@@ -128,14 +128,82 @@ const HomePage = () => {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-900 to-primary-700 text-white overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3825582/pexels-photo-3825582.jpeg?auto=compress&cs=tinysrgb&w=1600')] opacity-15 bg-cover bg-center mix-blend-overlay" />
-        <div className="container relative py-20 md:py-28" style={{
-          backgroundImage: 'url(/image.png)',
-          backgroundSize: '200px 200px',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center right',
-          backgroundAttachment: 'local'
-        }}>
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-900/80 to-primary-700/80"></div>
+        
+        {/* Logo 360° Background Pattern */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Pattern de logos avec rotations multiples */}
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png)
+            `,
+            backgroundSize: '120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px',
+            backgroundPosition: `
+              0% 0%,
+              25% 15%,
+              50% 30%,
+              75% 45%,
+              100% 60%,
+              20% 75%,
+              60% 90%,
+              90% 10%
+            `,
+            backgroundRepeat: 'repeat',
+            opacity: 0.15,
+            transform: 'rotate(0deg)',
+            animation: 'logoRotate 120s linear infinite'
+          }} />
+          
+          {/* Deuxième couche avec rotation inverse */}
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png)
+            `,
+            backgroundSize: '80px 80px, 80px 80px, 80px 80px, 80px 80px, 80px 80px',
+            backgroundPosition: `
+              10% 20%,
+              40% 50%,
+              70% 80%,
+              85% 25%,
+              15% 70%
+            `,
+            backgroundRepeat: 'repeat',
+            opacity: 0.08,
+            transform: 'rotate(180deg)',
+            animation: 'logoRotateReverse 180s linear infinite'
+          }} />
+          
+          {/* Troisième couche avec rotation diagonale */}
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              url(/image.png),
+              url(/image.png),
+              url(/image.png)
+            `,
+            backgroundSize: '100px 100px, 100px 100px, 100px 100px',
+            backgroundPosition: `
+              30% 10%,
+              65% 40%,
+              5% 85%
+            `,
+            backgroundRepeat: 'repeat',
+            opacity: 0.12,
+            transform: 'rotate(45deg)',
+            animation: 'logoRotateDiagonal 150s linear infinite'
+          }} />
+        </div>
+        
+        <div className="container relative py-20 md:py-28">
           <motion.div 
             className="max-w-2xl relative z-10"
             initial={{ opacity: 0, y: 30 }}
