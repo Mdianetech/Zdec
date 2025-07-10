@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import HomeTestimonials from '../components/testimonials/HomeTestimonials';
+import BrandIconContainer from '../components/ui/BrandIconContainer';
 
 const services = [
   {
@@ -317,8 +318,12 @@ const HomePage = () => {
                   <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
                   
                   <div className="relative z-10">
-                    <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-4 rounded-xl w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                      <service.icon className="h-8 w-8 text-white" />
+                    <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <BrandIconContainer 
+                        icon={service.icon} 
+                        variant="gradient" 
+                        size="lg" 
+                      />
                     </div>
                     <h3 className="text-xl font-bold mb-4 text-gray-900 group-hover:text-primary-700 transition-colors">
                       {service.title}
@@ -449,8 +454,13 @@ const HomePage = () => {
                 variants={fadeInUp}
                 className="text-center"
               >
-                <div className="bg-primary-50 rounded-full h-16 w-16 flex items-center justify-center mx-auto mb-5">
-                  <benefit.icon className="h-8 w-8 text-primary-600" />
+                <div className="mx-auto mb-5">
+                  <BrandIconContainer 
+                    icon={benefit.icon} 
+                    variant="primary" 
+                    size="lg" 
+                    shape="circle"
+                  />
                 </div>
                 <h3 className="text-xl font-semibold mb-3">{benefit.title}</h3>
                 <p className="text-gray-600">{benefit.description}</p>

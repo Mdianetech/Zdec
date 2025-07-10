@@ -13,6 +13,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { cn } from '../utils/cn';
+import BrandIconContainer from '../components/ui/BrandIconContainer';
 
 const services = [
   {
@@ -202,9 +203,11 @@ const ServicesPage = () => {
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 rounded-lg bg-primary-50 text-primary-600">
-                      <service.icon className="h-6 w-6" />
-                    </div>
+                    <BrandIconContainer 
+                      icon={service.icon} 
+                      variant="gradient" 
+                      size="sm" 
+                    />
                     <h3 className="text-xl font-semibold">{service.title}</h3>
                   </div>
                   <p className="text-gray-600 mb-6">{service.description}</p>
@@ -259,8 +262,12 @@ const ServicesPage = () => {
                 variants={fadeInUp}
                 className="card p-6 hover:shadow-elevation-3 transition-shadow"
               >
-                <div className={cn("p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-6", type.color)}>
-                  <type.icon className="h-7 w-7" />
+                <div className="mb-6">
+                  <BrandIconContainer 
+                    icon={type.icon} 
+                    variant={index === 0 ? "primary" : index === 1 ? "secondary" : "accent"} 
+                    size="lg" 
+                  />
                 </div>
                 <h3 className="text-xl font-semibold mb-3">{type.title}</h3>
                 <p className="text-gray-600">{type.description}</p>
@@ -299,8 +306,13 @@ const ServicesPage = () => {
                 variants={fadeInUp}
                 className="text-center"
               >
-                <div className="mx-auto bg-primary-50 w-16 h-16 rounded-full flex items-center justify-center mb-6">
-                  <cert.icon className="h-8 w-8 text-primary-600" />
+                <div className="mx-auto mb-6">
+                  <BrandIconContainer 
+                    icon={cert.icon} 
+                    variant="outline" 
+                    size="lg" 
+                    shape="circle"
+                  />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{cert.title}</h3>
                 <p className="text-gray-600">{cert.description}</p>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Award, Users, Zap, Shield, Linkedin, X } from 'lucide-react';
+import BrandIconContainer from '../components/ui/BrandIconContainer';
 
 const AboutPage = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -197,8 +198,13 @@ const AboutPage = () => {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <div className="bg-primary-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Shield className="h-8 w-8 text-primary-600" />
+              <div className="mx-auto mb-6">
+                <BrandIconContainer 
+                  icon={Shield} 
+                  variant="primary" 
+                  size="lg" 
+                  shape="circle"
+                />
               </div>
               <h3 className="text-xl font-semibold mb-4">Excellence</h3>
               <p className="text-gray-600">
@@ -214,8 +220,13 @@ const AboutPage = () => {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <div className="bg-primary-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Users className="h-8 w-8 text-primary-600" />
+              <div className="mx-auto mb-6">
+                <BrandIconContainer 
+                  icon={Users} 
+                  variant="secondary" 
+                  size="lg" 
+                  shape="circle"
+                />
               </div>
               <h3 className="text-xl font-semibold mb-4">Professionnalisme</h3>
               <p className="text-gray-600">
@@ -231,8 +242,13 @@ const AboutPage = () => {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <div className="bg-primary-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Zap className="h-8 w-8 text-primary-600" />
+              <div className="mx-auto mb-6">
+                <BrandIconContainer 
+                  icon={Zap} 
+                  variant="gradient" 
+                  size="lg" 
+                  shape="circle"
+                />
               </div>
               <h3 className="text-xl font-semibold mb-4">Innovation</h3>
               <p className="text-gray-600">

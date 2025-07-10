@@ -4,6 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Couleurs ZDEC basées sur le logo
+        zdec: {
+          blue: '#1e40af',        // Bleu principal du logo
+          'blue-light': '#3b82f6', // Bleu clair
+          'blue-dark': '#1e3a8a',  // Bleu foncé
+          orange: '#f97316',       // Orange accent du logo
+          'orange-light': '#fb923c', // Orange clair
+          'orange-dark': '#ea580c',  // Orange foncé
+          gray: '#6b7280',         // Gris neutre
+          'gray-light': '#9ca3af',  // Gris clair
+          'gray-dark': '#4b5563',   // Gris foncé
+        },
         primary: {
           50: '#e6e9ff',
           100: '#c4cbff',

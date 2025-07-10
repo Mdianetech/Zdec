@@ -95,7 +95,7 @@ const Footer = () => {
             <h4 className="font-bold text-lg text-white mb-6">Contact</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-4">
-                <div className="rounded-lg bg-primary-600 p-2 mt-1">
+                <div className="rounded-lg bg-gradient-to-br from-zdec-blue to-zdec-blue-dark p-2 mt-1 shadow-lg">
                   <MapPin className="h-5 w-5 text-white" />
                 </div>
                 <div>
@@ -103,7 +103,7 @@ const Footer = () => {
                 </div>
               </li>
               <li className="flex items-start gap-4">
-                <div className="rounded-lg bg-primary-600 p-2 mt-1">
+                <div className="rounded-lg bg-gradient-to-br from-zdec-orange to-zdec-orange-dark p-2 mt-1 shadow-lg">
                   <Phone className="h-5 w-5 text-white" />
                 </div>
                 <div>
@@ -113,7 +113,7 @@ const Footer = () => {
                 </div>
               </li>
               <li className="flex items-start gap-4">
-                <div className="rounded-lg bg-primary-600 p-2 mt-1">
+                <div className="rounded-lg bg-gradient-to-br from-zdec-blue to-zdec-orange p-2 mt-1 shadow-lg">
                   <Mail className="h-5 w-5 text-white" />
                 </div>
                 <div>

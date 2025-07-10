@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useState } from 'react';
+import BrandIconContainer from '../components/ui/BrandIconContainer';
 
 const IrvePage = () => {
   const [openFaqId, setOpenFaqId] = useState<number | null>(null);
@@ -193,8 +194,13 @@ const IrvePage = () => {
                 variants={fadeInUp}
                 className="card p-6 hover:shadow-elevation-3 transition-shadow"
               >
-                <div className="p-3 rounded-full w-14 h-14 flex items-center justify-center bg-primary-100 text-primary-600 mb-5">
-                  <feature.icon className="h-7 w-7" />
+                <div className="mb-5">
+                  <BrandIconContainer 
+                    icon={feature.icon} 
+                    variant="gradient" 
+                    size="lg" 
+                    shape="circle"
+                  />
                 </div>
                 <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
                 <p className="text-gray-600">{feature.description}</p>

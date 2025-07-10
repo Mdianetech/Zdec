@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
+import BrandIconContainer from '../components/ui/BrandIconContainer';
 
 const contactInfo = [
   {
@@ -113,8 +114,13 @@ const ContactPage = () => {
                 className="card p-6 text-center hover:shadow-elevation-3 transition-shadow"
                 variants={fadeInUp}
               >
-                <div className="mx-auto bg-primary-50 text-primary-600 h-12 w-12 rounded-full flex items-center justify-center mb-4">
-                  <info.icon className="h-6 w-6" />
+                <div className="mx-auto mb-4">
+                  <BrandIconContainer 
+                    icon={info.icon} 
+                    variant={index % 2 === 0 ? "primary" : "secondary"} 
+                    size="md" 
+                    shape="circle"
+                  />
                 </div>
                 <h3 className="font-semibold mb-2">{info.title}</h3>
                 <p className="font-medium text-primary-700 mb-1">{info.details}</p>
