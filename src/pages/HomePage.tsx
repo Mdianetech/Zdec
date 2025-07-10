@@ -126,8 +126,8 @@ const HomePage = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary-900 to-primary-700 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3825582/pexels-photo-3825582.jpeg?auto=compress&cs=tinysrgb&w=1600')] opacity-15 bg-cover bg-center mix-blend-overlay" />
+      <section className="relative bg-gradient-to-br from-gray-900 via-primary-900 to-primary-800 text-white overflow-hidden min-h-screen flex items-center">
+        <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3825582/pexels-photo-3825582.jpeg?auto=compress&cs=tinysrgb&w=1600')] opacity-10 bg-cover bg-center" />
         
         {/* Logo 360° Background Pattern */}
         <div className="absolute inset-0 overflow-hidden">
@@ -203,83 +203,171 @@ const HomePage = () => {
           }} />
         </div>
         
-        <div className="container relative py-20 md:py-28">
+        <div className="container relative py-20 md:py-32">
           <motion.div 
-            className="max-w-2xl relative z-10"
+            className="max-w-4xl relative z-10 text-center"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
             <motion.span 
-              className="inline-block px-4 py-1 rounded-full bg-primary-400/20 text-primary-100 text-sm font-medium mb-6"
+              className="inline-flex items-center px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm font-medium mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
+              <Zap className="h-4 w-4 mr-2" />
               Électricien certifié IRVE
             </motion.span>
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6 text-white drop-shadow-lg [text-shadow:_2px_2px_10px_rgb(0_0_0_/_20%)]">
-              Solutions électriques professionnelles à Lyon et partout en France
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-8 text-white">
+              <span className="block">Solutions électriques</span>
+              <span className="block bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
+                professionnelles
+              </span>
+              <span className="block text-3xl md:text-4xl lg:text-5xl font-normal mt-2 text-gray-200">
+                à Lyon et partout en France
+              </span>
             </h1>
-            <p className="text-lg md:text-xl text-primary-100 mb-8">
+            <p className="text-lg md:text-xl text-gray-200 mb-12 max-w-3xl mx-auto leading-relaxed">
               Installations électriques, bornes de recharge, réseaux et domotique par des experts qualifiés pour particuliers et professionnels.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/contact" className="btn bg-white text-primary-600 hover:bg-gray-100 px-6 py-3 font-medium">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Link to="/contact" className="btn bg-white text-primary-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
                 Demander un devis
               </Link>
-              <Link to="/services" className="btn bg-primary-600 text-white hover:bg-primary-700 border border-primary-500 px-6 py-3 font-medium">
+              <Link to="/services" className="btn bg-transparent text-white hover:bg-white/10 border-2 border-white/30 hover:border-white/50 px-8 py-4 text-lg font-semibold rounded-xl backdrop-blur-sm transition-all duration-300">
                 Découvrir nos services
               </Link>
             </div>
+            
+            {/* Stats Section */}
+            <motion.div 
+              className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 pt-16 border-t border-white/20"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+            >
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2">15+</div>
+                <div className="text-gray-300">Années d'expérience</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2">500+</div>
+                <div className="text-gray-300">Projets réalisés</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2">100%</div>
+                <div className="text-gray-300">Clients satisfaits</div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent" />
+        
+        {/* Scroll indicator */}
+        <motion.div 
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-white rounded-full mt-2"></div>
+          </div>
+        </motion.div>
       </section>
 
       {/* Services section */}
-      <section className="py-16 md:py-24 bg-white">
+      <section className="py-20 md:py-32 bg-white relative">
+        {/* Background decoration */}
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 to-white"></div>
+        
         <div className="container">
           <motion.div 
-            className="text-center max-w-3xl mx-auto mb-16"
+            className="text-center max-w-4xl mx-auto mb-20"
             variants={fadeInUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Nos services d'électricité</h2>
-            <p className="text-lg text-gray-600">
+            <span className="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-6">
+              NOS EXPERTISES
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold mb-8 text-gray-900">
+              Services d'électricité <span className="text-primary-600">de qualité</span>
+            </h2>
+            <p className="text-xl text-gray-600 leading-relaxed">
               Découvrez notre gamme complète de services électriques assurés par des professionnels qualifiés et certifiés.
             </p>
           </motion.div>
 
+          <div className="relative">
+            <motion.div 
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              {services.map((service, index) => (
+                <motion.div 
+                  key={index}
+                  variants={fadeInUp}
+                  className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary-200 transform hover:-translate-y-2"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-4 rounded-xl w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <service.icon className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-4 text-gray-900 group-hover:text-primary-700 transition-colors">
+                      {service.title}
+                    </h3>
+                    <p className="text-gray-600 mb-6 leading-relaxed">{service.description}</p>
+                    <Link
+                      to="/contact"
+                      className="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 group-hover:gap-3 transition-all duration-300"
+                    >
+                      En savoir plus 
+                      <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
+                    </Link>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust indicators */}
+      <section className="py-16 bg-gray-50">
+        <div className="container">
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="text-center mb-12"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {services.map((service, index) => (
-              <motion.div 
-                key={index}
-                variants={fadeInUp}
-                className="card p-6 hover:shadow-elevation-3 transition-shadow"
-              >
-                <div className={cn("p-4 rounded-full w-16 h-16 flex items-center justify-center mb-5", service.color)}>
-                  <service.icon className="h-8 w-8" />
-                </div>
-                <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                <p className="text-gray-600 mb-5">{service.description}</p>
-                <Link
-                  to={service.link}
-                  className="inline-flex items-center text-primary-600 font-medium hover:text-primary-700"
-                >
-                  En savoir plus <ChevronRight className="h-4 w-4 ml-1" />
-                </Link>
-              </motion.div>
-            ))}
+            <h3 className="text-2xl font-bold text-gray-900 mb-8">Ils nous font confiance</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-60">
+              <div className="flex items-center justify-center">
+                <Shield className="h-12 w-12 text-gray-400" />
+                <span className="ml-2 font-semibold text-gray-500">IRVE</span>
+              </div>
+              <div className="flex items-center justify-center">
+                <Award className="h-12 w-12 text-gray-400" />
+                <span className="ml-2 font-semibold text-gray-500">Qualifelec</span>
+              </div>
+              <div className="flex items-center justify-center">
+                <ShieldCheck className="h-12 w-12 text-gray-400" />
+                <span className="ml-2 font-semibold text-gray-500">RGE</span>
+              </div>
+              <div className="flex items-center justify-center">
+                <Clock className="h-12 w-12 text-gray-400" />
+                <span className="ml-2 font-semibold text-gray-500">24/7</span>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>

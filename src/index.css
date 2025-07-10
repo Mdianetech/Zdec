@@ -31,39 +31,43 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors 
+    @apply inline-flex items-center justify-center rounded-lg text-sm font-semibold transition-all duration-300
            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2
            disabled:opacity-50 disabled:pointer-events-none;
   }
   
   .btn-primary {
-    @apply bg-primary-600 text-white hover:bg-primary-700 px-4 py-2;
+    @apply bg-gradient-to-r from-primary-600 to-primary-700 text-white hover:from-primary-700 hover:to-primary-800 
+           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-6 py-3;
   }
   
   .btn-secondary {
-    @apply bg-secondary-500 text-white hover:bg-secondary-600 px-4 py-2;
+    @apply bg-gradient-to-r from-secondary-500 to-secondary-600 text-white hover:from-secondary-600 hover:to-secondary-700 
+           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-6 py-3;
   }
   
   .btn-accent {
-    @apply bg-accent-500 text-white hover:bg-accent-600 px-4 py-2;
+    @apply bg-gradient-to-r from-accent-500 to-accent-600 text-white hover:from-accent-600 hover:to-accent-700 
+           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-6 py-3;
   }
   
   .btn-outline {
-    @apply border border-gray-300 bg-transparent hover:bg-gray-50 px-4 py-2;
+    @apply border-2 border-gray-300 bg-transparent hover:bg-gray-50 hover:border-gray-400 
+           transform hover:-translate-y-0.5 px-6 py-3;
   }
   
   .card {
-    @apply rounded-lg bg-white shadow-elevation-2 overflow-hidden;
+    @apply rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100;
   }
   
   .input {
-    @apply flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm
-           focus:outline-none focus:ring-2 focus:ring-primary-500 focus-visible:ring-offset-2
+    @apply flex h-12 w-full rounded-lg border-2 border-gray-200 bg-white px-4 py-3 text-sm
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300
            disabled:cursor-not-allowed disabled:opacity-50;
   }
   
   .input-label {
-    @apply block text-sm font-medium leading-6 text-gray-900 mb-1;
+    @apply block text-sm font-semibold leading-6 text-gray-900 mb-2;
   }
   
   .container {
@@ -71,7 +75,7 @@
   }
   
   .transition-standard {
-    @apply transition-all duration-300 ease-in-out;
+    @apply transition-all duration-500 ease-out;
   }
 }
 

@@ -28,41 +28,54 @@ const Navbar = () => {
 
   return (
     <header className={cn(
-      "sticky top-0 z-30 w-full transition-all duration-300",
+      "fixed top-0 z-50 w-full transition-all duration-500",
       isScrolled 
-        ? "bg-white shadow-elevation-2" 
+        ? "bg-white/95 backdrop-blur-md shadow-xl border-b border-gray-100" 
         : "bg-transparent"
     )}>
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative flex h-16 items-center justify-between">
+        <div className="relative flex h-20 items-center justify-between">
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
-              <img src="/image.png" alt="ZDEC" className="h-12" />
+              <img src="/image.png" alt="ZDEC" className="h-14 transition-all duration-300 hover:scale-105" />
             </Link>
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden md:flex md:items-center md:space-x-8">
+          <div className="hidden lg:flex lg:items-center lg:space-x-10">
             {navLinks.map((link) => (
               <NavLink
                 key={link.path}
                 to={link.path}
                 className={({ isActive }) => cn(
-                  "text-sm font-medium transition-colors hover:text-primary-600",
-                  isActive ? "text-primary-600" : "text-gray-700"
+                  "text-sm font-semibold transition-all duration-300 hover:text-primary-600 relative py-2",
+                  isActive 
+                    ? "text-primary-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-primary-600" 
+                    : isScrolled ? "text-gray-700 hover:text-primary-600" : "text-white hover:text-primary-300"
                 )}
               >
                 {link.name}
               </NavLink>
             ))}
+            <Link 
+              to="/contact" 
+              className="btn btn-primary px-6 py-2.5 text-sm font-semibold rounded-lg hover:shadow-lg transition-all duration-300"
+            >
+              Contact
+            </Link>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              className={cn(
+                "flex items-center justify-center p-2 rounded-lg transition-colors",
+                isScrolled 
+                  ? "text-gray-600 hover:text-gray-900 hover:bg-gray-100" 
+                  : "text-white hover:text-gray-200 hover:bg-white/10"
+              )}
             >
               <Menu className="h-6 w-6" />
               <span className="sr-only">Ouvrir le menu</span>
