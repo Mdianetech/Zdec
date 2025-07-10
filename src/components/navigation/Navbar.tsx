@@ -57,12 +57,6 @@ const Navbar = () => {
                 {link.name}
               </NavLink>
             ))}
-            <Link 
-              to="/contact" 
-              className="btn btn-primary px-6 py-2.5 text-sm font-semibold rounded-lg hover:shadow-lg transition-all duration-300"
-            >
-              Contact
-            </Link>
           </div>
 
           {/* Mobile menu button */}
