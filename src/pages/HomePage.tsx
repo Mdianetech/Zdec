@@ -128,9 +128,16 @@ const HomePage = () => {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-900 to-primary-700 text-white overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3825582/pexels-photo-3825582.jpeg?auto=compress&cs=tinysrgb&w=1600')] opacity-15 bg-cover bg-center mix-blend-overlay" />
-        <div className="container relative py-20 md:py-28">
+        <div className="container relative py-20 md:py-28" style={{
+          backgroundImage: 'url(/image.png)',
+          backgroundSize: '200px 200px',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center right',
+          backgroundAttachment: 'local'
+        }}>
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-900/80 to-primary-700/80"></div>
           <motion.div 
-            className="max-w-2xl"
+            className="max-w-2xl relative z-10"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
