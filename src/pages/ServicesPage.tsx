@@ -26,7 +26,7 @@ const services = [
       'Installation de tableaux électriques',
       'Raccordement d&apos;appareils',
     ],
-    image: 'https://images.pexels.com/photos/8005397/pexels-photo-8005397.jpeg?auto=compress&cs=tinysrgb&w=1600'
+    image: '/1fde24ca-122c-4ea9-a8e6-2783ffaf78f9.jpeg'
   },
   {
     title: 'Bornes de recharge IRVE',
