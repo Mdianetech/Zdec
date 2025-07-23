@@ -198,7 +198,7 @@ const ServicesPage = () => {
                   <img 
                     src={service.image}
                     alt={service.title}
-                    className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-700"
+                    className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-700 scale-x-[-1]"
                   />
                 </div>
                 <div className="p-6">
