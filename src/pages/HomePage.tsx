@@ -414,8 +414,8 @@ const HomePage = () => {
               </div>
               <div className="lg:w-1/2 relative">
                 <img
-                  src="https://images.pexels.com/photos/3822843/pexels-photo-3822843.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  alt="Borne de recharge pour véhicule électrique"
+                  src="/1fde24ca-122c-4ea9-a8e6-2783ffaf78f9.jpeg"
+                  alt="Technicien travaillant sur une installation électrique"
                   className="w-full h-full object-cover"
                 />
               </div>
