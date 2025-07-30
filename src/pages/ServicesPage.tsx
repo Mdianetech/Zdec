@@ -40,9 +40,9 @@ const services = [
     icon: BatteryCharging,
     images: [
       '/edf61b3d-67aa-467b-86c6-4fcb836ea43c.jpeg',
-      '/af7d00c0-ac68-4e24-94eb-fb3210a07c30.jpeg',
-      '/83k4kH4Gyz9l7Pl-IsfmA.jpg',
-      '/1IKcYkXwVoGCjDIsD5vsI.jpg'
+      '/1749721290289.jpeg',
+      '/1750010421911.jpeg',
+      '/1750071623260.jpeg'
     ],
     features: [
       'Étude technique personnalisée',
