@@ -95,16 +95,21 @@ export default function ProjectsShowcasePage() {
     const newProject = {
       title: 'Nouveau projet',
       description: 'Description du projet',
-      date: new Date().toISOString().split('T')[0],
-      content: []
+      date: new Date().toISOString().split('T')[0]
     };
 
     try {
-      const docRef = await addDoc(collection(db, 'projects'), newProject);
-      const createdProject = { id: docRef.id, ...newProject };
-      
-      setProjects([...projects, createdProject]);
-      setEditingProject(createdProject);
+      const { data, error } = await supabase
+        .from('projects')
+        .insert(newProject)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      const projectWithContent = { ...data, content: [] };
+      setProjects([...projects, projectWithContent]);
+      setEditingProject(projectWithContent);
       setIsEditing(true);
     } catch (err) {
       setError('Error creating project');
@@ -119,7 +124,12 @@ export default function ProjectsShowcasePage() {
 
   const handleDeleteProject = async (projectId: string) => {
     try {
-      await deleteDoc(doc(db, 'projects', projectId));
+      const { error } = await supabase
+        .from('projects')
+        .delete()
+        .eq('id', projectId);
+
+      if (error) throw error;
 
       setProjects(projects.filter(p => p.id !== projectId));
     } catch (err) {
@@ -132,12 +142,27 @@ export default function ProjectsShowcasePage() {
     if (!editingProject) return;
     
     try {
-      await updateDoc(doc(db, 'projects', editingProject.id), {
-        title: editingProject.title,
-        description: editingProject.description,
-        content: editingProject.content,
-        date: editingProject.date
-      });
+      const { error: projectError } = await supabase
+        .from('projects')
+        .update({
+          title: editingProject.title,
+          description: editingProject.description
+        })
+        .eq('id', editingProject.id);
+
+      if (projectError) throw projectError;
+
+      const { error: contentError } = await supabase
+        .from('project_content')
+        .upsert(
+          editingProject.content.map((content, index) => ({
+            ...content,
+            project_id: editingProject.id,
+            order: index
+          }))
+        );
+
+      if (contentError) throw contentError;
 
       setProjects(projects.map(p => 
         p.id === editingProject.id ? editingProject : p
@@ -163,23 +188,51 @@ export default function ProjectsShowcasePage() {
     setNewContent(newContentItem);
   };
 
-  const handleSaveContent = () => {
+  const handleSaveContent = async () => {
     if (!editingProject || !newContent) return;
+    
+    try {
+      const { error } = await supabase
+        .from('project_content')
+        .insert({
+          project_id: editingProject.id,
+          type: newContent.type,
+          content: newContent.content,
+          order: editingProject.content.length
+        });
+
+      if (error) throw error;
 
       setEditingProject({
         ...editingProject,
         content: [...editingProject.content, newContent]
       });
       setNewContent(null);
+    } catch (err) {
+      setError('Error saving content');
+      console.error('Error saving content:', err);
+    }
   };
 
-  const handleDeleteContent = (contentId: string) => {
+  const handleDeleteContent = async (contentId: string) => {
     if (!editingProject) return;
+    
+    try {
+      const { error } = await supabase
+        .from('project_content')
+        .delete()
+        .eq('id', contentId);
+
+      if (error) throw error;
 
       setEditingProject({
         ...editingProject,
         content: editingProject.content.filter(c => c.id !== contentId)
       });
+    } catch (err) {
+      setError('Error deleting content');
+      console.error('Error deleting content:', err);
+    }
   };
 
   const renderContent = (content: ProjectContent) => {
