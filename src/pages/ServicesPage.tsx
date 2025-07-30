@@ -171,29 +171,29 @@ const ServicesPage = () => {
                 ? "opacity-100 scale-100" 
                 : "opacity-0 scale-105"
             )}
+            style={{
+              imageRendering: 'high-quality',
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)',
+              filter: 'contrast(1.05) saturate(1.1) brightness(1.02)',
+            }}
+            loading="lazy"
+            decoding="async"
           />
         ))}
         
         {/* Indicateurs de pagination */}
-              filter: 'contrast(1.05) saturate(1.1) brightness(1.02)',
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
           {images.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentImageIndex(index)}
               className={cn(
-                "absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out cursor-pointer hover:scale-105 select-none",
+                "w-3 h-3 rounded-full transition-all duration-300",
                 index === currentImageIndex 
                   ? "bg-white scale-125" 
                   : "bg-white/50 hover:bg-white/75"
               )}
-              style={{
-                imageRendering: 'high-quality',
-                backfaceVisibility: 'hidden',
-                transform: 'translateZ(0)',
-              }}
-              loading="lazy"
-              decoding="async"
             />
           ))}
         </div>
@@ -435,12 +435,13 @@ const ServicesPage = () => {
             <img 
               src={selectedImage} 
               alt="Image agrandie" 
-                maxHeight: '95vh',
+              style={{ 
+                maxHeight: '90vh',
                 maxWidth: '95vw',
                 imageRendering: 'high-quality',
                 objectFit: 'contain',
                 filter: 'contrast(1.05) saturate(1.1) brightness(1.02)',
-              style={{ maxHeight: '90vh' }}
+              }}
               loading="eager"
               decoding="sync"
             />
