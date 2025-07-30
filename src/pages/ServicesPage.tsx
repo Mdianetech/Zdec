@@ -11,7 +11,8 @@ import {
   Home,
   Building2,
   Factory,
-  ChevronRight
+  ChevronRight,
+  X
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import BrandIconContainer from '../components/ui/BrandIconContainer';
@@ -140,6 +141,8 @@ const staggerContainer = {
 };
 
 const ServicesPage = () => {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   // Component pour le carrousel d'images
   const ImageCarousel = ({ images, title }: { images: string[], title: string }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -161,8 +164,9 @@ const ServicesPage = () => {
             key={index}
             src={image}
             alt={`${title} - Image ${index + 1}`}
+            onClick={() => setSelectedImage(image)}
             className={cn(
-              "absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out",
+              "absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out cursor-pointer hover:scale-105",
               index === currentImageIndex 
                 ? "opacity-100 scale-100" 
                 : "opacity-0 scale-105"
@@ -412,6 +416,29 @@ const ServicesPage = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Image Zoom Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-4xl w-full">
+            <img 
+              src={selectedImage} 
+              alt="Image agrandie" 
+              className="w-full h-auto rounded-lg"
+              style={{ maxHeight: '90vh' }}
+            />
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors"
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };
