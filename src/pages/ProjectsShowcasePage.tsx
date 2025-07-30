@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Plus, Edit2, Trash2, Image as ImageIcon, Video, Type, Save, X, ExternalLink } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 
 interface Project {
   id: string;
@@ -25,86 +24,126 @@ export default function ProjectsShowcasePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isSupabaseAvailable, setIsSupabaseAvailable] = useState(false);
+
+  // Demo data for when Supabase is not available
+  const demoProjects: Project[] = [
+    {
+      id: 'demo-1',
+      title: 'Installation électrique résidentielle',
+      description: 'Mise aux normes complète d\'une installation électrique dans une maison individuelle',
+      date: '2024-01-15',
+      content: [
+        {
+          id: 'demo-content-1',
+          type: 'text',
+          content: 'Installation complète du tableau électrique avec mise aux normes NF C 15-100'
+        },
+        {
+          id: 'demo-content-2',
+          type: 'image',
+          content: '/1749721290289.jpeg'
+        }
+      ]
+    },
+    {
+      id: 'demo-2',
+      title: 'Borne de recharge IRVE',
+      description: 'Installation d\'une borne de recharge pour véhicule électrique',
+      date: '2024-02-10',
+      content: [
+        {
+          id: 'demo-content-3',
+          type: 'text',
+          content: 'Installation certifiée IRVE d\'une borne de recharge 22kW'
+        },
+        {
+          id: 'demo-content-4',
+          type: 'image',
+          content: '/edf61b3d-67aa-467b-86c6-4fcb836ea43c.jpeg'
+        }
+      ]
+    }
+  ];
 
   useEffect(() => {
     fetchProjects();
   }, []);
 
+  const checkSupabaseConnection = async () => {
+    try {
+      const { supabase } = await import('../lib/supabase');
+      const { data, error } = await supabase.from('projects').select('id').limit(1);
+      if (error && error.message.includes('Failed to fetch')) {
+        return false;
+      }
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+
   const fetchProjects = async () => {
     try {
-      const { data: projectsData, error: projectsError } = await supabase
-        .from('projects')
-        .select(`
-          *,
-          project_content (
-            id,
-            type,
-            content,
-            order
-          )
-        `)
-        .order('date', { ascending: false });
-      
-      if (projectsError) throw projectsError;
-      
-      const formattedProjects = projectsData?.map(project => ({
-        ...project,
-        content: project.project_content
-          ?.sort((a, b) => a.order - b.order)
-          .map(({ id, type, content }) => ({ id, type, content })) || []
-      })) as Project[];
-      
-      setProjects(formattedProjects || []);
+      const isConnected = await checkSupabaseConnection();
+      setIsSupabaseAvailable(isConnected);
+
+      if (isConnected) {
+        const { supabase } = await import('../lib/supabase');
+        const { data: projectsData, error: projectsError } = await supabase
+          .from('projects')
+          .select(`
+            *,
+            project_content (
+              id,
+              type,
+              content,
+              order
+            )
+          `)
+          .order('date', { ascending: false });
+        
+        if (projectsError) throw projectsError;
+        
+        const formattedProjects = projectsData?.map(project => ({
+          ...project,
+          content: project.project_content
+            ?.sort((a, b) => a.order - b.order)
+            .map(({ id, type, content }) => ({ id, type, content })) || []
+        })) as Project[];
+        
+        setProjects(formattedProjects || []);
+      } else {
+        // Use demo data when Supabase is not available
+        setProjects(demoProjects);
+        setError('Mode démonstration - Supabase non configuré');
+      }
     } catch (err) {
-      setError('Erreur de chargement des projets. Vérifiez votre connexion Firebase.');
+      setError('Mode démonstration - Connexion Supabase indisponible');
       console.error('Error fetching projects:', err);
-      
-      // Fallback to demo data on error
-      const demoProjects = [
-        {
-          id: 'demo-1',
-          title: 'Installation électrique résidentielle',
-          description: 'Mise aux normes complète d\'une installation électrique dans une maison individuelle',
-          date: '2024-01-15',
-          content: [
-            {
-              id: 'demo-content-1',
-              type: 'text',
-              content: 'Installation complète du tableau électrique avec mise aux normes NF C 15-100'
-            },
-            {
-              id: 'demo-content-2',
-              type: 'image',
-              content: '/1749721290289.jpeg'
-            }
-          ]
-        },
-        {
-          id: 'demo-2',
-          title: 'Borne de recharge IRVE',
-          description: 'Installation d\'une borne de recharge pour véhicule électrique',
-          date: '2024-02-10',
-          content: [
-            {
-              id: 'demo-content-3',
-              type: 'text',
-              content: 'Installation certifiée IRVE d\'une borne de recharge 22kW'
-            },
-            {
-              id: 'demo-content-4',
-              type: 'image',
-              content: '/edf61b3d-67aa-467b-86c6-4fcb836ea43c.jpeg'
-            }
-          ]
-        }
-      ];
       setProjects(demoProjects);
+      setIsSupabaseAvailable(false);
     } finally {
       setLoading(false);
     }
   };
 
   const handleAddProject = async () => {
+    if (!isSupabaseAvailable) {
+      // Add to local state in demo mode
+      const newProject: Project = {
+        id: `demo-${Date.now()}`,
+        title: 'Nouveau projet',
+        description: 'Description du projet',
+        date: new Date().toISOString().split('T')[0],
+        content: []
+      };
+      setProjects([newProject, ...projects]);
+      setEditingProject(newProject);
+      setIsEditing(true);
+      return;
+    }
+
     const newProject = {
       title: 'Nouveau projet',
       description: 'Description du projet',
@@ -112,6 +151,7 @@ export default function ProjectsShowcasePage() {
     };
 
     try {
+      const { supabase } = await import('../lib/supabase');
       const { data, error } = await supabase
         .from('projects')
         .insert(newProject)
@@ -131,12 +171,26 @@ export default function ProjectsShowcasePage() {
   };
 
   const handleEditProject = (project: Project) => {
+    if (!isSupabaseAvailable) {
+      // In demo mode, just enable editing
+      setEditingProject(project);
+      setIsEditing(true);
+      return;
+    }
+
     setEditingProject(project);
     setIsEditing(true);
   };
 
   const handleDeleteProject = async (projectId: string) => {
     try {
+      if (!isSupabaseAvailable) {
+        // Remove from local state in demo mode
+        setProjects(projects.filter(p => p.id !== projectId));
+        return;
+      }
+
+      const { supabase } = await import('../lib/supabase');
       const { error } = await supabase
         .from('projects')
         .delete()
@@ -153,8 +207,20 @@ export default function ProjectsShowcasePage() {
 
   const handleSaveProject = async () => {
     if (!editingProject) return;
+
+    if (!isSupabaseAvailable) {
+      // Update local state in demo mode
+      setProjects(projects.map(p => 
+        p.id === editingProject.id ? editingProject : p
+      ));
+      setIsEditing(false);
+      setEditingProject(null);
+      setNewContent(null);
+      return;
+    }
     
     try {
+      const { supabase } = await import('../lib/supabase');
       const { error: projectError } = await supabase
         .from('projects')
         .update({
@@ -203,8 +269,19 @@ export default function ProjectsShowcasePage() {
 
   const handleSaveContent = async () => {
     if (!editingProject || !newContent) return;
+
+    if (!isSupabaseAvailable) {
+      // Add to local state in demo mode
+      setEditingProject({
+        ...editingProject,
+        content: [...editingProject.content, newContent]
+      });
+      setNewContent(null);
+      return;
+    }
     
     try {
+      const { supabase } = await import('../lib/supabase');
       const { error } = await supabase
         .from('project_content')
         .insert({
@@ -229,8 +306,18 @@ export default function ProjectsShowcasePage() {
 
   const handleDeleteContent = async (contentId: string) => {
     if (!editingProject) return;
+
+    if (!isSupabaseAvailable) {
+      // Remove from local state in demo mode
+      setEditingProject({
+        ...editingProject,
+        content: editingProject.content.filter(c => c.id !== contentId)
+      });
+      return;
+    }
     
     try {
+      const { supabase } = await import('../lib/supabase');
       const { error } = await supabase
         .from('project_content')
         .delete()
@@ -292,7 +379,11 @@ export default function ProjectsShowcasePage() {
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {error && (
-          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+          <div className={`mb-4 p-4 rounded ${
+            isSupabaseAvailable 
+              ? 'bg-red-100 border border-red-400 text-red-700' 
+              : 'bg-blue-100 border border-blue-400 text-blue-700'
+          }`}>
             {error}
           </div>
         )}
