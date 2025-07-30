@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Plus, Edit2, Trash2, Image as ImageIcon, Video, Type, Save, X, ExternalLink } from 'lucide-react';
-import { db } from '../lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+import { supabase } from '../lib/supabase';
 
 interface Project {
   id: string;
@@ -33,15 +32,29 @@ export default function ProjectsShowcasePage() {
 
   const fetchProjects = async () => {
     try {
-      const projectsQuery = query(collection(db, 'projects'), orderBy('date', 'desc'));
-      const querySnapshot = await getDocs(projectsQuery);
+      const { data: projectsData, error: projectsError } = await supabase
+        .from('projects')
+        .select(`
+          *,
+          project_content (
+            id,
+            type,
+            content,
+            order
+          )
+        `)
+        .order('date', { ascending: false });
       
-      const projectsData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
+      if (projectsError) throw projectsError;
+      
+      const formattedProjects = projectsData?.map(project => ({
+        ...project,
+        content: project.project_content
+          ?.sort((a, b) => a.order - b.order)
+          .map(({ id, type, content }) => ({ id, type, content })) || []
       })) as Project[];
       
-      setProjects(projectsData);
+      setProjects(formattedProjects || []);
     } catch (err) {
       setError('Erreur de chargement des projets. Vérifiez votre connexion Firebase.');
       console.error('Error fetching projects:', err);
