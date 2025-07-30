@@ -39,10 +39,10 @@ const services = [
     description: 'Installation certifiée de bornes de recharge pour véhicules électriques.',
     icon: BatteryCharging,
     images: [
-      'https://images.pexels.com/photos/3822843/pexels-photo-3822843.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/7841419/pexels-photo-7841419.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/110844/pexels-photo-110844.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/15001445/pexels-photo-15001445.jpeg?auto=compress&cs=tinysrgb&w=1600'
+      '/edf61b3d-67aa-467b-86c6-4fcb836ea43c.jpeg',
+      '/af7d00c0-ac68-4e24-94eb-fb3210a07c30.jpeg',
+      '/83k4kH4Gyz9l7Pl-IsfmA.jpg',
+      '/1IKcYkXwVoGCjDIsD5vsI.jpg'
     ],
     features: [
       'Étude technique personnalisée',
