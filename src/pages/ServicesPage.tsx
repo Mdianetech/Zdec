@@ -22,10 +22,10 @@ const services = [
     description: 'Installation complète, mise aux normes et rénovation de votre système électrique par des techniciens qualifiés.',
     icon: LightbulbIcon,
     images: [
-      '/electrician-work.jpg',
-      'https://images.pexels.com/photos/8005397/pexels-photo-8005397.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/257886/pexels-photo-257886.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg?auto=compress&cs=tinysrgb&w=1600'
+      '/1fde24ca-122c-4ea9-a8e6-2783ffaf78f9.jpeg',
+      '/edf61b3d-67aa-467b-86c6-4fcb836ea43c.jpeg',
+      '/af7d00c0-ac68-4e24-94eb-fb3210a07c30.jpeg',
+      '/83k4kH4Gyz9l7Pl-IsfmA.jpg'
     ],
     features: [
       'Diagnostic complet de l\'installation existante',
@@ -39,10 +39,10 @@ const services = [
     description: 'Installation certifiée de bornes de recharge pour véhicules électriques.',
     icon: BatteryCharging,
     images: [
-      'https://images.pexels.com/photos/3822843/pexels-photo-3822843.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/15001445/pexels-photo-15001445.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/4329322/pexels-photo-4329322.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/5263359/pexels-photo-5263359.jpeg?auto=compress&cs=tinysrgb&w=1600'
+      '/1IKcYkXwVoGCjDIsD5vsI.jpg',
+      '/edf61b3d-67aa-467b-86c6-4fcb836ea43c.jpeg',
+      '/af7d00c0-ac68-4e24-94eb-fb3210a07c30.jpeg',
+      '/83k4kH4Gyz9l7Pl-IsfmA.jpg'
     ],
     features: [
       'Étude technique personnalisée',
@@ -56,10 +56,10 @@ const services = [
     description: 'Solutions intelligentes pour le contrôle et l&apos;automatisation de votre habitat.',
     icon: Home,
     images: [
-      'https://images.pexels.com/photos/3183183/pexels-photo-3183183.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/4219654/pexels-photo-4219654.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/4219654/pexels-photo-4219654.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&w=1600'
+      '/af7d00c0-ac68-4e24-94eb-fb3210a07c30.jpeg',
+      '/edf61b3d-67aa-467b-86c6-4fcb836ea43c.jpeg',
+      '/1IKcYkXwVoGCjDIsD5vsI.jpg',
+      '/83k4kH4Gyz9l7Pl-IsfmA.jpg'
     ],
     features: [
       'Éclairage intelligent',
@@ -73,10 +73,10 @@ const services = [
     description: 'Installation et configuration de réseaux VDI professionnels.',
     icon: Network,
     images: [
-      'https://images.pexels.com/photos/2881232/pexels-photo-2881232.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/325229/pexels-photo-325229.jpeg?auto=compress&cs=tinysrgb&w=1600'
+      '/83k4kH4Gyz9l7Pl-IsfmA.jpg',
+      '/1IKcYkXwVoGCjDIsD5vsI.jpg',
+      '/edf61b3d-67aa-467b-86c6-4fcb836ea43c.jpeg',
+      '/af7d00c0-ac68-4e24-94eb-fb3210a07c30.jpeg'
     ],
     features: [
       'Câblage structuré',
