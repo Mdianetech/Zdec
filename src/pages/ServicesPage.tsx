@@ -24,8 +24,8 @@ const services = [
     images: [
       'https://images.pexels.com/photos/8005397/pexels-photo-8005397.jpeg?auto=compress&cs=tinysrgb&w=1600',
       'https://images.pexels.com/photos/257886/pexels-photo-257886.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/162539/architecture-building-amsterdam-blue-162539.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=1600'
+      '/1749721290289.jpeg',
+      '/1750071623260.jpeg'
     ],
     features: [
       'Diagnostic complet de l\'installation existante',
