@@ -74,6 +74,7 @@ export default function ProjectsShowcasePage() {
   const checkSupabaseConnection = async () => {
     // Vérifier d'abord si Supabase est configuré
     if (!isSupabaseConfigured()) {
+      console.log('Supabase non configuré - utilisation du mode démonstration');
       return false;
     }
 
@@ -90,13 +91,14 @@ export default function ProjectsShowcasePage() {
       const { error } = await Promise.race([testPromise, timeoutPromise]) as any;
       
       if (error) {
-        console.warn('Supabase connection test failed:', error.message);
+        console.log('Test de connexion Supabase échoué:', error.message);
         return false;
       }
       
+      console.log('Connexion Supabase réussie');
       return true;
     } catch (err) {
-      console.warn('Supabase connection error:', err);
+      console.log('Erreur de connexion Supabase:', err);
       return false;
     }
   };
@@ -113,6 +115,7 @@ export default function ProjectsShowcasePage() {
 
       if (isConnected) {
         const { supabase } = await import('../lib/supabase');
+        console.log('Tentative de récupération des projets depuis Supabase...');
         const { data: projectsData, error: projectsError } = await supabase
           .from('projects')
           .select(`
@@ -128,6 +131,7 @@ export default function ProjectsShowcasePage() {
         
         if (projectsError) throw projectsError;
         
+        console.log('Projets récupérés depuis Supabase:', projectsData?.length || 0);
         const formattedProjects = projectsData?.map(project => ({
           ...project,
           content: project.project_content
@@ -138,6 +142,7 @@ export default function ProjectsShowcasePage() {
         setProjects(formattedProjects || []);
       } else {
         // Use demo data when Supabase is not available
+        console.log('Utilisation des données de démonstration');
         setProjects(demoProjects);
         if (!isConfigured) {
           setError('Mode démonstration - Supabase non configuré. Ajoutez vos variables d\'environnement VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY');
@@ -146,8 +151,8 @@ export default function ProjectsShowcasePage() {
         }
       }
     } catch (err) {
+      console.log('Erreur lors de la récupération des projets:', err);
       setError('Mode démonstration - Erreur de connexion');
-      console.error('Error fetching projects:', err);
       setProjects(demoProjects);
       setIsSupabaseAvailable(false);
     } finally {
@@ -158,6 +163,7 @@ export default function ProjectsShowcasePage() {
   const handleAddProject = async () => {
     if (!isSupabaseAvailable) {
       // Add to local state in demo mode
+      console.log('Ajout d\'un projet en mode démonstration');
       const newProject: Project = {
         id: `demo-${Date.now()}`,
         title: 'Nouveau projet',
@@ -179,6 +185,7 @@ export default function ProjectsShowcasePage() {
 
     try {
       const { supabase } = await import('../lib/supabase');
+      console.log('Ajout d\'un projet via Supabase...');
       const { data, error } = await supabase
         .from('projects')
         .insert(newProject)
@@ -187,13 +194,14 @@ export default function ProjectsShowcasePage() {
 
       if (error) throw error;
 
+      console.log('Projet ajouté avec succès:', data);
       const projectWithContent = { ...data, content: [] };
       setProjects([...projects, projectWithContent]);
       setEditingProject(projectWithContent);
       setIsEditing(true);
     } catch (err) {
+      console.log('Erreur lors de l\'ajout du projet:', err);
       setError('Error creating project');
-      console.error('Error adding project:', err);
     }
   };
 
