@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { 
   Zap, 
   BatteryCharging, 
@@ -20,49 +21,69 @@ const services = [
     title: 'Installation électrique',
     description: 'Installation complète, mise aux normes et rénovation de votre système électrique par des techniciens qualifiés.',
     icon: LightbulbIcon,
+    images: [
+      '/electrician-work.jpg',
+      'https://images.pexels.com/photos/8005397/pexels-photo-8005397.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      'https://images.pexels.com/photos/257886/pexels-photo-257886.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg?auto=compress&cs=tinysrgb&w=1600'
+    ],
     features: [
       'Diagnostic complet de l\'installation existante',
       'Mise aux normes NF C 15-100 certifiée',
       'Installation et rénovation de tableaux électriques',
       'Raccordement sécurisé d\'appareils électriques',
     ],
-    image: '/electrician-work.jpg'
   },
   {
     title: 'Bornes de recharge IRVE',
     description: 'Installation certifiée de bornes de recharge pour véhicules électriques.',
     icon: BatteryCharging,
+    images: [
+      'https://images.pexels.com/photos/3822843/pexels-photo-3822843.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      'https://images.pexels.com/photos/15001445/pexels-photo-15001445.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      'https://images.pexels.com/photos/4329322/pexels-photo-4329322.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      'https://images.pexels.com/photos/5263359/pexels-photo-5263359.jpeg?auto=compress&cs=tinysrgb&w=1600'
+    ],
     features: [
       'Étude technique personnalisée',
       'Installation aux normes IRVE',
       'Configuration et mise en service',
       'Maintenance préventive',
     ],
-    image: 'https://images.pexels.com/photos/3822843/pexels-photo-3822843.jpeg?auto=compress&cs=tinysrgb&w=1600'
   },
   {
     title: 'Domotique',
     description: 'Solutions intelligentes pour le contrôle et l&apos;automatisation de votre habitat.',
     icon: Home,
+    images: [
+      'https://images.pexels.com/photos/3183183/pexels-photo-3183183.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      'https://images.pexels.com/photos/4219654/pexels-photo-4219654.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      'https://images.pexels.com/photos/4219654/pexels-photo-4219654.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      'https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&w=1600'
+    ],
     features: [
       'Éclairage intelligent',
       'Contrôle du chauffage',
       'Gestion des volets',
       'Systèmes de sécurité',
     ],
-    image: 'https://images.pexels.com/photos/3183183/pexels-photo-3183183.jpeg?auto=compress&cs=tinysrgb&w=1600'
   },
   {
     title: 'Réseaux informatiques',
     description: 'Installation et configuration de réseaux VDI professionnels.',
     icon: Network,
+    images: [
+      'https://images.pexels.com/photos/2881232/pexels-photo-2881232.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      'https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      'https://images.pexels.com/photos/325229/pexels-photo-325229.jpeg?auto=compress&cs=tinysrgb&w=1600'
+    ],
     features: [
       'Câblage structuré',
       'Installation fibre optique',
       'Configuration réseau',
       'Tests et certification',
     ],
-    image: 'https://images.pexels.com/photos/2881232/pexels-photo-2881232.jpeg?auto=compress&cs=tinysrgb&w=1600'
   }
 ];
 
@@ -119,6 +140,55 @@ const staggerContainer = {
 };
 
 const ServicesPage = () => {
+  // Component pour le carrousel d'images
+  const ImageCarousel = ({ images, title }: { images: string[], title: string }) => {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrentImageIndex((prevIndex) => 
+          prevIndex === images.length - 1 ? 0 : prevIndex + 1
+        );
+      }, 3000); // Change d'image toutes les 3 secondes
+
+      return () => clearInterval(interval);
+    }, [images.length]);
+
+    return (
+      <div className="relative h-64 overflow-hidden">
+        {images.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            alt={`${title} - Image ${index + 1}`}
+            className={cn(
+              "absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out",
+              index === currentImageIndex 
+                ? "opacity-100 scale-100" 
+                : "opacity-0 scale-105"
+            )}
+          />
+        ))}
+        
+        {/* Indicateurs de pagination */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentImageIndex(index)}
+              className={cn(
+                "w-2 h-2 rounded-full transition-all duration-300",
+                index === currentImageIndex 
+                  ? "bg-white scale-125" 
+                  : "bg-white/50 hover:bg-white/75"
+              )}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -194,13 +264,7 @@ const ServicesPage = () => {
                 variants={fadeInUp}
                 className="card overflow-hidden group"
               >
-                <div className="h-64 overflow-hidden">
-                  <img 
-                    src="/electrician-work.jpg"
-                    alt={service.title}
-                    className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-700 scale-x-[-1]"
-                  />
-                </div>
+                <ImageCarousel images={service.images} title={service.title} />
                 <div className="p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <BrandIconContainer 
