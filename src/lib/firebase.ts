@@ -8,7 +8,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyBy_SW66GyuLZwqs0DX4jPaKUHsGHTqjHE",
   authDomain: "newbrain-7955f.firebaseapp.com",
   projectId: "newbrain-7955f",
-  storageBucket: "newbrain-7955f.appspot.com",
+  storageBucket: "newbrain-7955f.firebasestorage.app",
   messagingSenderId: "331779110246",
   appId: "1:331779110246:web:190d973de808b847ee44a7"
 };
