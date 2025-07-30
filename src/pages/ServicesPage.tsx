@@ -56,8 +56,8 @@ const services = [
     description: 'Solutions intelligentes pour le contrôle et l&apos;automatisation de votre habitat.',
     icon: Home,
     images: [
-      'https://images.pexels.com/photos/3183183/pexels-photo-3183183.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      '/1750010421911 copy.jpeg',
+      '/1750071623260 copy copy.jpeg',
       'https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&w=1600',
       'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600'
     ],
