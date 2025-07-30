@@ -32,6 +32,54 @@ export default function ProjectsShowcasePage() {
 
   const fetchProjects = async () => {
     try {
+      // Check if Supabase is properly configured
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('your-project') || supabaseKey.includes('your-anon-key')) {
+        // Use demo data when Supabase is not configured
+        const demoProjects = [
+          {
+            id: 'demo-1',
+            title: 'Installation électrique résidentielle',
+            description: 'Mise aux normes complète d\'une installation électrique dans une maison individuelle',
+            date: '2024-01-15',
+            content: [
+              {
+                id: 'demo-content-1',
+                type: 'text',
+                content: 'Installation complète du tableau électrique avec mise aux normes NF C 15-100'
+              },
+              {
+                id: 'demo-content-2',
+                type: 'image',
+                content: '/1749721290289.jpeg'
+              }
+            ]
+          },
+          {
+            id: 'demo-2',
+            title: 'Borne de recharge IRVE',
+            description: 'Installation d\'une borne de recharge pour véhicule électrique',
+            date: '2024-02-10',
+            content: [
+              {
+                id: 'demo-content-3',
+                type: 'text',
+                content: 'Installation certifiée IRVE d\'une borne de recharge 22kW'
+              },
+              {
+                id: 'demo-content-4',
+                type: 'image',
+                content: '/edf61b3d-67aa-467b-86c6-4fcb836ea43c.jpeg'
+              }
+            ]
+          }
+        ];
+        setProjects(demoProjects);
+        return;
+      }
+
       const { data: projectsData, error: projectsError } = await supabase
         .from('projects')
         .select(`
@@ -57,8 +105,31 @@ export default function ProjectsShowcasePage() {
 
       setProjects(formattedProjects);
     } catch (err) {
-      setError('Error loading projects');
+      setError('Erreur de chargement des projets. Vérifiez votre connexion Supabase.');
       console.error('Error fetching projects:', err);
+      
+      // Fallback to demo data on error
+      const demoProjects = [
+        {
+          id: 'demo-1',
+          title: 'Installation électrique résidentielle',
+          description: 'Mise aux normes complète d\'une installation électrique dans une maison individuelle',
+          date: '2024-01-15',
+          content: [
+            {
+              id: 'demo-content-1',
+              type: 'text',
+              content: 'Installation complète du tableau électrique avec mise aux normes NF C 15-100'
+            },
+            {
+              id: 'demo-content-2',
+              type: 'image',
+              content: '/1749721290289.jpeg'
+            }
+          ]
+        }
+      ];
+      setProjects(demoProjects);
     } finally {
       setLoading(false);
     }
