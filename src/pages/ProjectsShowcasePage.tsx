@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Plus, Edit2, Trash2, Image as ImageIcon, Video, Type, Save, X, ExternalLink } from 'lucide-react';
+import { isSupabaseConfigured } from '../lib/supabase';
 
 interface Project {
   id: string;
@@ -71,21 +72,43 @@ export default function ProjectsShowcasePage() {
   }, []);
 
   const checkSupabaseConnection = async () => {
+    // Vérifier d'abord si Supabase est configuré
+    if (!isSupabaseConfigured()) {
+      return false;
+    }
+
     try {
       const { supabase } = await import('../lib/supabase');
-      const { data, error } = await supabase.from('projects').select('id').limit(1);
-      if (error && error.message.includes('Failed to fetch')) {
+      
+      // Test de connexion simple avec timeout
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout')), 3000)
+      );
+      
+      const testPromise = supabase.from('projects').select('id').limit(1);
+      
+      const { error } = await Promise.race([testPromise, timeoutPromise]) as any;
+      
+      if (error) {
+        console.warn('Supabase connection test failed:', error.message);
         return false;
       }
+      
       return true;
     } catch (err) {
+      console.warn('Supabase connection error:', err);
       return false;
     }
   };
 
   const fetchProjects = async () => {
     try {
-      const isConnected = await checkSupabaseConnection();
+      setLoading(true);
+      
+      // Vérifier la configuration et la connexion
+      const isConfigured = isSupabaseConfigured();
+      const isConnected = isConfigured ? await checkSupabaseConnection() : false;
+      
       setIsSupabaseAvailable(isConnected);
 
       if (isConnected) {
@@ -116,10 +139,14 @@ export default function ProjectsShowcasePage() {
       } else {
         // Use demo data when Supabase is not available
         setProjects(demoProjects);
-        setError('Mode démonstration - Supabase non configuré');
+        if (!isConfigured) {
+          setError('Mode démonstration - Supabase non configuré. Ajoutez vos variables d\'environnement VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY');
+        } else {
+          setError('Mode démonstration - Connexion Supabase indisponible');
+        }
       }
     } catch (err) {
-      setError('Mode démonstration - Connexion Supabase indisponible');
+      setError('Mode démonstration - Erreur de connexion');
       console.error('Error fetching projects:', err);
       setProjects(demoProjects);
       setIsSupabaseAvailable(false);
