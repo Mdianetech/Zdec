@@ -18,15 +18,15 @@ import BrandIconContainer from '../components/ui/BrandIconContainer';
 const services = [
   {
     title: 'Installation électrique',
-    description: 'Installation complète, mise aux normes et rénovation de votre système électrique.',
+    description: 'Installation complète, mise aux normes et rénovation de votre système électrique par des techniciens qualifiés.',
     icon: LightbulbIcon,
     features: [
-      'Diagnostic complet de l&apos;installation',
-      'Mise aux normes NF C 15-100',
-      'Installation de tableaux électriques',
-      'Raccordement d&apos;appareils',
+      'Diagnostic complet de l\'installation existante',
+      'Mise aux normes NF C 15-100 certifiée',
+      'Installation et rénovation de tableaux électriques',
+      'Raccordement sécurisé d\'appareils électriques',
     ],
-    image: '/1fde24ca-122c-4ea9-a8e6-2783ffaf78f9.jpeg'
+    image: '/electrician-work.jpg'
   },
   {
     title: 'Bornes de recharge IRVE',
@@ -196,7 +196,7 @@ const ServicesPage = () => {
               >
                 <div className="h-64 overflow-hidden">
                   <img 
-                    src={service.image}
+                    src="/electrician-work.jpg"
                     alt={service.title}
                     className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-700 scale-x-[-1]"
                   />
@@ -215,7 +215,7 @@ const ServicesPage = () => {
                     {service.features.map((feature, idx) => (
                       <li key={idx} className="flex items-center gap-2 text-gray-700">
                         <ChevronRight className="h-4 w-4 text-primary-600" />
-                        <span>{feature}</span>
+                        <span dangerouslySetInnerHTML={{ __html: feature }} />
                       </li>
                     ))}
                   </ul>
