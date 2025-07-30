@@ -77,6 +77,29 @@
   .transition-standard {
     @apply transition-all duration-500 ease-out;
   }
+  
+  /* Amélioration de la qualité des images */
+  .high-quality-image {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: high-quality;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  /* Optimisation pour les images en carrousel */
+  .carousel-container {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  /* Amélioration de la netteté lors des transitions */
+  .image-transition {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
 }
 
 /* Animations pour le logo 360° */

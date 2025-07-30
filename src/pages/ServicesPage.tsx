@@ -158,7 +158,7 @@ const ServicesPage = () => {
     }, [images.length]);
 
     return (
-      <div className="relative h-64 overflow-hidden">
+      <div className="relative h-64 overflow-hidden carousel-container bg-gray-100">
         {images.map((image, index) => (
           <img
             key={index}
@@ -166,7 +166,7 @@ const ServicesPage = () => {
             alt={`${title} - Image ${index + 1}`}
             onClick={() => setSelectedImage(image)}
             className={cn(
-              "absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out cursor-pointer hover:scale-105",
+              "absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out cursor-pointer hover:scale-105 select-none high-quality-image image-transition",
               index === currentImageIndex 
                 ? "opacity-100 scale-100" 
                 : "opacity-0 scale-105"
@@ -175,17 +175,25 @@ const ServicesPage = () => {
         ))}
         
         {/* Indicateurs de pagination */}
+              filter: 'contrast(1.05) saturate(1.1) brightness(1.02)',
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
           {images.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentImageIndex(index)}
               className={cn(
-                "w-2 h-2 rounded-full transition-all duration-300",
+                "absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out cursor-pointer hover:scale-105 select-none",
                 index === currentImageIndex 
                   ? "bg-white scale-125" 
                   : "bg-white/50 hover:bg-white/75"
               )}
+              style={{
+                imageRendering: 'high-quality',
+                backfaceVisibility: 'hidden',
+                transform: 'translateZ(0)',
+              }}
+              loading="lazy"
+              decoding="async"
             />
           ))}
         </div>
@@ -423,12 +431,18 @@ const ServicesPage = () => {
           className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedImage(null)}
         >
-          <div className="relative max-w-4xl w-full">
+          <div className="relative max-w-6xl w-full flex items-center justify-center">
             <img 
               src={selectedImage} 
               alt="Image agrandie" 
-              className="w-full h-auto rounded-lg"
+                maxHeight: '95vh',
+                maxWidth: '95vw',
+                imageRendering: 'high-quality',
+                objectFit: 'contain',
+                filter: 'contrast(1.05) saturate(1.1) brightness(1.02)',
               style={{ maxHeight: '90vh' }}
+              loading="eager"
+              decoding="sync"
             />
             <button
               onClick={() => setSelectedImage(null)}
