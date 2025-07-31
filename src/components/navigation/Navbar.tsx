@@ -216,11 +216,6 @@ const HomePage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-                    ? "text-primary-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-primary-600" 
-                    : isScrolled ? "text-gray-700 hover:text-primary-600" : "text-white hover:text-primary-300";
-                  
-                  return cn(baseClasses, textSize, activeClasses);
-                }}
             >
               <Zap className="h-4 w-4 mr-2" />
               Électricien certifié IRVE
