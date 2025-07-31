@@ -20,7 +20,8 @@ import {
   List,
   Search
 } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { db } from '../lib/firebase';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
 import { cn } from '../utils/cn';
 
 interface Project {
@@ -108,7 +109,6 @@ const ImageCarousel = ({ images, title }: { images: string[], title: string }) =
     </div>
   );
 };
-
 export default function ProjectsShowcasePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
@@ -121,7 +121,7 @@ export default function ProjectsShowcasePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [isSupabaseAvailable, setIsSupabaseAvailable] = useState(true);
+  const [isFirebaseAvailable, setIsFirebaseAvailable] = useState(true);
 
   // Mode développement - édition possible uniquement dans Bolt
   const isDevelopmentMode = import.meta.env.DEV || window.location.hostname === 'localhost';
@@ -254,17 +254,13 @@ export default function ProjectsShowcasePage() {
     filterProjects();
   }, [projects, selectedCategory, searchTerm]);
 
-  const checkSupabaseConnection = async () => {
+  const checkFirebaseConnection = async () => {
     try {
-      const { data, error } = await supabase
-        .from('projects')
-        .select('id')
-        .limit(1);
-      
-      if (error) throw error;
+      const testQuery = query(collection(db, 'projects'), orderBy('date', 'desc'));
+      await getDocs(testQuery);
       return true;
     } catch (err) {
-      console.log('Erreur de connexion Supabase:', err);
+      console.log('Erreur de connexion Firebase:', err);
       return false;
     }
   };
@@ -273,55 +269,50 @@ export default function ProjectsShowcasePage() {
     try {
       setLoading(true);
       
-      const isConnected = await checkSupabaseConnection();
-      setIsSupabaseAvailable(isConnected);
+      const isConnected = await checkFirebaseConnection();
+      setIsFirebaseAvailable(isConnected);
 
       if (isConnected) {
-        // Récupérer les projets avec leur contenu
-        const { data: projectsData, error: projectsError } = await supabase
-          .from('projects')
-          .select(`
-            id,
-            title,
-            description,
-            date,
-            category,
-            project_content (
-              id,
-              type,
-              content,
-              order
-            )
-          `)
-          .order('date', { ascending: false });
-
-        if (projectsError) throw projectsError;
-
-        const formattedProjects: Project[] = projectsData?.map(project => ({
-          id: project.id,
-          title: project.title,
-          description: project.description || '',
-          date: project.date,
-          category: project.category,
-          content: project.project_content
-            ?.sort((a, b) => a.order - b.order)
-            .map(content => ({
-              id: content.id,
-              type: content.type as 'text' | 'image' | 'video',
-              content: content.content
-            })) || []
-        })) || [];
+        const projectsQuery = query(collection(db, 'projects'), orderBy('date', 'desc'));
+        const projectsSnapshot = await getDocs(projectsQuery);
         
-        setProjects(formattedProjects);
+        const projectsData: Project[] = [];
+        
+        for (const projectDoc of projectsSnapshot.docs) {
+          const projectData = projectDoc.data();
+          
+          const contentQuery = query(
+            collection(db, 'projects', projectDoc.id, 'content'),
+            orderBy('order', 'asc')
+          );
+          const contentSnapshot = await getDocs(contentQuery);
+          
+          const content = contentSnapshot.docs.map(contentDoc => ({
+            id: contentDoc.id,
+            type: contentDoc.data().type,
+            content: contentDoc.data().content
+          }));
+          
+          projectsData.push({
+            id: projectDoc.id,
+            title: projectData.title,
+            description: projectData.description,
+            date: projectData.date,
+            category: projectData.category || 'electrical',
+            content
+          });
+        }
+        
+        setProjects(projectsData);
       } else {
         setProjects(demoProjects);
-        setError('Mode démonstration - Connexion Supabase indisponible');
+        setError('Mode démonstration - Connexion Firebase indisponible');
       }
     } catch (err) {
       console.log('Erreur lors de la récupération des projets:', err);
-      setError('Mode démonstration - Erreur de connexion Supabase');
+      setError('Mode démonstration - Erreur de connexion Firebase');
       setProjects(demoProjects);
-      setIsSupabaseAvailable(false);
+      setIsFirebaseAvailable(false);
     } finally {
       setLoading(false);
     }
@@ -345,7 +336,7 @@ export default function ProjectsShowcasePage() {
   };
 
   const handleAddProject = async () => {
-    if (!isSupabaseAvailable) {
+    if (!isFirebaseAvailable) {
       const newProject: Project = {
         id: `demo-${Date.now()}`,
         title: 'Nouveau projet',
@@ -360,27 +351,20 @@ export default function ProjectsShowcasePage() {
       return;
     }
 
+    const newProjectData = {
+      title: 'Nouveau projet',
+      description: 'Description du projet',
+      date: new Date().toISOString().split('T')[0],
+      category: 'electrical'
+    };
+
     try {
-      const { data, error } = await supabase
-        .from('projects')
-        .insert([{
-          title: 'Nouveau projet',
-          description: 'Description du projet',
-          date: new Date().toISOString().split('T')[0],
-          category: 'electrical'
-        }])
-        .select()
-        .single();
+      const docRef = await addDoc(collection(db, 'projects'), newProjectData);
       
-      if (error) throw error;
-      
-      const projectWithContent: Project = {
-        id: data.id,
-        title: data.title,
-        description: data.description || '',
-        date: data.date,
-        category: data.category,
-        content: []
+      const projectWithContent = { 
+        id: docRef.id, 
+        ...newProjectData, 
+        content: [] 
       };
       
       setProjects([projectWithContent, ...projects]);
@@ -399,17 +383,12 @@ export default function ProjectsShowcasePage() {
 
   const handleDeleteProject = async (projectId: string) => {
     try {
-      if (!isSupabaseAvailable) {
+      if (!isFirebaseAvailable) {
         setProjects(projects.filter(p => p.id !== projectId));
         return;
       }
 
-      const { error } = await supabase
-        .from('projects')
-        .delete()
-        .eq('id', projectId);
-      
-      if (error) throw error;
+      await deleteDoc(doc(db, 'projects', projectId));
       setProjects(projects.filter(p => p.id !== projectId));
     } catch (err) {
       setError('Error deleting project');
@@ -420,7 +399,7 @@ export default function ProjectsShowcasePage() {
   const handleSaveProject = async () => {
     if (!editingProject) return;
 
-    if (!isSupabaseAvailable) {
+    if (!isFirebaseAvailable) {
       setProjects(projects.map(p => 
         p.id === editingProject.id ? editingProject : p
       ));
@@ -431,40 +410,26 @@ export default function ProjectsShowcasePage() {
     }
     
     try {
-      // Mettre à jour le projet
-      const { error: projectError } = await supabase
-        .from('projects')
-        .update({
-          title: editingProject.title,
-          description: editingProject.description,
-          category: editingProject.category
-        })
-        .eq('id', editingProject.id);
+      await updateDoc(doc(db, 'projects', editingProject.id), {
+        title: editingProject.title,
+        description: editingProject.description,
+        category: editingProject.category
+      });
 
-      if (projectError) throw projectError;
+      const contentCollection = collection(db, 'projects', editingProject.id, 'content');
+      const contentSnapshot = await getDocs(contentCollection);
       
-      // Supprimer l'ancien contenu
-      const { error: deleteError } = await supabase
-        .from('project_content')
-        .delete()
-        .eq('project_id', editingProject.id);
-
-      if (deleteError) throw deleteError;
+      for (const contentDoc of contentSnapshot.docs) {
+        await deleteDoc(contentDoc.ref);
+      }
       
-      // Insérer le nouveau contenu
-      if (editingProject.content.length > 0) {
-        const contentToInsert = editingProject.content.map((content, index) => ({
-          project_id: editingProject.id,
+      for (let i = 0; i < editingProject.content.length; i++) {
+        const content = editingProject.content[i];
+        await addDoc(contentCollection, {
           type: content.type,
           content: content.content,
-          order: index
-        }));
-
-        const { error: insertError } = await supabase
-          .from('project_content')
-          .insert(contentToInsert);
-
-        if (insertError) throw insertError;
+          order: i
+        });
       }
 
       setProjects(projects.map(p => 
@@ -494,7 +459,7 @@ export default function ProjectsShowcasePage() {
   const handleSaveContent = async () => {
     if (!editingProject || !newContent) return;
 
-    if (!isSupabaseAvailable) {
+    if (!isFirebaseAvailable) {
       setEditingProject({
         ...editingProject,
         content: [...editingProject.content, newContent]
@@ -504,16 +469,11 @@ export default function ProjectsShowcasePage() {
     }
     
     try {
-      const { error } = await supabase
-        .from('project_content')
-        .insert([{
-          project_id: editingProject.id,
-          type: newContent.type,
-          content: newContent.content,
-          order: editingProject.content.length
-        }]);
-
-      if (error) throw error;
+      await addDoc(collection(db, 'projects', editingProject.id, 'content'), {
+        type: newContent.type,
+        content: newContent.content,
+        order: editingProject.content.length
+      });
 
       setEditingProject({
         ...editingProject,
@@ -529,7 +489,7 @@ export default function ProjectsShowcasePage() {
   const handleDeleteContent = async (contentId: string) => {
     if (!editingProject) return;
 
-    if (!isSupabaseAvailable) {
+    if (!isFirebaseAvailable) {
       setEditingProject({
         ...editingProject,
         content: editingProject.content.filter(c => c.id !== contentId)
@@ -538,12 +498,7 @@ export default function ProjectsShowcasePage() {
     }
     
     try {
-      const { error } = await supabase
-        .from('project_content')
-        .delete()
-        .eq('id', contentId);
-
-      if (error) throw error;
+      await deleteDoc(doc(db, 'projects', editingProject.id, 'content', contentId));
 
       setEditingProject({
         ...editingProject,
@@ -640,7 +595,6 @@ export default function ProjectsShowcasePage() {
       }
     });
   };
-
   const getCategoryInfo = (categoryId: string) => {
     return categories.find(cat => cat.id === categoryId) || categories[0];
   };
@@ -663,7 +617,7 @@ export default function ProjectsShowcasePage() {
         <div className="container mx-auto px-6 py-16">
           {error && (
             <div className={`mb-6 p-4 rounded-xl ${
-              isSupabaseAvailable 
+              isFirebaseAvailable 
                 ? 'bg-red-500/20 border border-red-300 text-red-100' 
                 : 'bg-blue-500/20 border border-blue-300 text-blue-100'
             }`}>
