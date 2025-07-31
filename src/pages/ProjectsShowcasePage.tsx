@@ -64,6 +64,7 @@ export default function ProjectsShowcasePage() {
   const fetchProjects = async () => {
     try {
       setLoading(true);
+      setError(null);
       
       const projectsData = await getProjects();
       
@@ -77,11 +78,10 @@ export default function ProjectsShowcasePage() {
       }
     } catch (err) {
       console.error('Erreur lors de la récupération des projets:', err);
-      if (err instanceof Error && err.message.includes('Missing or insufficient permissions')) {
-        setError('Configuration Firebase requise: Les règles Firestore doivent être déployées. Utilisez: firebase deploy --only firestore:rules');
-      } else {
-        setError('Erreur lors du chargement des projets');
-      }
+      setError('Erreur de connexion Firebase. Vérifiez votre configuration.');
+      
+      // Fallback avec des données par défaut en cas d'erreur
+      setProjects([]);
     } finally {
       setLoading(false);
     }

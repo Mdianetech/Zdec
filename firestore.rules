@@ -1,26 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Règles pour les membres de l'équipe
-    match /team_members/{memberId} {
-      // Lecture publique
-      allow read: if true;
-      // Écriture pour tous (à sécuriser plus tard)
-      allow write: if true;
-    }
-    
-    // Règles pour les projets
-    match /projects/{projectId} {
-      // Lecture publique
-      allow read: if true;
-      // Écriture pour tous (à sécuriser plus tard)
-      allow write: if true;
-      
-      // Sous-collection content
-      match /content/{contentId} {
-        allow read: if true;
-        allow write: if true;
-      }
+    // Règles temporaires très permissives pour les tests
+    match /{document=**} {
+      allow read, write: if true;
     }
   }
 }
