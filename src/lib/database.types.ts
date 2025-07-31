@@ -53,6 +53,7 @@ export interface Database {
           title: string
           description: string | null
           date: string
+          category: string
           created_at: string
           updated_at: string
         }
@@ -61,6 +62,7 @@ export interface Database {
           title: string
           description?: string | null
           date?: string
+          category?: string
           created_at?: string
           updated_at?: string
         }
@@ -69,6 +71,7 @@ export interface Database {
           title?: string
           description?: string | null
           date?: string
+          category?: string
           created_at?: string
           updated_at?: string
         }
