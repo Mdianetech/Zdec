@@ -77,7 +77,11 @@ export default function ProjectsShowcasePage() {
       }
     } catch (err) {
       console.error('Erreur lors de la récupération des projets:', err);
-      setError('Erreur lors du chargement des projets');
+      if (err instanceof Error && err.message.includes('Missing or insufficient permissions')) {
+        setError('Configuration Firebase requise: Les règles Firestore doivent être déployées. Utilisez: firebase deploy --only firestore:rules');
+      } else {
+        setError('Erreur lors du chargement des projets');
+      }
     } finally {
       setLoading(false);
     }
