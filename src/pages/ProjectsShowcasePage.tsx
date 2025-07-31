@@ -574,12 +574,33 @@ export default function ProjectsShowcasePage() {
         );
       case 'video':
         return (
-          <div className="relative rounded-xl overflow-hidden shadow-lg">
+          <div className="relative rounded-xl overflow-hidden shadow-lg bg-black">
             <video 
               src={content.content}
               controls
-              className="w-full rounded-xl"
+              preload="metadata"
+              className="w-full h-64 object-contain rounded-xl bg-black"
+              onError={(e) => {
+                console.error('Erreur de lecture vidéo:', e);
+                const target = e.target as HTMLVideoElement;
+                target.style.display = 'none';
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'flex items-center justify-center h-64 bg-gray-100 rounded-xl text-gray-500';
+                errorDiv.innerHTML = `
+                  <div class="text-center">
+                    <div class="text-4xl mb-2">🎥</div>
+                    <div>Impossible de lire cette vidéo</div>
+                    <div class="text-sm mt-1">Format non supporté ou URL invalide</div>
+                  </div>
+                `;
+                target.parentNode?.appendChild(errorDiv);
+              }}
             />
+            {/* Overlay pour indiquer que c'est une vidéo */}
+            <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1 text-white text-sm flex items-center gap-2">
+              <Video className="h-4 w-4" />
+              Vidéo
+            </div>
           </div>
         );
       case 'text':
