@@ -127,7 +127,7 @@ const HomePage = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-gray-900 via-primary-900 to-primary-800 text-white overflow-hidden min-h-screen flex items-center">
+      <section className="relative bg-gradient-to-br from-gray-900 via-primary-900 to-primary-800 text-white overflow-hidden flex items-center" style={{ minHeight: '100vh' }}>
         <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3825582/pexels-photo-3825582.jpeg?auto=compress&cs=tinysrgb&w=1600')] opacity-10 bg-cover bg-center" />
         
         {/* Logo 360° Background Pattern */}
@@ -204,61 +204,79 @@ const HomePage = () => {
           }} />
         </div>
         
-        <div className="container relative py-20 sm:py-24 md:py-32 lg:py-40">
+        <div className="container relative" style={{ paddingTop: 'clamp(5rem, 15vh, 10rem)', paddingBottom: 'clamp(5rem, 15vh, 10rem)' }}>
           <motion.div 
-            className="max-w-4xl relative z-10 text-center mx-auto px-4 sm:px-6 lg:px-8"
+            className="max-w-4xl relative z-10 text-center mx-auto"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
             <motion.span 
-              className="inline-flex items-center px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs sm:text-sm font-medium mb-4 sm:mb-6 md:mb-8"
+              className="inline-flex items-center rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white font-medium"
+              style={{ 
+                padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
+                fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
+                marginBottom: 'clamp(1rem, 4vw, 2rem)'
+              }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <Zap className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <Zap className="mr-2" style={{ width: 'clamp(0.75rem, 2vw, 1rem)', height: 'clamp(0.75rem, 2vw, 1rem)' }} />
               Électricien certifié IRVE
             </motion.span>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight mb-4 sm:mb-6 md:mb-8 text-white">
+            <h1 className="font-bold leading-tight text-white" style={{ 
+              fontSize: 'clamp(2rem, 8vw, 4.5rem)',
+              marginBottom: 'clamp(1rem, 4vw, 2rem)'
+            }}>
               <span className="block">Solutions électriques</span>
               <span className="block bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
                 professionnelles
               </span>
-              <span className="block text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl font-normal mt-1 sm:mt-2 text-gray-200">
+              <span className="block font-normal text-gray-200" style={{ 
+                fontSize: 'clamp(1rem, 3vw, 1.5rem)',
+                marginTop: 'clamp(0.5rem, 2vw, 1rem)'
+              }}>
                 à Lyon et partout en France
               </span>
             </h1>
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-6 sm:mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-gray-200 max-w-3xl mx-auto leading-relaxed" style={{ 
+              fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
+              marginBottom: 'clamp(2rem, 6vw, 3rem)'
+            }}>
               Installations électriques, bornes de recharge, réseaux et domotique par des experts qualifiés pour particuliers et professionnels.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center max-w-md sm:max-w-none mx-auto">
-              <Link to="/contact" className="btn bg-white text-primary-600 hover:bg-gray-100 px-4 sm:px-6 md:px-8 py-3 sm:py-4 text-sm sm:text-base md:text-lg font-semibold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md sm:max-w-none mx-auto">
+              <Link to="/contact" className="btn bg-white text-primary-600 hover:bg-gray-100 font-semibold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
                 Demander un devis
               </Link>
-              <Link to="/services" className="btn bg-transparent text-white hover:bg-white/10 border-2 border-white/30 hover:border-white/50 px-4 sm:px-6 md:px-8 py-3 sm:py-4 text-sm sm:text-base md:text-lg font-semibold rounded-xl backdrop-blur-sm transition-all duration-300">
+              <Link to="/services" className="btn bg-transparent text-white hover:bg-white/10 border-2 border-white/30 hover:border-white/50 font-semibold rounded-xl backdrop-blur-sm transition-all duration-300">
                 Découvrir nos services
               </Link>
             </div>
             
             {/* Stats Section */}
             <motion.div 
-              className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mt-8 sm:mt-12 md:mt-16 pt-8 sm:pt-12 md:pt-16 border-t border-white/20"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-white/20"
+              style={{ 
+                marginTop: 'clamp(2rem, 8vw, 4rem)',
+                paddingTop: 'clamp(2rem, 8vw, 4rem)'
+              }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.6 }}
             >
               <div className="text-center">
-                <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">15+</div>
-                <div className="text-sm sm:text-base text-gray-300">Années d'expérience</div>
+                <div className="font-bold text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}>15+</div>
+                <div className="text-gray-300" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>Années d'expérience</div>
               </div>
               <div className="text-center">
-                <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">500+</div>
-                <div className="text-sm sm:text-base text-gray-300">Projets réalisés</div>
+                <div className="font-bold text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}>500+</div>
+                <div className="text-gray-300" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>Projets réalisés</div>
               </div>
               <div className="text-center">
-                <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">100%</div>
-                <div className="text-sm sm:text-base text-gray-300">Clients satisfaits</div>
+                <div className="font-bold text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}>100%</div>
+                <div className="text-gray-300" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>Clients satisfaits</div>
               </div>
             </motion.div>
           </motion.div>
@@ -266,11 +284,11 @@ const HomePage = () => {
         
         {/* Scroll indicator */}
         <motion.div 
-          className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 hidden md:block"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden md:block"
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <div className="w-5 h-8 md:w-6 md:h-10 border-2 border-white/30 rounded-full flex justify-center">
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
             <div className="w-1 h-3 bg-white rounded-full mt-2"></div>
           </div>
         </motion.div>

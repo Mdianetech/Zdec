@@ -49,33 +49,42 @@ const Navbar = () => {
         <div className="relative flex h-16 sm:h-18 lg:h-20 items-center justify-between">
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
-              <img src="/image.png" alt="ZDEC" className="h-8 sm:h-10 md:h-12 lg:h-14 transition-all duration-300 hover:scale-105" />
+              <img 
+                src="/image.png" 
+                alt="ZDEC" 
+                className="transition-all duration-300 hover:scale-105"
+                style={{ height: 'clamp(2rem, 6vw, 3.5rem)' }}
+              />
             </Link>
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden lg:flex lg:items-center lg:space-x-6 xl:space-x-10">
+          <div className="hidden lg:flex lg:items-center">
+            <div className="flex space-x-4 xl:space-x-8">
             {navLinks.map((link) => (
               <NavLink
                 key={link.path}
                 to={link.path}
                 className={({ isActive }) => cn(
-                  "text-sm lg:text-base xl:text-lg font-semibold transition-all duration-300 hover:text-primary-600 relative py-2 px-2 whitespace-nowrap",
+                  "font-semibold transition-all duration-300 hover:text-primary-600 relative py-2 px-3 whitespace-nowrap",
                   isActive 
                     ? "text-primary-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-primary-600" 
                     : isScrolled ? "text-gray-700 hover:text-primary-600" : "text-white hover:text-primary-300"
                 )}
+                style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.125rem)' }}
               >
                 {link.name}
               </NavLink>
             ))}
+            </div>
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden lg:flex xl:flex items-center gap-2 lg:gap-4">
+          <div className="hidden lg:flex items-center gap-3">
             <a 
               href="tel:+33622802645"
-              className="btn btn-outline text-xs lg:text-sm px-3 lg:px-4 py-2 flex items-center gap-1 lg:gap-2"
+              className="btn btn-outline flex items-center gap-2"
+              style={{ fontSize: 'clamp(0.75rem, 1.2vw, 0.875rem)' }}
             >
               <Phone className="h-4 w-4" />
               <span className="hidden xl:inline">06 22 80 26 45</span>
@@ -89,13 +98,14 @@ const Navbar = () => {
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               className={cn(
-                "flex items-center justify-center p-2 rounded-lg transition-colors min-h-[44px] min-w-[44px]",
+                "flex items-center justify-center p-3 rounded-lg transition-colors",
                 isScrolled
                   ? "text-gray-600 hover:text-gray-900 hover:bg-gray-100" 
                   : "text-white hover:text-gray-200 hover:bg-white/10"
               )}
+              style={{ minHeight: '48px', minWidth: '48px' }}
             >
-              <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
+              <Menu className="h-6 w-6" />
               <span className="sr-only">Ouvrir le menu</span>
             </button>
           </div>
