@@ -3,6 +3,10 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      screens: {
+        'xs': '475px',
+        '3xl': '1600px',
+      },
       colors: {
         // Couleurs ZDEC basées sur le logo
         zdec: {
@@ -106,6 +110,9 @@ export default {
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
+      spacing: {
+        '18': '4.5rem',
       },
     },
   },
