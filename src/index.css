@@ -84,8 +84,8 @@
   .btn {
     @apply inline-flex items-center justify-center rounded-lg text-xs sm:text-sm md:text-base font-semibold transition-all duration-300
            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2
-           disabled:opacity-50 disabled:pointer-events-none min-h-[44px] px-3 sm:px-4 py-2 sm:py-3
-           touch-action: manipulation;
+           disabled:opacity-50 disabled:pointer-events-none min-h-[44px] px-3 sm:px-4 py-2 sm:py-3;
+    touch-action: manipulation;
   }
   
   .btn-primary {
