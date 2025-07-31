@@ -1,12 +1,30 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Award, Users, Zap, Shield, Linkedin, X } from 'lucide-react';
+import { db } from '../lib/firebase';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import BrandIconContainer from '../components/ui/BrandIconContainer';
+
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  description: string;
+  image: string;
+  linkedin: string;
+  cropPosition: { x: number; y: number };
+}
 
 const AboutPage = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [teamMembers] = useState([
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Données par défaut si Firebase n'est pas disponible
+  const defaultTeamMembers: TeamMember[] = [
     {
+      id: 'default-1',
       name: 'AZZOUZ MOUFID',
       role: 'Président',
       image: '/Photo Moufid (1).jpg',
@@ -15,6 +33,7 @@ const AboutPage = () => {
       cropPosition: { x: 50, y: 50 }
     },
     {
+      id: 'default-2',
       name: 'Rami Bouchedda',
       role: 'Directeur des Relations',
       image: '/files_2655144-1748866352955-files_2655144-1748866279307-1W9A4080.jpg',
@@ -22,7 +41,73 @@ const AboutPage = () => {
       linkedin: 'https://www.linkedin.com/in/rami-bouchedda-7b03a318a/',
       cropPosition: { x: 50, y: 30 }
     }
-  ]);
+  ];
+
+  // Fonction pour récupérer les membres de l'équipe depuis Firebase
+  const fetchTeamMembers = async () => {
+    try {
+      setLoading(true);
+      const teamCollection = collection(db, 'team_members');
+      const teamSnapshot = await getDocs(teamCollection);
+      
+      if (teamSnapshot.empty) {
+        // Si aucun membre n'existe, créer les membres par défaut
+        await initializeDefaultTeamMembers();
+      } else {
+        const members = teamSnapshot.docs.map(doc => ({
+          id: doc.id,
+          name: doc.data().name,
+          role: doc.data().role,
+          description: doc.data().description,
+          image: doc.data().image_url || doc.data().image,
+          linkedin: doc.data().linkedin_url || doc.data().linkedin,
+          cropPosition: {
+            x: doc.data().crop_position_x || 50,
+            y: doc.data().crop_position_y || 50
+          }
+        }));
+        setTeamMembers(members);
+      }
+    } catch (err) {
+      console.error('Erreur lors de la récupération des membres:', err);
+      setError('Impossible de charger les membres de l\'équipe');
+      setTeamMembers(defaultTeamMembers);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fonction pour initialiser les membres par défaut dans Firebase
+  const initializeDefaultTeamMembers = async () => {
+    try {
+      const teamCollection = collection(db, 'team_members');
+      
+      for (const member of defaultTeamMembers) {
+        await addDoc(teamCollection, {
+          name: member.name,
+          role: member.role,
+          description: member.description,
+          image_url: member.image,
+          linkedin_url: member.linkedin,
+          crop_position_x: member.cropPosition.x,
+          crop_position_y: member.cropPosition.y,
+          created_at: new Date(),
+          updated_at: new Date()
+        });
+      }
+      
+      // Recharger les données après l'initialisation
+      await fetchTeamMembers();
+    } catch (err) {
+      console.error('Erreur lors de l\'initialisation:', err);
+      setTeamMembers(defaultTeamMembers);
+    }
+  };
+
+  // Charger les données au montage du composant
+  useState(() => {
+    fetchTeamMembers();
+  });
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -36,6 +121,17 @@ const AboutPage = () => {
       transition: { staggerChildren: 0.1 } 
     },
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary-500 border-t-transparent mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Chargement de l'équipe...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -53,6 +149,11 @@ const AboutPage = () => {
               Une entreprise d&apos;électricité engagée dans l&apos;excellence et l&apos;innovation, 
               au service de vos projets électriques.
             </p>
+            {error && (
+              <div className="mt-4 p-3 bg-yellow-500/20 border border-yellow-300 rounded-lg text-yellow-100 text-sm">
+                {error} - Affichage des données par défaut
+              </div>
+            )}
           </motion.div>
         </div>
       </section>
