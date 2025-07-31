@@ -653,36 +653,6 @@ export default function ProjectsShowcasePage() {
             
             <div className="flex items-center gap-4">
               {/* Toggle view mode */}
-              <div className="flex bg-white/10 backdrop-blur-sm rounded-xl p-1">
-                <button
-                  onClick={() => setViewMode('masonry')}
-                  className={`p-2 rounded-lg transition-all ${
-                    viewMode === 'masonry' 
-                      ? 'bg-white text-primary-600' 
-                      : 'text-white/70 hover:text-white'
-                  }`}
-                >
-                  <Grid3X3 className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-lg transition-all ${
-                    viewMode === 'grid' 
-                      ? 'bg-white text-primary-600' 
-                      : 'text-white/70 hover:text-white'
-                  }`}
-                >
-                  <List className="h-5 w-5" />
-                </button>
-              </div>
-              
-              <button
-                onClick={handleAddProject}
-                className="bg-white text-primary-600 hover:bg-gray-100 px-6 py-3 rounded-xl font-semibold flex items-center gap-2 transition-all duration-300 hover:scale-105 shadow-lg"
-              >
-                <Plus className="h-5 w-5" />
-                Ajouter un projet
-              </button>
             </div>
           </div>
         </div>
@@ -887,20 +857,6 @@ export default function ProjectsShowcasePage() {
                       </div>
                       
                       {/* Actions */}
-                      <div className="absolute top-4 right-4 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                        <button
-                          onClick={() => handleEditProject(project)}
-                          className="p-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all duration-300 hover:scale-110"
-                        >
-                          <Edit2 className="h-4 w-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteProject(project.id)}
-                          className="p-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300 hover:scale-110"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
                       
                       <div className="p-8">
                         <h3 className="text-2xl font-bold mb-3 text-gray-900 group-hover:text-primary-600 transition-colors">
