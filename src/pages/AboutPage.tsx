@@ -133,38 +133,90 @@ const AboutPage = () => {
               <motion.div
                 key={index}
                 variants={fadeInUp}
-                className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                className="group relative bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
               >
+                {/* Background gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-transparent to-secondary-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
+                
+                {/* Professional badge */}
+                <div className="absolute top-4 left-4 z-20 bg-gradient-to-r from-primary-600 to-primary-700 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg transform -translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  {member.role}
+                </div>
+                
                 <div 
-                  className="aspect-w-16 aspect-h-9 relative h-80 overflow-hidden group cursor-pointer"
+                  className="relative h-96 overflow-hidden cursor-pointer"
                   onClick={() => setSelectedImage(member.image)}
                 >
+                  {/* Image container with advanced effects */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/20 via-transparent to-transparent z-10" />
                   <img 
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-105"
                     style={{
                       objectPosition: `${member.cropPosition.x}% ${member.cropPosition.y}%`
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-                <div className="p-6">
-                  <div>
-                    <h3 className="text-2xl font-semibold mb-2">{member.name}</h3>
-                    <p className="text-primary-600 font-medium mb-4">{member.role}</p>
+                  
+                  {/* Professional overlay with company branding */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary-900/80 via-primary-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-10" />
+                  
+                  {/* Floating action button */}
+                  <div className="absolute bottom-4 right-4 z-20 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                    <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
                   </div>
-                  <p className="text-gray-600 mb-6 leading-relaxed">{member.description}</p>
+                  
+                  {/* Professional info overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 z-20 p-6 text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                    <h3 className="text-xl font-bold mb-1">{member.name}</h3>
+                    <p className="text-primary-200 text-sm font-medium">{member.role}</p>
+                  </div>
+                </div>
+                
+                <div className="relative z-10 p-8 bg-gradient-to-br from-white to-gray-50/50">
+                  {/* Decorative element */}
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500" />
+                  
+                  <div>
+                    <h3 className="text-2xl font-bold mb-2 text-gray-900 group-hover:text-primary-700 transition-colors duration-300">{member.name}</h3>
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse" />
+                      <p className="text-primary-600 font-semibold text-lg">{member.role}</p>
+                    </div>
+                  </div>
+                  
+                  <p className="text-gray-700 mb-8 leading-relaxed text-base">{member.description}</p>
+                  
+                  {/* Professional stats or highlights */}
+                  <div className="flex items-center gap-4 mb-6 text-sm text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-green-500 rounded-full" />
+                      <span>Disponible</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full" />
+                      <span>Expert certifié</span>
+                    </div>
+                  </div>
+                  
                   <a 
                     href={member.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-primary-600 hover:text-primary-700 transition-colors"
+                    className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-3 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
-                    <Linkedin className="h-5 w-5 mr-2" />
-                    Voir le profil LinkedIn
+                    <Linkedin className="h-5 w-5" />
+                    <span>Voir le profil</span>
+                    <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
                   </a>
                 </div>
+                
+                {/* Subtle border animation */}
+                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-primary-200 transition-colors duration-500" />
               </motion.div>
             ))}
           </motion.div>
