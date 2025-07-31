@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Menu, X, Phone, User, LogOut } from 'lucide-react';
+import { Menu, X, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '../../utils/cn';
-import { useAuth } from '../../hooks/useAuth';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,27 +61,6 @@ const Navbar = () => {
 
           {/* Desktop CTA */}
           <div className="hidden xl:flex items-center gap-4">
-            {user ? (
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 px-3 py-2 bg-primary-100 rounded-lg">
-                  <User className="h-4 w-4 text-primary-600" />
-                  <span className="text-sm font-medium text-primary-700">
-                    {user.displayName}
-                  </span>
-                  <span className="text-xs px-2 py-1 bg-primary-200 text-primary-800 rounded-full">
-                    {user.role}
-                  </span>
-                </div>
-                <button
-                  onClick={logout}
-                  className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-                  title="Déconnexion"
-                >
-                  <LogOut className="h-4 w-4" />
-                </button>
-              </div>
-            ) : (
-              <>
             <a 
               href="tel:+33622802645"
               className="btn btn-outline text-sm px-4 py-2 flex items-center gap-2"
@@ -91,8 +68,6 @@ const Navbar = () => {
               <Phone className="h-4 w-4" />
               <span className="hidden 2xl:inline">06 22 80 26 45</span>
             </a>
-              </>
-            )}
           </div>
 
           {/* Mobile menu button */}
@@ -168,27 +143,6 @@ const Navbar = () => {
               
               {/* Mobile CTA */}
               <div className="pt-6 mt-6 border-t border-gray-200">
-                {user ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3 p-4 bg-primary-50 rounded-lg">
-                      <User className="h-5 w-5 text-primary-600" />
-                      <div>
-                        <p className="font-semibold text-primary-900">{user.displayName}</p>
-                        <p className="text-sm text-primary-600 capitalize">{user.role}</p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => {
-                        logout();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="w-full btn btn-outline justify-center text-base py-3 flex items-center gap-2"
-                    >
-                      <LogOut className="h-5 w-5" />
-                      Déconnexion
-                    </button>
-                  </div>
-                ) : (
                 <a 
                   href="tel:+33622802645"
                   className="btn btn-primary w-full justify-center text-base py-3 flex items-center gap-2"
@@ -197,7 +151,6 @@ const Navbar = () => {
                   <Phone className="h-5 w-5" />
                   06 22 80 26 45
                 </a>
-                )}
               </div>
             </div>
           </motion.div>
