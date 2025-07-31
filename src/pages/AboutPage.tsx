@@ -133,35 +133,61 @@ const AboutPage = () => {
               <motion.div
                 key={index}
                 variants={fadeInUp}
-                className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                className="group bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-gray-100 hover:border-primary-200"
               >
                 <div 
-                  className="aspect-w-16 aspect-h-9 relative h-80 overflow-hidden group cursor-pointer"
+                  className="relative h-80 overflow-hidden cursor-pointer"
                   onClick={() => setSelectedImage(member.image)}
                 >
+                  {/* Gradient overlay for modern effect */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  {/* Profile image with modern styling */}
                   <img 
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 filter brightness-105 contrast-105 saturate-110"
                     style={{
                       objectPosition: `${member.cropPosition.x}% ${member.cropPosition.y}%`
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-                <div className="p-6">
-                  <div>
-                    <h3 className="text-2xl font-semibold mb-2">{member.name}</h3>
-                    <p className="text-primary-600 font-medium mb-4">{member.role}</p>
+                  
+                  {/* Modern decorative elements */}
+                  <div className="absolute top-4 right-4 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-4 group-hover:translate-x-0">
+                    <div className="w-6 h-6 border-2 border-white rounded-full animate-pulse"></div>
                   </div>
-                  <p className="text-gray-600 mb-6 leading-relaxed">{member.description}</p>
+                  
+                  {/* Bottom gradient for text readability */}
+                  <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                  
+                  {/* Name overlay on hover */}
+                  <div className="absolute bottom-4 left-4 right-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 opacity-0 group-hover:opacity-100">
+                    <h3 className="text-white font-bold text-lg mb-1">{member.name}</h3>
+                    <p className="text-white/90 text-sm">{member.role}</p>
+                  </div>
+                </div>
+                
+                <div className="p-6 relative">
+                  {/* Decorative accent line */}
+                  <div className="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-primary-500 to-accent-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                  
+                  <div>
+                    <h3 className="text-2xl font-bold mb-2 text-gray-900 group-hover:text-primary-700 transition-colors duration-300">{member.name}</h3>
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-2 h-2 bg-primary-500 rounded-full"></div>
+                      <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">{member.role}</p>
+                    </div>
+                  </div>
+                  
+                  <p className="text-gray-600 mb-6 leading-relaxed text-sm">{member.description}</p>
+                  
                   <a 
                     href={member.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-primary-600 hover:text-primary-700 transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-50 to-primary-100 text-primary-700 hover:from-primary-100 hover:to-primary-200 rounded-lg font-medium text-sm transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5"
                   >
-                    <Linkedin className="h-5 w-5 mr-2" />
+                    <Linkedin className="h-4 w-4" />
                     Voir le profil LinkedIn
                   </a>
                 </div>
