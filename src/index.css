@@ -12,6 +12,7 @@
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+    font-size: 16px;
   }
   
   body {
@@ -19,28 +20,30 @@
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
     line-height: 1.6;
     overflow-x: hidden;
+    min-width: 320px;
   }
   
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold tracking-tight text-gray-900;
     line-height: 1.2;
     word-wrap: break-word;
+    hyphens: auto;
   }
   
   h1 {
-    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight;
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight;
   }
   
   h2 {
-    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight;
+    @apply text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl leading-tight;
   }
   
   h3 {
-    @apply text-lg sm:text-xl md:text-2xl lg:text-3xl leading-tight;
+    @apply text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl leading-tight;
   }
   
   h4 {
-    @apply text-base sm:text-lg md:text-xl lg:text-2xl;
+    @apply text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl;
   }
   
   /* Responsive images */
@@ -59,56 +62,68 @@
   /* Touch-friendly links and buttons */
   a, button {
     min-height: 44px;
-    min-width: 44px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    touch-action: manipulation;
+  }
+  
+  /* Prevent zoom on input focus on iOS */
+  input, select, textarea {
+    font-size: 16px;
+  }
+  
+  @media (max-width: 640px) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
   }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-lg text-sm sm:text-base font-semibold transition-all duration-300
+    @apply inline-flex items-center justify-center rounded-lg text-xs sm:text-sm md:text-base font-semibold transition-all duration-300
            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2
-           disabled:opacity-50 disabled:pointer-events-none min-h-[44px] px-4 py-2;
+           disabled:opacity-50 disabled:pointer-events-none min-h-[44px] px-3 sm:px-4 py-2 sm:py-3
+           touch-action: manipulation;
   }
   
   .btn-primary {
     @apply bg-gradient-to-r from-primary-600 to-primary-700 text-white hover:from-primary-700 hover:to-primary-800 
-           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-4 sm:px-6 py-2 sm:py-3;
+           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
   }
   
   .btn-secondary {
     @apply bg-gradient-to-r from-secondary-500 to-secondary-600 text-white hover:from-secondary-600 hover:to-secondary-700 
-           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-4 sm:px-6 py-2 sm:py-3;
+           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
   }
   
   .btn-accent {
     @apply bg-gradient-to-r from-accent-500 to-accent-600 text-white hover:from-accent-600 hover:to-accent-700 
-           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-4 sm:px-6 py-2 sm:py-3;
+           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
   }
   
   .btn-outline {
     @apply border-2 border-gray-300 bg-transparent hover:bg-gray-50 hover:border-gray-400 
-           transform hover:-translate-y-0.5 px-4 sm:px-6 py-2 sm:py-3;
+           transform hover:-translate-y-0.5;
   }
   
   .card {
-    @apply rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100;
+    @apply rounded-lg sm:rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100;
   }
   
   .input {
-    @apply flex h-12 w-full rounded-lg border-2 border-gray-200 bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base
+    @apply flex h-10 sm:h-12 w-full rounded-lg border-2 border-gray-200 bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base
            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300
-           disabled:cursor-not-allowed disabled:opacity-50;
+           disabled:cursor-not-allowed disabled:opacity-50 touch-action: manipulation;
   }
   
   .input-label {
-    @apply block text-sm font-semibold leading-6 text-gray-900 mb-2;
+    @apply block text-xs sm:text-sm font-semibold leading-6 text-gray-900 mb-1 sm:mb-2;
   }
   
   .container {
-    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl w-full;
+    @apply mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 max-w-7xl w-full;
   }
   
   .transition-standard {
@@ -141,18 +156,20 @@
   /* Responsive utilities */
   .responsive-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1rem;
   }
   
   @media (min-width: 640px) {
     .responsive-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
     }
   }
   
   @media (min-width: 1024px) {
     .responsive-grid {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 2rem;
     }
   }
@@ -172,7 +189,7 @@
   
   /* Touch-friendly spacing */
   .touch-spacing {
-    @apply space-y-4 sm:space-y-6;
+    @apply space-y-3 sm:space-y-4 md:space-y-6;
   }
   
   .touch-spacing > * {
@@ -181,20 +198,31 @@
   
   /* Responsive text */
   .responsive-text {
-    @apply text-sm sm:text-base lg:text-lg;
+    @apply text-xs sm:text-sm md:text-base lg:text-lg;
   }
   
   .responsive-text-large {
-    @apply text-base sm:text-lg lg:text-xl;
+    @apply text-sm sm:text-base md:text-lg lg:text-xl;
   }
   
   /* Responsive padding */
   .responsive-padding {
-    @apply p-4 sm:p-6 lg:p-8;
+    @apply p-3 sm:p-4 md:p-6 lg:p-8;
   }
   
   .responsive-margin {
-    @apply m-4 sm:m-6 lg:m-8;
+    @apply m-3 sm:m-4 md:m-6 lg:m-8;
+  }
+  
+  /* Scroll improvements */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Focus improvements for accessibility */
+  .focus-visible {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
   }
 }
 
@@ -229,8 +257,24 @@
 /* Mobile-specific optimizations */
 @media (max-width: 640px) {
   .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  /* Improve touch targets */
+  button, a, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Optimize font sizes for mobile */
+  html {
+    font-size: 14px;
   }
   
   /* Reduce motion for better mobile performance */
@@ -249,6 +293,10 @@
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
+  
+  html {
+    font-size: 15px;
+  }
 }
 
 /* Desktop optimizations */
@@ -256,6 +304,18 @@
   .container {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+  
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Large desktop optimizations */
+@media (min-width: 1440px) {
+  .container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
 }
 
@@ -267,9 +327,35 @@
   }
 }
 
+/* Landscape mobile optimization */
+@media (max-height: 500px) and (orientation: landscape) {
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  /* Reduce padding in landscape mode */
+  .py-20 {
+    @apply py-12;
+  }
+  
+  .py-16 {
+    @apply py-8;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  /* Add dark mode styles if needed */
+}
+
 /* Print styles */
 @media print {
   .no-print {
     display: none !important;
+  }
+  
+  * {
+    background: white !important;
+    color: black !important;
   }
 }
