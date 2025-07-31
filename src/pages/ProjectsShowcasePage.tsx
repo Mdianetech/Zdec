@@ -173,7 +173,8 @@ export default function ProjectsShowcasePage() {
     const newContentItem: ProjectContent = {
       id: Date.now().toString(),
       type,
-      content: ''
+      content: '',
+      order: editingProject.content.length
     };
     
     setNewContent(newContentItem);
@@ -186,7 +187,7 @@ export default function ProjectsShowcasePage() {
       const contentId = await addProjectContent(editingProject.id, {
         type: newContent.type,
         content: newContent.content,
-        order: editingProject.content.length
+        order: newContent.order
       });
 
       const newContentWithId = { ...newContent, id: contentId };
@@ -277,11 +278,7 @@ export default function ProjectsShowcasePage() {
       <div className="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-800 text-white">
         <div className="container mx-auto px-6 py-16">
           {error && (
-            <div className={`mb-6 p-4 rounded-xl ${
-              isFirebaseAvailable 
-                ? 'bg-red-500/20 border border-red-300 text-red-100' 
-                : 'bg-blue-500/20 border border-blue-300 text-blue-100'
-            }`}>
+            <div className="mb-6 p-4 rounded-xl bg-red-500/20 border border-red-300 text-red-100">
               {error}
             </div>
           )}
