@@ -11,7 +11,7 @@ const AboutPage = () => {
       role: 'Président',
       image: '/Photo Moufid (1).jpg',
       description: 'Expert en installations électriques avec plus de 15 ans d\'expérience dans le secteur.',
-      linkedin: 'https://www.linkedin.com/in/azzouz-moufid',
+      linkedin: 'https://www.linkedin.com/company/zdec69/posts/?feedView=all',
       cropPosition: { x: 50, y: 50 }
     },
     {
