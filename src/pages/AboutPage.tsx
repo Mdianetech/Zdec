@@ -176,20 +176,20 @@ const AboutPage = () => {
                   <div className="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-primary-500 to-accent-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                   
                   <div>
-                    <h3 className="text-2xl font-bold mb-2 text-gray-900 group-hover:text-primary-700 transition-colors duration-300">{member.name}</h3>
+                    <h3 className="text-xl font-bold mb-2 text-gray-900 group-hover:text-primary-700 transition-colors duration-300">{member.name}</h3>
                     <div className="flex items-center gap-2 mb-4">
                       <div className="w-2 h-2 bg-primary-500 rounded-full"></div>
-                      <p className="text-primary-600 font-semibold text-sm uppercase tracking-wide">{member.role}</p>
+                      <p className="text-primary-600 font-semibold text-xs uppercase tracking-wide">{member.role}</p>
                     </div>
                   </div>
                   
-                  <p className="text-gray-600 mb-6 leading-relaxed text-sm">{member.description}</p>
+                  <p className="text-gray-600 mb-6 leading-relaxed text-sm font-normal">{member.description}</p>
                   
                   <a 
                     href={member.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-50 to-primary-100 text-primary-700 hover:from-primary-100 hover:to-primary-200 rounded-lg font-medium text-sm transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-50 to-primary-100 text-primary-700 hover:from-primary-100 hover:to-primary-200 rounded-lg font-semibold text-xs transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5"
                   >
                     <Linkedin className="h-4 w-4" />
                     Voir le profil LinkedIn
