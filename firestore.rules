@@ -7,6 +7,12 @@ service cloud.firestore {
       
       // Allow anyone to create, update, and delete projects
       allow create, update, delete: if true;
+      
+      // Allow access to content subcollection
+      match /content/{contentId} {
+        allow read, list: if true;
+        allow create, update, delete: if true;
+      }
     }
   }
 }
