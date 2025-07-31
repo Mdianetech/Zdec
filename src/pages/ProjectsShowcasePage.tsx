@@ -108,6 +108,7 @@ const ImageCarousel = ({ images, title }: { images: string[], title: string }) =
     </div>
   );
 };
+
 export default function ProjectsShowcasePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
@@ -325,22 +326,6 @@ export default function ProjectsShowcasePage() {
       setLoading(false);
     }
   };
-        }
-        
-        setProjects(projectsData);
-      } else {
-        setProjects(demoProjects);
-        setError('Mode démonstration - Connexion Firebase indisponible');
-      }
-    } catch (err) {
-      console.log('Erreur lors de la récupération des projets:', err);
-      setError('Mode démonstration - Erreur de connexion Firebase');
-      setProjects(demoProjects);
-      setIsFirebaseAvailable(false);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const filterProjects = () => {
     let filtered = projects;
@@ -388,6 +373,15 @@ export default function ProjectsShowcasePage() {
         .single();
       
       if (error) throw error;
+      
+      const projectWithContent: Project = {
+        id: data.id,
+        title: data.title,
+        description: data.description || '',
+        date: data.date,
+        category: data.category,
+        content: []
+      };
       
       setProjects([projectWithContent, ...projects]);
       setEditingProject(projectWithContent);
@@ -646,6 +640,7 @@ export default function ProjectsShowcasePage() {
       }
     });
   };
+
   const getCategoryInfo = (categoryId: string) => {
     return categories.find(cat => cat.id === categoryId) || categories[0];
   };
