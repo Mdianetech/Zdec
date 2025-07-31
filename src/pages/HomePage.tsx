@@ -514,11 +514,11 @@ const HomePage = () => {
                 Nous contacter
               </Link>
               <a 
-                href="tel:+33622802645"
+                href="tel:+33428384426" 
                 className="btn btn-outline px-6 sm:px-8 py-3 text-sm sm:text-base flex items-center justify-center gap-2"
               >
                 <Phone className="h-5 w-5" />
-                +33 06 22 80 26 45
+                +33 04 28 38 44 26
               </a>
             </div>
           </motion.div>

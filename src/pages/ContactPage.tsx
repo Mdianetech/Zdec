@@ -7,7 +7,7 @@ const contactInfo = [
   {
     icon: Phone,
     title: 'Téléphone',
-    details: '+33 06 22 80 26 45',
+    details: '+33 04 28 38 44 26',
     description: 'Du lundi au vendredi, 8h-18h',
   },
   {
@@ -333,11 +333,11 @@ const ContactPage = () => {
               Contactez-nous directement par téléphone pour une réponse immédiate.
             </p>
             <a 
-              href="tel:+33622802645" 
+              href="tel:+33428384426" 
               className="btn bg-white text-primary-600 hover:bg-gray-100 px-6 sm:px-8 py-3 text-base sm:text-lg font-medium inline-flex items-center gap-2"
             >
               <Phone className="h-5 w-5" />
-              +33 06 22 80 26 45
+              +33 04 28 38 44 26
             </a>
           </motion.div>
         </div>

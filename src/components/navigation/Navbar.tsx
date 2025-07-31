@@ -82,12 +82,12 @@ const Navbar = () => {
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
             <a 
-              href="tel:+33622802645"
+              href="tel:+33428384426"
               className="btn btn-outline flex items-center gap-2"
               style={{ fontSize: 'clamp(0.75rem, 1.2vw, 0.875rem)' }}
             >
               <Phone className="h-4 w-4" />
-              <span className="hidden xl:inline">06 22 80 26 45</span>
+              <span className="hidden xl:inline">04 28 38 44 26</span>
               <span className="xl:hidden">Appeler</span>
             </a>
           </div>
@@ -167,12 +167,12 @@ const Navbar = () => {
               {/* Mobile CTA */}
               <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t border-gray-200">
                 <a 
-                  href="tel:+33622802645"
+                  href="tel:+33428384426"
                   className="btn btn-primary w-full justify-center text-sm sm:text-base py-3 flex items-center gap-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <Phone className="h-4 w-4 sm:h-5 sm:w-5" />
-                  06 22 80 26 45
+                  04 28 38 44 26
                 </a>
               </div>
             </div>
