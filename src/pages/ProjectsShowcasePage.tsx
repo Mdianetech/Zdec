@@ -615,16 +615,6 @@ export default function ProjectsShowcasePage() {
       {/* Header avec gradient moderne */}
       <div className="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-800 text-white">
         <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16">
-          {error && (
-            <div className={`mb-4 sm:mb-6 p-3 sm:p-4 rounded-xl ${
-              isFirebaseAvailable 
-                ? 'bg-red-500/20 border border-red-300 text-red-100' 
-                : 'bg-blue-500/20 border border-blue-300 text-blue-100'
-            }`}>
-              {error}
-            </div>
-          )}
-
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8">
             <div className="flex-1">
               <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
