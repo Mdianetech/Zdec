@@ -123,6 +123,9 @@ export default function ProjectsShowcasePage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isFirebaseAvailable, setIsFirebaseAvailable] = useState(true);
 
+  // Mode développement - édition possible uniquement dans Bolt
+  const isDevelopmentMode = import.meta.env.DEV || window.location.hostname === 'localhost';
+
   // Demo data for when Firebase is not available
   const demoProjects: Project[] = [
     {
@@ -652,7 +655,42 @@ export default function ProjectsShowcasePage() {
             </div>
             
             <div className="flex items-center gap-4">
-              {/* Toggle view mode */}
+              {/* Boutons d'administration - uniquement en mode développement */}
+              {isDevelopmentMode && (
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={handleAddProject}
+                    className="bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-xl hover:bg-white/30 transition-all duration-300 flex items-center gap-2"
+                  >
+                    <Plus className="h-5 w-5" />
+                    Ajouter un projet
+                  </button>
+                  
+                  {/* Toggle view mode */}
+                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-xl p-1">
+                    <button
+                      onClick={() => setViewMode('masonry')}
+                      className={`p-2 rounded-lg transition-all duration-300 ${
+                        viewMode === 'masonry'
+                          ? 'bg-white/20 text-white'
+                          : 'text-white/70 hover:text-white hover:bg-white/10'
+                      }`}
+                    >
+                      <Grid3X3 className="h-5 w-5" />
+                    </button>
+                    <button
+                      onClick={() => setViewMode('grid')}
+                      className={`p-2 rounded-lg transition-all duration-300 ${
+                        viewMode === 'grid'
+                          ? 'bg-white/20 text-white'
+                          : 'text-white/70 hover:text-white hover:bg-white/10'
+                      }`}
+                    >
+                      <List className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -856,7 +894,23 @@ export default function ProjectsShowcasePage() {
                         </div>
                       </div>
                       
-                      {/* Actions */}
+                      {/* Actions - uniquement en mode développement */}
+                      {isDevelopmentMode && (
+                        <div className="absolute top-4 right-4 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <button
+                            onClick={() => handleEditProject(project)}
+                            className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors"
+                          >
+                            <Edit2 className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteProject(project.id)}
+                            className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      )}
                       
                       <div className="p-8">
                         <h3 className="text-2xl font-bold mb-3 text-gray-900 group-hover:text-primary-600 transition-colors">
