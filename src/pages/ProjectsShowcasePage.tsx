@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+import { cn } from '../utils/cn';
 
 interface Project {
   id: string;
@@ -46,6 +47,68 @@ const categories = [
   { id: 'network', name: 'Réseaux', icon: Network, color: 'bg-orange-100 text-orange-700' },
 ];
 
+// Component pour le carrousel d'images
+const ImageCarousel = ({ images, title }: { images: string[], title: string }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === images.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 3000); // Change d'image toutes les 3 secondes
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  if (images.length === 0) return null;
+
+  return (
+    <div className="relative h-64 overflow-hidden bg-gray-100 rounded-xl">
+      {images.map((image, index) => (
+        <img
+          key={index}
+          src={image}
+          alt={`${title} - Image ${index + 1}`}
+          className={cn(
+            "absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out cursor-pointer hover:scale-105 select-none",
+            index === currentImageIndex 
+              ? "opacity-100 scale-100" 
+              : "opacity-0 scale-105"
+          )}
+          style={{
+            imageRendering: 'high-quality',
+            backfaceVisibility: 'hidden',
+            transform: 'translateZ(0)',
+            filter: 'contrast(1.05) saturate(1.1) brightness(1.02)',
+          }}
+          loading="lazy"
+          decoding="async"
+        />
+      ))}
+      
+      {/* Indicateurs de pagination */}
+      {images.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentImageIndex(index)}
+              className={cn(
+                "w-3 h-3 rounded-full transition-all duration-300",
+                index === currentImageIndex 
+                  ? "bg-white scale-125" 
+                  : "bg-white/50 hover:bg-white/75"
+              )}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 export default function ProjectsShowcasePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
@@ -78,6 +141,16 @@ export default function ProjectsShowcasePage() {
           id: 'demo-content-2',
           type: 'image',
           content: '/1749721290289.jpeg'
+        },
+        {
+          id: 'demo-content-2b',
+          type: 'image',
+          content: '/1750071623260.jpeg'
+        },
+        {
+          id: 'demo-content-2c',
+          type: 'image',
+          content: 'https://images.pexels.com/photos/8005397/pexels-photo-8005397.jpeg?auto=compress&cs=tinysrgb&w=1600'
         }
       ]
     },
@@ -97,6 +170,16 @@ export default function ProjectsShowcasePage() {
           id: 'demo-content-4',
           type: 'image',
           content: '/edf61b3d-67aa-467b-86c6-4fcb836ea43c.jpeg'
+        },
+        {
+          id: 'demo-content-4b',
+          type: 'image',
+          content: '/af7d00c0-ac68-4e24-94eb-fb3210a07c30.jpeg'
+        },
+        {
+          id: 'demo-content-4c',
+          type: 'image',
+          content: '/83k4kH4Gyz9l7Pl-IsfmA.jpg'
         }
       ]
     },
@@ -116,6 +199,16 @@ export default function ProjectsShowcasePage() {
           id: 'demo-content-6',
           type: 'image',
           content: '/1750010421911.jpeg'
+        },
+        {
+          id: 'demo-content-6b',
+          type: 'image',
+          content: '/1750010421911 copy.jpeg'
+        },
+        {
+          id: 'demo-content-6c',
+          type: 'image',
+          content: 'https://images.pexels.com/photos/3183183/pexels-photo-3183183.jpeg?auto=compress&cs=tinysrgb&w=1600'
         }
       ]
     },
@@ -135,6 +228,16 @@ export default function ProjectsShowcasePage() {
           id: 'demo-content-8',
           type: 'image',
           content: 'https://images.pexels.com/photos/2881232/pexels-photo-2881232.jpeg?auto=compress&cs=tinysrgb&w=1600'
+        },
+        {
+          id: 'demo-content-8b',
+          type: 'image',
+          content: 'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=1600'
+        },
+        {
+          id: 'demo-content-8c',
+          type: 'image',
+          content: 'https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=1600'
         }
       ]
     }
@@ -442,6 +545,53 @@ export default function ProjectsShowcasePage() {
     }
   };
 
+  // Fonction pour regrouper les images consécutives
+  const groupConsecutiveImages = (content: ProjectContent[]) => {
+    const grouped: (ProjectContent | ProjectContent[])[] = [];
+    let currentImageGroup: ProjectContent[] = [];
+
+    content.forEach((item) => {
+      if (item.type === 'image') {
+        currentImageGroup.push(item);
+      } else {
+        if (currentImageGroup.length > 0) {
+          grouped.push(currentImageGroup.length === 1 ? currentImageGroup[0] : currentImageGroup);
+          currentImageGroup = [];
+        }
+        grouped.push(item);
+      }
+    });
+
+    if (currentImageGroup.length > 0) {
+      grouped.push(currentImageGroup.length === 1 ? currentImageGroup[0] : currentImageGroup);
+    }
+
+    return grouped;
+  };
+
+  // Fonction pour rendre le contenu avec carrousel
+  const renderContentWithCarousel = (content: ProjectContent[]) => {
+    const groupedContent = groupConsecutiveImages(content);
+
+    return groupedContent.map((item, index) => {
+      if (Array.isArray(item)) {
+        // Groupe d'images - utiliser le carrousel
+        const images = item.map(img => img.content);
+        return (
+          <div key={`carousel-${index}`} className="relative">
+            <ImageCarousel images={images} title="Projet" />
+          </div>
+        );
+      } else {
+        // Contenu individuel
+        return (
+          <div key={item.id} className="relative">
+            {renderContent(item)}
+          </div>
+        );
+      }
+    });
+  };
   const getCategoryInfo = (categoryId: string) => {
     return categories.find(cat => cat.id === categoryId) || categories[0];
   };
@@ -761,11 +911,7 @@ export default function ProjectsShowcasePage() {
                         </p>
                         
                         <div className="space-y-6">
-                          {project.content.map((content) => (
-                            <div key={content.id} className="relative">
-                              {renderContent(content)}
-                            </div>
-                          ))}
+                          {renderContentWithCarousel(project.content)}
                         </div>
                         
                         <div className="mt-6 pt-6 border-t border-gray-100">
