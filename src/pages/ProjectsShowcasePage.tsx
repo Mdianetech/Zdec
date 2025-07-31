@@ -78,7 +78,20 @@ export default function ProjectsShowcasePage() {
       }
     } catch (err) {
       console.error('Erreur lors de la récupération des projets:', err);
-      setError('Erreur de connexion Firebase. Vérifiez votre configuration.');
+      
+      // Vérifier si c'est une erreur de permissions Firebase
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      if (errorMessage.includes('Missing or insufficient permissions')) {
+        setError(
+          'Erreur de permissions Firebase. Pour résoudre ce problème:\n\n' +
+          '1. Ouvrez un terminal dans le dossier du projet\n' +
+          '2. Exécutez: npm run firebase:rules\n' +
+          '3. Ou déployez manuellement les règles dans la console Firebase\n\n' +
+          'Les règles Firestore doivent être déployées pour permettre l\'accès aux données.'
+        );
+      } else {
+        setError('Erreur de connexion Firebase. Vérifiez votre configuration.');
+      }
       
       // Fallback avec des données par défaut en cas d'erreur
       setProjects([]);
@@ -282,8 +295,18 @@ export default function ProjectsShowcasePage() {
       <div className="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-800 text-white">
         <div className="container mx-auto px-6 py-16">
           {error && (
-            <div className="mb-6 p-4 rounded-xl bg-red-500/20 border border-red-300 text-red-100">
-              {error}
+            <div className="mb-6 p-6 rounded-xl bg-red-500/20 border border-red-300 text-red-100">
+              <div className="flex items-start gap-3">
+                <div className="bg-red-500 rounded-full p-1 mt-1">
+                  <X className="h-4 w-4 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold mb-2">Erreur de configuration Firebase</h3>
+                  <pre className="text-sm whitespace-pre-wrap font-mono bg-red-900/20 p-3 rounded">
+                    {error}
+                  </pre>
+                </div>
+              </div>
             </div>
           )}
 
