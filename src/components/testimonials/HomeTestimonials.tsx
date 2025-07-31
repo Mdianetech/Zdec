@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Star, Quote } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-// Témoignages statiques (remplace Supabase)
 const testimonials = [
   {
     id: '1',

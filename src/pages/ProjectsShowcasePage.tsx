@@ -20,17 +20,23 @@ import {
   List,
   Search
 } from 'lucide-react';
-import { 
-  getProjects, 
-  addProject, 
-  updateProject, 
-  deleteProject, 
-  addProjectContent, 
-  deleteProjectContent,
-  initializeDemoProjects,
-  type Project,
-  type ProjectContent 
-} from '../lib/firebaseProjects';
+import { db } from '../lib/firebase';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  content: ProjectContent[];
+  date: string;
+  category: string;
+}
+
+interface ProjectContent {
+  id: string;
+  type: 'text' | 'image' | 'video';
+  content: string;
+}
 
 const categories = [
   { id: 'all', name: 'Tous les projets', icon: Grid3X3, color: 'bg-gray-100 text-gray-700' },
@@ -52,6 +58,87 @@ export default function ProjectsShowcasePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isFirebaseAvailable, setIsFirebaseAvailable] = useState(true);
+
+  // Demo data for when Firebase is not available
+  const demoProjects: Project[] = [
+    {
+      id: 'demo-1',
+      title: 'Installation électrique résidentielle',
+      description: 'Mise aux normes complète d\'une installation électrique dans une maison individuelle',
+      date: '2024-01-15',
+      category: 'electrical',
+      content: [
+        {
+          id: 'demo-content-1',
+          type: 'text',
+          content: 'Installation complète du tableau électrique avec mise aux normes NF C 15-100'
+        },
+        {
+          id: 'demo-content-2',
+          type: 'image',
+          content: '/1749721290289.jpeg'
+        }
+      ]
+    },
+    {
+      id: 'demo-2',
+      title: 'Borne de recharge IRVE',
+      description: 'Installation d\'une borne de recharge pour véhicule électrique',
+      date: '2024-02-10',
+      category: 'irve',
+      content: [
+        {
+          id: 'demo-content-3',
+          type: 'text',
+          content: 'Installation certifiée IRVE d\'une borne de recharge 22kW'
+        },
+        {
+          id: 'demo-content-4',
+          type: 'image',
+          content: '/edf61b3d-67aa-467b-86c6-4fcb836ea43c.jpeg'
+        }
+      ]
+    },
+    {
+      id: 'demo-3',
+      title: 'Système domotique intelligent',
+      description: 'Installation complète d\'un système domotique pour maison connectée',
+      date: '2024-03-05',
+      category: 'domotique',
+      content: [
+        {
+          id: 'demo-content-5',
+          type: 'text',
+          content: 'Système domotique complet avec contrôle éclairage, chauffage et sécurité'
+        },
+        {
+          id: 'demo-content-6',
+          type: 'image',
+          content: '/1750010421911.jpeg'
+        }
+      ]
+    },
+    {
+      id: 'demo-4',
+      title: 'Réseau informatique entreprise',
+      description: 'Câblage structuré et installation réseau pour bureaux professionnels',
+      date: '2024-03-20',
+      category: 'network',
+      content: [
+        {
+          id: 'demo-content-7',
+          type: 'text',
+          content: 'Installation complète du réseau VDI avec certification'
+        },
+        {
+          id: 'demo-content-8',
+          type: 'image',
+          content: 'https://images.pexels.com/photos/2881232/pexels-photo-2881232.jpeg?auto=compress&cs=tinysrgb&w=1600'
+        }
+      ]
+    }
+  ];
 
   useEffect(() => {
     fetchProjects();
@@ -61,40 +148,65 @@ export default function ProjectsShowcasePage() {
     filterProjects();
   }, [projects, selectedCategory, searchTerm]);
 
+  const checkFirebaseConnection = async () => {
+    try {
+      const testQuery = query(collection(db, 'projects'), orderBy('date', 'desc'));
+      await getDocs(testQuery);
+      return true;
+    } catch (err) {
+      console.log('Erreur de connexion Firebase:', err);
+      return false;
+    }
+  };
+
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      setError(null);
       
-      const projectsData = await getProjects();
-      
-      if (projectsData.length === 0) {
-        // Initialiser les projets de démonstration si aucun projet n'existe
-        await initializeDemoProjects();
-        const newProjectsData = await getProjects();
-        setProjects(newProjectsData);
-      } else {
+      const isConnected = await checkFirebaseConnection();
+      setIsFirebaseAvailable(isConnected);
+
+      if (isConnected) {
+        const projectsQuery = query(collection(db, 'projects'), orderBy('date', 'desc'));
+        const projectsSnapshot = await getDocs(projectsQuery);
+        
+        const projectsData: Project[] = [];
+        
+        for (const projectDoc of projectsSnapshot.docs) {
+          const projectData = projectDoc.data();
+          
+          const contentQuery = query(
+            collection(db, 'projects', projectDoc.id, 'content'),
+            orderBy('order', 'asc')
+          );
+          const contentSnapshot = await getDocs(contentQuery);
+          
+          const content = contentSnapshot.docs.map(contentDoc => ({
+            id: contentDoc.id,
+            type: contentDoc.data().type,
+            content: contentDoc.data().content
+          }));
+          
+          projectsData.push({
+            id: projectDoc.id,
+            title: projectData.title,
+            description: projectData.description,
+            date: projectData.date,
+            category: projectData.category || 'electrical',
+            content
+          });
+        }
+        
         setProjects(projectsData);
+      } else {
+        setProjects(demoProjects);
+        setError('Mode démonstration - Connexion Firebase indisponible');
       }
     } catch (err) {
-      console.error('Erreur lors de la récupération des projets:', err);
-      
-      // Vérifier si c'est une erreur de permissions Firebase
-      const errorMessage = err instanceof Error ? err.message : String(err);
-      if (errorMessage.includes('Missing or insufficient permissions')) {
-        setError(
-          'Erreur de permissions Firebase. Pour résoudre ce problème:\n\n' +
-          '1. Ouvrez un terminal dans le dossier du projet\n' +
-          '2. Exécutez: npm run firebase:rules\n' +
-          '3. Ou déployez manuellement les règles dans la console Firebase\n\n' +
-          'Les règles Firestore doivent être déployées pour permettre l\'accès aux données.'
-        );
-      } else {
-        setError('Erreur de connexion Firebase. Vérifiez votre configuration.');
-      }
-      
-      // Fallback avec des données par défaut en cas d'erreur
-      setProjects([]);
+      console.log('Erreur lors de la récupération des projets:', err);
+      setError('Mode démonstration - Erreur de connexion Firebase');
+      setProjects(demoProjects);
+      setIsFirebaseAvailable(false);
     } finally {
       setLoading(false);
     }
@@ -118,31 +230,43 @@ export default function ProjectsShowcasePage() {
   };
 
   const handleAddProject = async () => {
-    try {
-      const projectId = await addProject({
-        title: 'Nouveau projet',
-        description: 'Description du projet',
-        date: new Date().toISOString().split('T')[0],
-        category: 'electrical'
-      });
-      
+    if (!isFirebaseAvailable) {
       const newProject: Project = {
-        id: projectId,
+        id: `demo-${Date.now()}`,
         title: 'Nouveau projet',
         description: 'Description du projet',
         date: new Date().toISOString().split('T')[0],
         category: 'electrical',
-        content: [],
-        created_at: new Date(),
-        updated_at: new Date()
+        content: []
       };
-      
       setProjects([newProject, ...projects]);
       setEditingProject(newProject);
       setIsEditing(true);
+      return;
+    }
+
+    const newProjectData = {
+      title: 'Nouveau projet',
+      description: 'Description du projet',
+      date: new Date().toISOString().split('T')[0],
+      category: 'electrical'
+    };
+
+    try {
+      const docRef = await addDoc(collection(db, 'projects'), newProjectData);
+      
+      const projectWithContent = { 
+        id: docRef.id, 
+        ...newProjectData, 
+        content: [] 
+      };
+      
+      setProjects([projectWithContent, ...projects]);
+      setEditingProject(projectWithContent);
+      setIsEditing(true);
     } catch (err) {
-      console.error('Erreur lors de l\'ajout du projet:', err);
-      setError('Erreur lors de la création du projet');
+      console.log('Erreur lors de l\'ajout du projet:', err);
+      setError('Error creating project');
     }
   };
 
@@ -153,10 +277,15 @@ export default function ProjectsShowcasePage() {
 
   const handleDeleteProject = async (projectId: string) => {
     try {
-      await deleteProject(projectId);
+      if (!isFirebaseAvailable) {
+        setProjects(projects.filter(p => p.id !== projectId));
+        return;
+      }
+
+      await deleteDoc(doc(db, 'projects', projectId));
       setProjects(projects.filter(p => p.id !== projectId));
     } catch (err) {
-      setError('Erreur lors de la suppression du projet');
+      setError('Error deleting project');
       console.error('Error deleting project:', err);
     }
   };
@@ -164,13 +293,38 @@ export default function ProjectsShowcasePage() {
   const handleSaveProject = async () => {
     if (!editingProject) return;
 
+    if (!isFirebaseAvailable) {
+      setProjects(projects.map(p => 
+        p.id === editingProject.id ? editingProject : p
+      ));
+      setIsEditing(false);
+      setEditingProject(null);
+      setNewContent(null);
+      return;
+    }
+    
     try {
-      await updateProject(editingProject.id, {
+      await updateDoc(doc(db, 'projects', editingProject.id), {
         title: editingProject.title,
         description: editingProject.description,
-        date: editingProject.date,
         category: editingProject.category
       });
+
+      const contentCollection = collection(db, 'projects', editingProject.id, 'content');
+      const contentSnapshot = await getDocs(contentCollection);
+      
+      for (const contentDoc of contentSnapshot.docs) {
+        await deleteDoc(contentDoc.ref);
+      }
+      
+      for (let i = 0; i < editingProject.content.length; i++) {
+        const content = editingProject.content[i];
+        await addDoc(contentCollection, {
+          type: content.type,
+          content: content.content,
+          order: i
+        });
+      }
 
       setProjects(projects.map(p => 
         p.id === editingProject.id ? editingProject : p
@@ -179,7 +333,7 @@ export default function ProjectsShowcasePage() {
       setEditingProject(null);
       setNewContent(null);
     } catch (err) {
-      setError('Erreur lors de la sauvegarde du projet');
+      setError('Error saving project');
       console.error('Error updating project:', err);
     }
   };
@@ -190,8 +344,7 @@ export default function ProjectsShowcasePage() {
     const newContentItem: ProjectContent = {
       id: Date.now().toString(),
       type,
-      content: '',
-      order: editingProject.content.length
+      content: ''
     };
     
     setNewContent(newContentItem);
@@ -200,22 +353,29 @@ export default function ProjectsShowcasePage() {
   const handleSaveContent = async () => {
     if (!editingProject || !newContent) return;
 
+    if (!isFirebaseAvailable) {
+      setEditingProject({
+        ...editingProject,
+        content: [...editingProject.content, newContent]
+      });
+      setNewContent(null);
+      return;
+    }
+    
     try {
-      const contentId = await addProjectContent(editingProject.id, {
+      await addDoc(collection(db, 'projects', editingProject.id, 'content'), {
         type: newContent.type,
         content: newContent.content,
-        order: newContent.order
+        order: editingProject.content.length
       });
-
-      const newContentWithId = { ...newContent, id: contentId };
 
       setEditingProject({
         ...editingProject,
-        content: [...editingProject.content, newContentWithId]
+        content: [...editingProject.content, newContent]
       });
       setNewContent(null);
     } catch (err) {
-      setError('Erreur lors de la sauvegarde du contenu');
+      setError('Error saving content');
       console.error('Error saving content:', err);
     }
   };
@@ -223,15 +383,23 @@ export default function ProjectsShowcasePage() {
   const handleDeleteContent = async (contentId: string) => {
     if (!editingProject) return;
 
+    if (!isFirebaseAvailable) {
+      setEditingProject({
+        ...editingProject,
+        content: editingProject.content.filter(c => c.id !== contentId)
+      });
+      return;
+    }
+    
     try {
-      await deleteProjectContent(editingProject.id, contentId);
+      await deleteDoc(doc(db, 'projects', editingProject.id, 'content', contentId));
 
       setEditingProject({
         ...editingProject,
         content: editingProject.content.filter(c => c.id !== contentId)
       });
     } catch (err) {
-      setError('Erreur lors de la suppression du contenu');
+      setError('Error deleting content');
       console.error('Error deleting content:', err);
     }
   };
@@ -295,18 +463,12 @@ export default function ProjectsShowcasePage() {
       <div className="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-800 text-white">
         <div className="container mx-auto px-6 py-16">
           {error && (
-            <div className="mb-6 p-6 rounded-xl bg-red-500/20 border border-red-300 text-red-100">
-              <div className="flex items-start gap-3">
-                <div className="bg-red-500 rounded-full p-1 mt-1">
-                  <X className="h-4 w-4 text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold mb-2">Erreur de configuration Firebase</h3>
-                  <pre className="text-sm whitespace-pre-wrap font-mono bg-red-900/20 p-3 rounded">
-                    {error}
-                  </pre>
-                </div>
-              </div>
+            <div className={`mb-6 p-4 rounded-xl ${
+              isFirebaseAvailable 
+                ? 'bg-red-500/20 border border-red-300 text-red-100' 
+                : 'bg-blue-500/20 border border-blue-300 text-blue-100'
+            }`}>
+              {error}
             </div>
           )}
 

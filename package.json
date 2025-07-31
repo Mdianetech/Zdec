@@ -7,10 +7,7 @@
     "dev": "npx vite",
     "build": "npx vite build",
     "lint": "eslint .",
-    "preview": "npx vite preview",
-    "firebase:deploy": "firebase deploy",
-    "firebase:rules": "firebase deploy --only firestore:rules",
-    "firebase:emulators": "firebase emulators:start"
+    "preview": "npx vite preview"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.7",

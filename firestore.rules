@@ -1,9 +1,12 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Règles temporaires très permissives pour les tests
-    match /{document=**} {
-      allow read, write: if true;
+    match /projects/{projectId} {
+      // Allow anyone to read and list projects
+      allow read, list: if true;
+      
+      // Allow anyone to create, update, and delete projects
+      allow create, update, delete: if true;
     }
   }
 }
