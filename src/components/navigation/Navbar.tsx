@@ -161,37 +161,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-            >
-              <img src="/image.png" alt="ZDEC" className="h-10" />
-            </Link>
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-            >
-              <X className="h-6 w-6" />
-              <span className="sr-only">Fermer le menu</span>
-            </button>
-          </div>
-          <div className="px-4 py-6 space-y-6">
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.path}
-                to={link.path}
-                className={({ isActive }) => cn(
-                  "block text-base font-medium",
-                  isActive ? "text-primary-600" : "text-gray-700 hover:text-primary-600"
-                )}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.name}
-              </NavLink>
-            ))}
-          </div>
-        </motion.div>
-      )}
-    </header>
-  );
-};
-
-export default Navbar;
