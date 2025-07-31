@@ -11,13 +11,13 @@ const Footer = () => {
       </div>
       
       <div className="container mx-auto py-12 sm:py-16 relative z-10">
-        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-6 xs:gap-8 sm:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-2 mb-6">
-              <img src="/image.png" alt="ZDEC" className="h-8 xs:h-10 sm:h-12" />
+              <img src="/image.png" alt="ZDEC" className="h-10 sm:h-12" />
             </div>
-            <p className="mb-6 max-w-xs text-xs xs:text-sm sm:text-base text-gray-400 leading-relaxed">
+            <p className="mb-6 max-w-xs text-sm sm:text-base text-gray-400 leading-relaxed">
               Électricien certifié IRVE à Lyon. Spécialistes en installation électrique, bornes de recharge et réseaux.
             </p>
             <div className="flex space-x-4">
@@ -38,10 +38,10 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h4 className="font-bold text-sm xs:text-base sm:text-lg text-white mb-4 sm:mb-6">Nos services</h4>
+            <h4 className="font-bold text-base sm:text-lg text-white mb-4 sm:mb-6">Nos services</h4>
             <ul className="space-y-4">
               <li>
-                <Link to="/services" className="text-xs xs:text-sm sm:text-base text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-300 inline-block min-h-[44px] flex items-center">
+                <Link to="/services" className="text-sm sm:text-base text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-300 inline-block min-h-[44px] flex items-center">
                   Électricité générale
                 </Link>
               </li>

@@ -1,525 +1,275 @@
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { 
-  Zap, 
-  BatteryCharging, 
-  Wrench, 
-  LightbulbIcon, 
-  Network, 
-  Shield, 
-  Home,
-  Building2,
-  Factory,
-  ChevronRight,
-  Phone,
-  ShieldCheck,
-  Award,
-  Clock
-} from 'lucide-react';
-import { cn } from '../utils/cn';
-import HomeTestimonials from '../components/testimonials/HomeTestimonials';
-import BrandIconContainer from '../components/ui/BrandIconContainer';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-const services = [
-  {
-    title: 'Électricité générale',
-    description: 'Installation, mise aux normes et dépannage électrique pour particuliers et professionnels',
-    icon: LightbulbIcon,
-    features: [
-      'Diagnostic complet de l\'installation',
-      'Mise aux normes NF C 15-100',
-      'Installation de tableaux électriques',
-      'Raccordement d\'appareils',
-    ],
-    image: 'https://images.pexels.com/photos/8005397/pexels-photo-8005397.jpeg?auto=compress&cs=tinysrgb&w=1600'
-  },
-  {
-    title: 'Bornes de recharge IRVE',
-    description: 'Installation certifiée de bornes de recharge pour véhicules électriques.',
-    icon: BatteryCharging,
-    features: [
-      'Étude technique personnalisée',
-      'Installation aux normes IRVE',
-      'Configuration et mise en service',
-      'Maintenance préventive',
-    ],
-    image: 'https://images.pexels.com/photos/3822843/pexels-photo-3822843.jpeg?auto=compress&cs=tinysrgb&w=1600'
-  },
-  {
-    title: 'Domotique',
-    description: 'Solutions intelligentes pour le contrôle et l\'automatisation de votre habitat.',
-    icon: Home,
-    features: [
-      'Éclairage intelligent',
-      'Contrôle du chauffage',
-      'Gestion des volets',
-      'Systèmes de sécurité',
-    ],
-    image: 'https://images.pexels.com/photos/3183183/pexels-photo-3183183.jpeg?auto=compress&cs=tinysrgb&w=1600'
-  },
-  {
-    title: 'Réseaux informatiques',
-    description: 'Installation et configuration de réseaux VDI professionnels.',
-    icon: Network,
-    features: [
-      'Câblage structuré',
-      'Installation fibre optique',
-      'Configuration réseau',
-      'Tests et certification',
-    ],
-    image: 'https://images.pexels.com/photos/2881232/pexels-photo-2881232.jpeg?auto=compress&cs=tinysrgb&w=1600'
+/* Responsive base styles */
+@layer base {
+  * {
+    box-sizing: border-box;
   }
-];
+  
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  
+  body {
+    @apply antialiased text-gray-800;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight text-gray-900;
+    line-height: 1.2;
+    word-wrap: break-word;
+  }
+  
+  h1 {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight;
+  }
+  
+  h2 {
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight;
+  }
+  
+  h3 {
+    @apply text-lg sm:text-xl md:text-2xl lg:text-3xl leading-tight;
+  }
+  
+  h4 {
+    @apply text-base sm:text-lg md:text-xl lg:text-2xl;
+  }
+  
+  /* Responsive images */
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  /* Responsive videos */
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Touch-friendly links and buttons */
+  a, button {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
 
-const clientTypes = [
-  {
-    title: 'Particuliers',
-    description: 'Solutions sur mesure pour votre maison',
-    icon: Home,
-    color: 'bg-primary-100 text-primary-600',
-  },
-  {
-    title: 'Professionnels',
-    description: 'Services adaptés aux entreprises',
-    icon: Building2,
-    color: 'bg-secondary-100 text-secondary-600',
-  },
-  {
-    title: 'Industriels',
-    description: 'Solutions pour sites industriels',
-    icon: Factory,
-    color: 'bg-accent-100 text-accent-600',
-  },
-];
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg text-sm sm:text-base font-semibold transition-all duration-300
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2
+           disabled:opacity-50 disabled:pointer-events-none min-h-[44px] px-4 py-2;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-700 text-white hover:from-primary-700 hover:to-primary-800 
+           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-4 sm:px-6 py-2 sm:py-3;
+  }
+  
+  .btn-secondary {
+    @apply bg-gradient-to-r from-secondary-500 to-secondary-600 text-white hover:from-secondary-600 hover:to-secondary-700 
+           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-4 sm:px-6 py-2 sm:py-3;
+  }
+  
+  .btn-accent {
+    @apply bg-gradient-to-r from-accent-500 to-accent-600 text-white hover:from-accent-600 hover:to-accent-700 
+           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 px-4 sm:px-6 py-2 sm:py-3;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-gray-300 bg-transparent hover:bg-gray-50 hover:border-gray-400 
+           transform hover:-translate-y-0.5 px-4 sm:px-6 py-2 sm:py-3;
+  }
+  
+  .card {
+    @apply rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100;
+  }
+  
+  .input {
+    @apply flex h-12 w-full rounded-lg border-2 border-gray-200 bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300
+           disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  .input-label {
+    @apply block text-sm font-semibold leading-6 text-gray-900 mb-2;
+  }
+  
+  .container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl w-full;
+  }
+  
+  .transition-standard {
+    @apply transition-all duration-500 ease-out;
+  }
+  
+  /* Amélioration de la qualité des images */
+  .high-quality-image {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: high-quality;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  /* Optimisation pour les images en carrousel */
+  .carousel-container {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  /* Amélioration de la netteté lors des transitions */
+  .image-transition {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  
+  /* Responsive utilities */
+  .responsive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  
+  @media (min-width: 640px) {
+    .responsive-grid {
+      gap: 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .responsive-grid {
+      gap: 2rem;
+    }
+  }
+  
+  /* Mobile-first navigation */
+  .mobile-menu {
+    @apply fixed inset-0 z-50 bg-white transform transition-transform duration-300 ease-in-out;
+  }
+  
+  .mobile-menu.closed {
+    @apply translate-x-full;
+  }
+  
+  .mobile-menu.open {
+    @apply translate-x-0;
+  }
+  
+  /* Touch-friendly spacing */
+  .touch-spacing {
+    @apply space-y-4 sm:space-y-6;
+  }
+  
+  .touch-spacing > * {
+    @apply min-h-[44px];
+  }
+  
+  /* Responsive text */
+  .responsive-text {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+  
+  .responsive-text-large {
+    @apply text-base sm:text-lg lg:text-xl;
+  }
+  
+  /* Responsive padding */
+  .responsive-padding {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
+  
+  .responsive-margin {
+    @apply m-4 sm:m-6 lg:m-8;
+  }
+}
 
-const benefits = [
-  {
-    title: 'Expertise Certifiée',
-    description: 'Plus de 15 ans d\'expérience et certifications reconnues dans le domaine électrique',
-    icon: Award,
-  },
-  {
-    title: 'Qualité Garantie',
-    description: 'Installations conformes aux normes avec garantie de satisfaction client',
-    icon: ShieldCheck,
-  },
-  {
-    title: 'Service Réactif',
-    description: 'Intervention rapide et support technique disponible 7j/7',
-    icon: Clock,
-  },
-];
+/* Animations pour le logo 360° */
+@keyframes logoRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
+@keyframes logoRotateReverse {
+  from {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(-180deg);
+  }
+}
 
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1, 
-    transition: { staggerChildren: 0.1 } 
-  },
-};
+@keyframes logoRotateDiagonal {
+  from {
+    transform: rotate(45deg);
+  }
+  to {
+    transform: rotate(405deg);
+  }
+}
 
-const HomePage = () => {
-  return (
-    <>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-gray-900 via-primary-900 to-primary-800 text-white overflow-hidden min-h-screen flex items-center px-2 xs:px-4 sm:px-0">
-        <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3825582/pexels-photo-3825582.jpeg?auto=compress&cs=tinysrgb&w=1600')] opacity-10 bg-cover bg-center" />
-        
-        {/* Logo 360° Background Pattern */}
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Pattern de logos avec rotations multiples */}
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              url(/image.png),
-              url(/image.png),
-              url(/image.png),
-              url(/image.png),
-              url(/image.png),
-              url(/image.png),
-              url(/image.png),
-              url(/image.png)
-            `,
-            backgroundSize: '120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px',
-            backgroundPosition: `
-              0% 0%,
-              25% 15%,
-              50% 30%,
-              75% 45%,
-              100% 60%,
-              20% 75%,
-              60% 90%,
-              90% 10%
-            `,
-            backgroundRepeat: 'repeat',
-            opacity: 0.15,
-            transform: 'rotate(0deg)',
-            animation: 'logoRotate 120s linear infinite'
-          }} />
-          
-          {/* Deuxième couche avec rotation inverse */}
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              url(/image.png),
-              url(/image.png),
-              url(/image.png),
-              url(/image.png),
-              url(/image.png)
-            `,
-            backgroundSize: '80px 80px, 80px 80px, 80px 80px, 80px 80px, 80px 80px',
-            backgroundPosition: `
-              10% 20%,
-              40% 50%,
-              70% 80%,
-              85% 25%,
-              15% 70%
-            `,
-            backgroundRepeat: 'repeat',
-            opacity: 0.08,
-            transform: 'rotate(180deg)',
-            animation: 'logoRotateReverse 180s linear infinite'
-          }} />
-          
-          {/* Troisième couche avec rotation diagonale */}
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              url(/image.png),
-              url(/image.png),
-              url(/image.png)
-            `,
-            backgroundSize: '100px 100px, 100px 100px, 100px 100px',
-            backgroundPosition: `
-              30% 10%,
-              65% 40%,
-              5% 85%
-            `,
-            backgroundRepeat: 'repeat',
-            opacity: 0.12,
-            transform: 'rotate(45deg)',
-            animation: 'logoRotateDiagonal 150s linear infinite'
-          }} />
-        </div>
-        
-        <div className="container relative py-12 xs:py-16 sm:py-20 md:py-32">
-          <motion.div 
-            className="max-w-4xl relative z-10 text-center mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <motion.span 
-              className="inline-flex items-center px-3 xs:px-4 sm:px-6 py-2 sm:py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs sm:text-sm font-medium mb-4 xs:mb-6 sm:mb-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-                marginBottom: 'clamp(1.5rem, 4vw, 2rem)'
-              }}
-              <Zap className="h-4 w-4 mr-2" />
-              Électricien certifié IRVE
-            </motion.span>
-            <h1 className="font-bold leading-tight text-white content-spacing">
-              <span className="block">Solutions électriques</span>
-              <span className="block bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
-                professionnelles
-              </span>
-              <span className="block font-normal mt-2 text-gray-200" style={{ fontSize: 'clamp(1rem, 2.5vw, 2rem)' }}>
-                à Lyon et partout en France
-              </span>
-            </h1>
-            <p className="text-gray-200 max-w-3xl mx-auto leading-relaxed content-spacing" style={{ fontSize: 'clamp(1rem, 1.5vw, 1.25rem)' }}>
-              Installations électriques, bornes de recharge, réseaux et domotique par des experts qualifiés pour particuliers et professionnels.
-            </p>
-            <div className="flex flex-col xs:flex-row gap-4 justify-center">
-              <Link to="/contact" className="btn bg-white text-primary-600 hover:bg-gray-100 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                Demander un devis
-              </Link>
-              <Link to="/services" className="btn bg-transparent text-white hover:bg-white/10 border-2 border-white/30 hover:border-white/50 rounded-xl backdrop-blur-sm transition-all duration-300">
-                Découvrir nos services
-              </Link>
-            </div>
-            
-            {/* Stats Section */}
-            <motion.div 
-              className="responsive-grid grid-cols-1 sm:grid-cols-3 border-t border-white/20"
-              style={{
-                marginTop: 'clamp(3rem, 8vw, 4rem)',
-                paddingTop: 'clamp(3rem, 8vw, 4rem)'
-              }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
-            >
-              <div className="text-center">
-                <div className="font-bold text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>15+</div>
-                <div className="text-gray-300" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>Années d'expérience</div>
-              </div>
-              <div className="text-center">
-                <div className="font-bold text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>500+</div>
-                <div className="text-gray-300" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>Projets réalisés</div>
-              </div>
-              <div className="text-center">
-                <div className="font-bold text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>100%</div>
-                <div className="text-gray-300" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>Clients satisfaits</div>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-        
-        {/* Scroll indicator */}
-        <motion.div 
-          className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 hidden sm:block"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white rounded-full mt-2"></div>
-          </div>
-        </motion.div>
-      </section>
+/* Mobile-specific optimizations */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Reduce motion for better mobile performance */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
 
-      {/* Services section */}
-      <section className="section-padding bg-white relative">
-        {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 to-white"></div>
-        
-        <div className="container">
-          <motion.div 
-            className="text-center max-w-4xl mx-auto content-spacing"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="inline-block bg-primary-100 text-primary-700 rounded-full font-semibold content-spacing"
-                  style={{
-                    padding: 'clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 2vw, 1.5rem)',
-                    fontSize: 'clamp(0.75rem, 1vw, 0.875rem)'
-                  }}>
-              NOS EXPERTISES
-            </span>
-            <h2 className="font-bold text-gray-900 content-spacing">
-              Services d'électricité <span className="text-primary-600">de qualité</span>
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
-              Découvrez notre gamme complète de services électriques assurés par des professionnels qualifiés et certifiés.
-            </p>
-          </motion.div>
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
 
-          <div className="relative">
-            <motion.div 
-              className="responsive-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              {services.map((service, index) => (
-                <motion.div 
-                  key={index}
-                  variants={fadeInUp}
-                  className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary-200 transform hover:-translate-y-2"
-                  style={{ padding: 'clamp(1.5rem, 3vw, 2rem)' }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
-                  
-                  <div className="relative z-10">
-                    <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
-                      <BrandIconContainer 
-                        icon={service.icon} 
-                        variant="gradient" 
-                        size="lg" 
-                      />
-                    </div>
-                    <h3 className="font-bold mb-4 text-gray-900 group-hover:text-primary-700 transition-colors" style={{ fontSize: 'clamp(1.125rem, 1.5vw, 1.25rem)' }}>
-                      {service.title}
-                    </h3>
-                    <p className="text-gray-600 mb-6 leading-relaxed" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>{service.description}</p>
-                    <Link
-                      to="/contact"
-                      className="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 group-hover:gap-3 transition-all duration-300 min-h-[44px]"
-                      style={{ fontSize: 'clamp(0.875rem, 1.1vw, 1rem)' }}
-                    >
-                      En savoir plus 
-                      <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
-                    </Link>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
+/* Desktop optimizations */
+@media (min-width: 1025px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
 
-      {/* Trust indicators */}
-      <section className="section-padding bg-gray-50">
-        <div className="container">
-          <motion.div 
-            className="text-center mb-12"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <h3 className="font-bold text-gray-900 content-spacing" style={{ fontSize: 'clamp(1.25rem, 2vw, 1.5rem)' }}>Ils nous font confiance</h3>
-            <div className="responsive-grid grid-cols-2 md:grid-cols-4 items-center opacity-60">
-              <div className="flex items-center justify-center">
-                <Shield className="text-gray-400" style={{ width: 'clamp(2rem, 3vw, 3rem)', height: 'clamp(2rem, 3vw, 3rem)' }} />
-                <span className="ml-2 font-semibold text-gray-500" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>IRVE</span>
-              </div>
-              <div className="flex items-center justify-center">
-                <Award className="text-gray-400" style={{ width: 'clamp(2rem, 3vw, 3rem)', height: 'clamp(2rem, 3vw, 3rem)' }} />
-                <span className="ml-2 font-semibold text-gray-500" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>Qualifelec</span>
-              </div>
-              <div className="flex items-center justify-center">
-                <ShieldCheck className="text-gray-400" style={{ width: 'clamp(2rem, 3vw, 3rem)', height: 'clamp(2rem, 3vw, 3rem)' }} />
-                <span className="ml-2 font-semibold text-gray-500" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>RGE</span>
-              </div>
-              <div className="flex items-center justify-center">
-                <Clock className="text-gray-400" style={{ width: 'clamp(2rem, 3vw, 3rem)', height: 'clamp(2rem, 3vw, 3rem)' }} />
-                <span className="ml-2 font-semibold text-gray-500" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>24/7</span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .high-quality-image {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
 
-      {/* CTA IRVE */}
-      <section className="py-12 sm:py-16 bg-gray-50">
-        <div className="container">
-          <motion.div 
-            className="bg-primary-600 rounded-xl overflow-hidden"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex flex-col lg:flex-row">
-              <div className="lg:w-1/2 p-6 sm:p-8 md:p-12 text-white">
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">Installation de bornes de recharge pour véhicules électriques</h2>
-                <p className="mb-6 text-sm sm:text-base text-primary-100">
-                  Notre équipe certifiée IRVE (Infrastructure de Recharge pour Véhicules Électriques) vous accompagne dans l'installation de bornes de recharge pour votre domicile ou votre entreprise.
-                </p>
-                <ul className="mb-6 sm:mb-8 space-y-2 text-sm sm:text-base">
-                  <li className="flex items-start">
-                    <span className="mr-2 mt-1">✓</span>
-                    <span>Installation conforme aux normes</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2 mt-1">✓</span>
-                    <span>Certification IRVE pour accéder aux aides financières</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2 mt-1">✓</span>
-                    <span>Solutions pour particuliers et professionnels</span>
-                  </li>
-                </ul>
-                <Link to="/irve" className="btn bg-white text-primary-600 hover:bg-gray-100 text-sm sm:text-base">
-                  Découvrir nos solutions IRVE
-                </Link>
-              </div>
-              <div className="lg:w-1/2 relative">
-                <img
-                  src="/1fde24ca-122c-4ea9-a8e6-2783ffaf78f9.jpeg"
-                  alt="Technicien travaillant sur une installation électrique"
-                  className="w-full h-64 sm:h-full object-cover"
-                />
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Benefits section */}
-      <section className="py-12 sm:py-16 md:py-24">
-        <div className="container">
-          <motion.div 
-            className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 px-4 sm:px-0"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">Pourquoi choisir Zdec ?</h2>
-            <p className="text-base sm:text-lg text-gray-600">
-              Notre engagement envers l'excellence et notre expertise technique font de nous votre partenaire de confiance pour tous vos projets électriques.
-            </p>
-          </motion.div>
-
-          <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            {benefits.map((benefit, index) => (
-              <motion.div
-                key={index}
-                variants={fadeInUp}
-                className="text-center"
-              >
-                <div className="mx-auto mb-5">
-                  <BrandIconContainer 
-                    icon={benefit.icon} 
-                    variant="primary" 
-                    size="lg" 
-                    shape="circle"
-                  />
-                </div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-3">{benefit.title}</h3>
-                <p className="text-sm sm:text-base text-gray-600">{benefit.description}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Add HomeTestimonials component */}
-      <HomeTestimonials />
-
-      {/* Contact CTA */}
-      <section className="py-12 sm:py-16 md:py-24">
-        <div className="container text-center">
-          <motion.div 
-            className="max-w-3xl mx-auto px-4 sm:px-0"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">Besoin d'un électricien qualifié ?</h2>
-            <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
-              Contactez-nous dès aujourd'hui pour discuter de votre projet ou pour une intervention rapide.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                to="/contact"
-                className="btn btn-primary px-6 sm:px-8 py-3 text-sm sm:text-base"
-              >
-                Nous contacter
-              </Link>
-              <a 
-                href="tel:+33622802645"
-                className="btn btn-outline px-6 sm:px-8 py-3 text-sm sm:text-base flex items-center justify-center gap-2"
-              >
-                <Phone className="h-5 w-5" />
-                +33 06 22 80 26 45
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-    </>
-  );
-};
-
-export default HomePage;
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
