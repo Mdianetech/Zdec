@@ -148,7 +148,11 @@ const AboutPage = () => {
                     alt={member.name}
                     className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 filter brightness-105 contrast-105 saturate-110"
                     style={{
-                      objectPosition: `${member.cropPosition.x}% ${member.cropPosition.y}%`
+                      objectPosition: member.name === 'AZZOUZ MOUFID' 
+                        ? 'center 20%' 
+                        : member.name === 'Rami Bouchedda' 
+                        ? 'center 15%' 
+                        : `${member.cropPosition.x}% ${member.cropPosition.y}%`
                     }}
                   />
                   
