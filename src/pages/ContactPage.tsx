@@ -1,323 +1,493 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { 
+  Zap, 
+  BatteryCharging, 
+  Wrench, 
+  LightbulbIcon, 
+  Network, 
+  Shield, 
+  Home,
+  Building2,
+  Factory,
+  ChevronRight,
+  Phone,
+  ShieldCheck,
+  Award,
+  Clock
+} from 'lucide-react';
+import { cn } from '../utils/cn';
+import HomeTestimonials from '../components/testimonials/HomeTestimonials';
 import BrandIconContainer from '../components/ui/BrandIconContainer';
 
-const contactInfo = [
+const services = [
   {
-    icon: Phone,
-    title: 'Téléphone',
-    details: '+33 06 22 80 26 45',
-    description: 'Du lundi au vendredi, 8h-18h',
+    title: 'Électricité générale',
+    description: 'Installation, mise aux normes et dépannage électrique pour particuliers et professionnels',
+    icon: LightbulbIcon,
+    features: [
+      'Diagnostic complet de l\'installation',
+      'Mise aux normes NF C 15-100',
+      'Installation de tableaux électriques',
+      'Raccordement d\'appareils',
+    ],
+    image: 'https://images.pexels.com/photos/8005397/pexels-photo-8005397.jpeg?auto=compress&cs=tinysrgb&w=1600'
   },
   {
-    icon: Mail,
-    title: 'Email',
-    details: 'contact@zedek.fr',
-    description: 'Réponse sous 24h ouvrables',
+    title: 'Bornes de recharge IRVE',
+    description: 'Installation certifiée de bornes de recharge pour véhicules électriques.',
+    icon: BatteryCharging,
+    features: [
+      'Étude technique personnalisée',
+      'Installation aux normes IRVE',
+      'Configuration et mise en service',
+      'Maintenance préventive',
+    ],
+    image: 'https://images.pexels.com/photos/3822843/pexels-photo-3822843.jpeg?auto=compress&cs=tinysrgb&w=1600'
   },
   {
-    icon: MapPin,
-    title: 'Adresse',
-    details: 'Lyon, France',
-    description: 'Intervention sur toute la France',
+    title: 'Domotique',
+    description: 'Solutions intelligentes pour le contrôle et l\'automatisation de votre habitat.',
+    icon: Home,
+    features: [
+      'Éclairage intelligent',
+      'Contrôle du chauffage',
+      'Gestion des volets',
+      'Systèmes de sécurité',
+    ],
+    image: 'https://images.pexels.com/photos/3183183/pexels-photo-3183183.jpeg?auto=compress&cs=tinysrgb&w=1600'
   },
   {
+    title: 'Réseaux informatiques',
+    description: 'Installation et configuration de réseaux VDI professionnels.',
+    icon: Network,
+    features: [
+      'Câblage structuré',
+      'Installation fibre optique',
+      'Configuration réseau',
+      'Tests et certification',
+    ],
+    image: 'https://images.pexels.com/photos/2881232/pexels-photo-2881232.jpeg?auto=compress&cs=tinysrgb&w=1600'
+  }
+];
+
+const clientTypes = [
+  {
+    title: 'Particuliers',
+    description: 'Solutions sur mesure pour votre maison',
+    icon: Home,
+    color: 'bg-primary-100 text-primary-600',
+  },
+  {
+    title: 'Professionnels',
+    description: 'Services adaptés aux entreprises',
+    icon: Building2,
+    color: 'bg-secondary-100 text-secondary-600',
+  },
+  {
+    title: 'Industriels',
+    description: 'Solutions pour sites industriels',
+    icon: Factory,
+    color: 'bg-accent-100 text-accent-600',
+  },
+];
+
+const benefits = [
+  {
+    title: 'Expertise Certifiée',
+    description: 'Plus de 15 ans d\'expérience et certifications reconnues dans le domaine électrique',
+    icon: Award,
+  },
+  {
+    title: 'Qualité Garantie',
+    description: 'Installations conformes aux normes avec garantie de satisfaction client',
+    icon: ShieldCheck,
+  },
+  {
+    title: 'Service Réactif',
+    description: 'Intervention rapide et support technique disponible 7j/7',
     icon: Clock,
-    title: 'Horaires',
-    details: 'Lun-Ven: 8h-18h',
-    description: 'Intervention d\'urgence possible',
   },
 ];
 
-const serviceOptions = [
-  "Installation électrique",
-  "Mise aux normes",
-  "Borne de recharge (IRVE)",
-  "Domotique",
-  "Réseaux informatiques (VDI)",
-  "Dépannage",
-  "Autre",
-];
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
 
-const ContactPage = () => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    service: '',
-    clientType: 'particulier',
-    message: '',
-  });
-  
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-  
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // This would connect to your backend
-    console.log('Form submission:', formData);
-    
-    // Mock success feedback
-    alert('Votre message a bien été envoyé. Nous vous contacterons dans les meilleurs délais.');
-  };
-  
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1, 
+    transition: { staggerChildren: 0.1 } 
+  },
+};
 
+const HomePage = () => {
   return (
     <>
-      {/* Header */}
-      <section className="bg-primary-600 text-white py-12 sm:py-16 md:py-24">
-        <div className="container">
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-gray-900 via-primary-900 to-primary-800 text-white overflow-hidden min-h-screen flex items-center px-2 xs:px-4 sm:px-0">
+        <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3825582/pexels-photo-3825582.jpeg?auto=compress&cs=tinysrgb&w=1600')] opacity-10 bg-cover bg-center" />
+        
+        {/* Logo 360° Background Pattern */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Pattern de logos avec rotations multiples */}
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png)
+            `,
+            backgroundSize: '120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px',
+            backgroundPosition: `
+              0% 0%,
+              25% 15%,
+              50% 30%,
+              75% 45%,
+              100% 60%,
+              20% 75%,
+              60% 90%,
+              90% 10%
+            `,
+            backgroundRepeat: 'repeat',
+            opacity: 0.15,
+            transform: 'rotate(0deg)',
+            animation: 'logoRotate 120s linear infinite'
+          }} />
+          
+          {/* Deuxième couche avec rotation inverse */}
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png),
+              url(/image.png)
+            `,
+            backgroundSize: '80px 80px, 80px 80px, 80px 80px, 80px 80px, 80px 80px',
+            backgroundPosition: `
+              10% 20%,
+              40% 50%,
+              70% 80%,
+              85% 25%,
+              15% 70%
+            `,
+            backgroundRepeat: 'repeat',
+            opacity: 0.08,
+            transform: 'rotate(180deg)',
+            animation: 'logoRotateReverse 180s linear infinite'
+          }} />
+          
+          {/* Troisième couche avec rotation diagonale */}
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              url(/image.png),
+              url(/image.png),
+              url(/image.png)
+            `,
+            backgroundSize: '100px 100px, 100px 100px, 100px 100px',
+            backgroundPosition: `
+              30% 10%,
+              65% 40%,
+              5% 85%
+            `,
+            backgroundRepeat: 'repeat',
+            opacity: 0.12,
+            transform: 'rotate(45deg)',
+            animation: 'logoRotateDiagonal 150s linear infinite'
+          }} />
+        </div>
+        
+        <div className="container relative py-12 xs:py-16 sm:py-20 md:py-32">
           <motion.div 
-            className="max-w-3xl mx-auto text-center px-4 sm:px-0"
-            initial={{ opacity: 0, y: 20 }}
+            className="max-w-4xl relative z-10 text-center mx-auto"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">Contactez-nous</h1>
-            <p className="text-base sm:text-lg text-primary-100">
-              Besoin d'un devis, d'une intervention ou simplement d'un conseil ?
-              Notre équipe est à votre écoute pour répondre à toutes vos questions.
+            <motion.span 
+              className="inline-flex items-center px-3 xs:px-4 sm:px-6 py-2 sm:py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs sm:text-sm font-medium mb-4 xs:mb-6 sm:mb-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              style={{
+                marginBottom: 'clamp(1.5rem, 4vw, 2rem)'
+              }}
+            >
+              <Zap className="h-4 w-4 mr-2" />
+              Électricien certifié IRVE
+            </motion.span>
+            <h1 className="font-bold leading-tight text-white content-spacing">
+              <span className="block">Solutions électriques</span>
+              <span className="block bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
+                professionnelles
+              </span>
+              <span className="block font-normal mt-2 text-gray-200" style={{ fontSize: 'clamp(1rem, 2.5vw, 2rem)' }}>
+                à Lyon et partout en France
+              </span>
+            </h1>
+            <p className="text-gray-200 max-w-3xl mx-auto leading-relaxed content-spacing" style={{ fontSize: 'clamp(1rem, 1.5vw, 1.25rem)' }}>
+              Installations électriques, bornes de recharge, réseaux et domotique par des experts qualifiés pour particuliers et professionnels.
             </p>
+            <div className="flex flex-col xs:flex-row gap-4 justify-center">
+              <Link to="/contact" className="btn bg-white text-primary-600 hover:bg-gray-100 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                Demander un devis
+              </Link>
+              <Link to="/services" className="btn bg-transparent text-white hover:bg-white/10 border-2 border-white/30 hover:border-white/50 rounded-xl backdrop-blur-sm transition-all duration-300">
+                Découvrir nos services
+              </Link>
+            </div>
+            
+            {/* Stats Section */}
+            <motion.div 
+              className="responsive-grid grid-cols-1 sm:grid-cols-3 border-t border-white/20"
+              style={{
+                marginTop: 'clamp(3rem, 8vw, 4rem)',
+                paddingTop: 'clamp(3rem, 8vw, 4rem)'
+              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+            >
+              <div className="text-center">
+                <div className="font-bold text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>15+</div>
+                <div className="text-gray-300" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>Années d'expérience</div>
+              </div>
+              <div className="text-center">
+                <div className="font-bold text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>500+</div>
+                <div className="text-gray-300" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>Projets réalisés</div>
+              </div>
+              <div className="text-center">
+                <div className="font-bold text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>100%</div>
+                <div className="text-gray-300" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>Clients satisfaits</div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
+        
+        {/* Scroll indicator */}
+        <motion.div 
+          className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 hidden sm:block"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-white rounded-full mt-2"></div>
+          </div>
+        </motion.div>
       </section>
 
-      {/* Contact Info Cards */}
-      <section className="py-8 sm:py-12 bg-white">
+      {/* Services section */}
+      <section className="section-padding bg-white relative">
+        {/* Background decoration */}
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 to-white"></div>
+        
         <div className="container">
           <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+            className="text-center max-w-4xl mx-auto content-spacing"
             variants={fadeInUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            transition={{ 
-              duration: 0.5,
-              staggerChildren: 0.1,
-            }}
+            transition={{ duration: 0.6 }}
           >
-            {contactInfo.map((info, index) => (
+            <span className="inline-block bg-primary-100 text-primary-700 rounded-full font-semibold content-spacing"
+                  style={{
+                    padding: 'clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 2vw, 1.5rem)',
+                    fontSize: 'clamp(0.75rem, 1vw, 0.875rem)'
+                  }}>
+              NOS EXPERTISES
+            </span>
+            <h2 className="font-bold text-gray-900 content-spacing">
+              Services d'électricité <span className="text-primary-600">de qualité</span>
+            </h2>
+            <p className="text-gray-600 leading-relaxed">
+              Découvrez notre gamme complète de services électriques assurés par des professionnels qualifiés et certifiés.
+            </p>
+          </motion.div>
+
+          <div className="relative">
+            <motion.div 
+              className="responsive-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              {services.map((service, index) => (
+                <motion.div 
+                  key={index}
+                  variants={fadeInUp}
+                  className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary-200 transform hover:-translate-y-2"
+                  style={{ padding: 'clamp(1.5rem, 3vw, 2rem)' }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <BrandIconContainer 
+                        icon={service.icon} 
+                        variant="gradient" 
+                        size="lg" 
+                      />
+                    </div>
+                    <h3 className="font-bold mb-4 text-gray-900 group-hover:text-primary-700 transition-colors" style={{ fontSize: 'clamp(1.125rem, 1.5vw, 1.25rem)' }}>
+                      {service.title}
+                    </h3>
+                    <p className="text-gray-600 mb-6 leading-relaxed" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>{service.description}</p>
+                    <Link
+                      to="/contact"
+                      className="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 group-hover:gap-3 transition-all duration-300 min-h-[44px]"
+                      style={{ fontSize: 'clamp(0.875rem, 1.1vw, 1rem)' }}
+                    >
+                      En savoir plus 
+                      <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
+                    </Link>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust indicators */}
+      <section className="section-padding bg-gray-50">
+        <div className="container">
+          <motion.div 
+            className="text-center mb-12"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <h3 className="font-bold text-gray-900 content-spacing" style={{ fontSize: 'clamp(1.25rem, 2vw, 1.5rem)' }}>Ils nous font confiance</h3>
+            <div className="responsive-grid grid-cols-2 md:grid-cols-4 items-center opacity-60">
+              <div className="flex items-center justify-center">
+                <Shield className="text-gray-400" style={{ width: 'clamp(2rem, 3vw, 3rem)', height: 'clamp(2rem, 3vw, 3rem)' }} />
+                <span className="ml-2 font-semibold text-gray-500" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>IRVE</span>
+              </div>
+              <div className="flex items-center justify-center">
+                <Award className="text-gray-400" style={{ width: 'clamp(2rem, 3vw, 3rem)', height: 'clamp(2rem, 3vw, 3rem)' }} />
+                <span className="ml-2 font-semibold text-gray-500" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>Qualifelec</span>
+              </div>
+              <div className="flex items-center justify-center">
+                <ShieldCheck className="text-gray-400" style={{ width: 'clamp(2rem, 3vw, 3rem)', height: 'clamp(2rem, 3vw, 3rem)' }} />
+                <span className="ml-2 font-semibold text-gray-500" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>RGE</span>
+              </div>
+              <div className="flex items-center justify-center">
+                <Clock className="text-gray-400" style={{ width: 'clamp(2rem, 3vw, 3rem)', height: 'clamp(2rem, 3vw, 3rem)' }} />
+                <span className="ml-2 font-semibold text-gray-500" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>24/7</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA IRVE */}
+      <section className="py-12 sm:py-16 bg-gray-50">
+        <div className="container">
+          <motion.div 
+            className="bg-primary-600 rounded-xl overflow-hidden"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="flex flex-col lg:flex-row">
+              <div className="lg:w-1/2 p-6 sm:p-8 md:p-12 text-white">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">Installation de bornes de recharge pour véhicules électriques</h2>
+                <p className="mb-6 text-sm sm:text-base text-primary-100">
+                  Notre équipe certifiée IRVE (Infrastructure de Recharge pour Véhicules Électriques) vous accompagne dans l'installation de bornes de recharge pour votre domicile ou votre entreprise.
+                </p>
+                <ul className="mb-6 sm:mb-8 space-y-2 text-sm sm:text-base">
+                  <li className="flex items-start">
+                    <span className="mr-2 mt-1">✓</span>
+                    <span>Installation conforme aux normes</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mr-2 mt-1">✓</span>
+                    <span>Certification IRVE pour accéder aux aides financières</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mr-2 mt-1">✓</span>
+                    <span>Solutions pour particuliers et professionnels</span>
+                  </li>
+                </ul>
+                <Link to="/irve" className="btn bg-white text-primary-600 hover:bg-gray-100 text-sm sm:text-base">
+                  Découvrir nos solutions IRVE
+                </Link>
+              </div>
+              <div className="lg:w-1/2 relative">
+                <img
+                  src="/1fde24ca-122c-4ea9-a8e6-2783ffaf78f9.jpeg"
+                  alt="Technicien travaillant sur une installation électrique"
+                  className="w-full h-64 sm:h-full object-cover"
+                />
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Benefits section */}
+      <section className="py-12 sm:py-16 md:py-24">
+        <div className="container">
+          <motion.div 
+            className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 px-4 sm:px-0"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">Pourquoi choisir Zdec ?</h2>
+            <p className="text-base sm:text-lg text-gray-600">
+              Notre engagement envers l'excellence et notre expertise technique font de nous votre partenaire de confiance pour tous vos projets électriques.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {benefits.map((benefit, index) => (
               <motion.div
                 key={index}
-                className="card p-4 sm:p-6 text-center hover:shadow-elevation-3 transition-shadow"
                 variants={fadeInUp}
+                className="text-center"
               >
-                <div className="mx-auto mb-4">
+                <div className="mx-auto mb-5">
                   <BrandIconContainer 
-                    icon={info.icon} 
-                    variant={index % 2 === 0 ? "primary" : "secondary"} 
-                    size="md" 
+                    icon={benefit.icon} 
+                    variant="primary" 
+                    size="lg" 
                     shape="circle"
                   />
                 </div>
-                <h3 className="text-sm sm:text-base font-semibold mb-2">{info.title}</h3>
-                <p className="text-sm sm:text-base font-medium text-primary-700 mb-1">{info.details}</p>
-                <p className="text-xs sm:text-sm text-gray-500">{info.description}</p>
+                <h3 className="text-lg sm:text-xl font-semibold mb-3">{benefit.title}</h3>
+                <p className="text-sm sm:text-base text-gray-600">{benefit.description}</p>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Contact Form & Map */}
-      <section className="py-12 sm:py-16 bg-gray-50">
-        <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
-            <motion.div
-              variants={fadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6">Envoyez-nous un message</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  <div>
-                    <label htmlFor="firstName" className="input-label">Prénom</label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      className="input"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="lastName" className="input-label">Nom</label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      className="input"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  <div>
-                    <label htmlFor="email" className="input-label">Email</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      className="input"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="phone" className="input-label">Téléphone</label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      className="input"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                </div>
+      {/* Add HomeTestimonials component */}
+      <HomeTestimonials />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  <div>
-                    <label htmlFor="service" className="input-label">Service concerné</label>
-                    <select
-                      id="service"
-                      name="service"
-                      className="input"
-                      value={formData.service}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="" disabled>Sélectionnez un service</option>
-                      {serviceOptions.map((option) => (
-                        <option key={option} value={option}>{option}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="input-label">Type de client</label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-                      <div className="flex items-center">
-                        <input
-                          type="radio"
-                          id="particulier"
-                          name="clientType"
-                          value="particulier"
-                          checked={formData.clientType === 'particulier'}
-                          onChange={handleChange}
-                          className="h-4 w-4 text-primary-600 border-gray-300 focus:ring-primary-500"
-                        />
-                        <label htmlFor="particulier" className="ml-2 text-sm sm:text-base text-gray-700">
-                          Particulier
-                        </label>
-                      </div>
-                      <div className="flex items-center">
-                        <input
-                          type="radio"
-                          id="professionnel"
-                          name="clientType"
-                          value="professionnel"
-                          checked={formData.clientType === 'professionnel'}
-                          onChange={handleChange}
-                          className="h-4 w-4 text-primary-600 border-gray-300 focus:ring-primary-500"
-                        />
-                        <label htmlFor="professionnel" className="ml-2 text-sm sm:text-base text-gray-700">
-                          Professionnel
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="input-label">Message</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={5}
-                    className="input"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="flex items-center">
-                  <input
-                    id="terms"
-                    name="terms"
-                    type="checkbox"
-                    required
-                    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                  />
-                  <label htmlFor="terms" className="ml-2 block text-sm sm:text-base text-gray-700">
-                    J'accepte que mes données soient utilisées pour me recontacter
-                  </label>
-                </div>
-
-                <div>
-                  <button
-                    type="submit"
-                    className="btn btn-primary w-full sm:w-auto flex items-center justify-center gap-2"
-                  >
-                    <Send className="h-4 w-4" />
-                    Envoyer le message
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-            
-            <motion.div
-              variants={fadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="h-full min-h-[400px] lg:min-h-0"
-            >
-              <div className="h-full flex flex-col mt-8 lg:mt-0">
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6">Notre zone d'intervention</h2>
-                <div className="flex-1 rounded-lg overflow-hidden shadow-lg bg-white p-1">
-                  <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2781.5089646543495!2d4.886577776271791!3d45.82172577107368!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4ea1b7c0f8dad%3A0x9d2c30590f7fd0e4!2s80%20Av.%20du%20Loup%20Pendu%2C%2069140%20Rillieux-la-Pape!5e0!3m2!1sfr!2sfr!4v1707684749101!5m2!1sfr!2sfr"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0, borderRadius: '0.5rem', minHeight: '300px' }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Carte de notre zone d'intervention"
-                  ></iframe>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-12 sm:py-16 bg-primary-600 text-white">
+      {/* Contact CTA */}
+      <section className="py-12 sm:py-16 md:py-24">
         <div className="container text-center">
           <motion.div 
             className="max-w-3xl mx-auto px-4 sm:px-0"
@@ -325,20 +495,27 @@ const ContactPage = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
-            <h2 className="text-2xl sm:text-3xl font-bold mb-6">
-              Besoin d'une intervention rapide ?
-            </h2>
-            <p className="text-primary-100 text-base sm:text-lg mb-6 sm:mb-8">
-              Contactez-nous directement par téléphone pour une réponse immédiate.
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">Besoin d'un électricien qualifié ?</h2>
+            <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
+              Contactez-nous dès aujourd'hui pour discuter de votre projet ou pour une intervention rapide.
             </p>
-            <a 
-              href="tel:+33622802645" 
-              className="btn bg-white text-primary-600 hover:bg-gray-100 px-6 sm:px-8 py-3 text-base sm:text-lg font-medium inline-flex items-center gap-2"
-            >
-              <Phone className="h-5 w-5" />
-              +33 06 22 80 26 45
-            </a>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link 
+                to="/contact"
+                className="btn btn-primary px-6 sm:px-8 py-3 text-sm sm:text-base"
+              >
+                Nous contacter
+              </Link>
+              <a 
+                href="tel:+33622802645"
+                className="btn btn-outline px-6 sm:px-8 py-3 text-sm sm:text-base flex items-center justify-center gap-2"
+              >
+                <Phone className="h-5 w-5" />
+                +33 06 22 80 26 45
+              </a>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -346,4 +523,4 @@ const ContactPage = () => {
   );
 };
 
-export default ContactPage;
+export default HomePage;
