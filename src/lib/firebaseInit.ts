@@ -20,15 +20,7 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 
-// Connect to emulators in development (optionnel)
-if (import.meta.env.DEV && !import.meta.env.VITE_USE_FIREBASE_PROD) {
-  try {
-    connectFirestoreEmulator(db, 'localhost', 8080);
-    connectAuthEmulator(auth, 'http://localhost:9099');
-    connectStorageEmulator(storage, 'localhost', 9199);
-  } catch (error) {
-    console.log('Emulators already connected or not available');
-  }
-}
+// Configuration pour la production
+console.log('🔥 Firebase configuré pour le projet:', firebaseConfig.projectId);
 
 export default app;
