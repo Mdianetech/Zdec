@@ -127,7 +127,7 @@ const HomePage = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-gray-900 via-primary-900 to-primary-800 text-white overflow-hidden min-h-screen flex items-center px-4 sm:px-0">
+      <section className="relative bg-gradient-to-br from-gray-900 via-primary-900 to-primary-800 text-white overflow-hidden min-h-screen flex items-center px-2 xs:px-4 sm:px-0">
         <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3825582/pexels-photo-3825582.jpeg?auto=compress&cs=tinysrgb&w=1600')] opacity-10 bg-cover bg-center" />
         
         {/* Logo 360° Background Pattern */}
@@ -204,7 +204,7 @@ const HomePage = () => {
           }} />
         </div>
         
-        <div className="container relative py-16 sm:py-20 md:py-32">
+        <div className="container relative py-12 xs:py-16 sm:py-20 md:py-32">
           <motion.div 
             className="max-w-4xl relative z-10 text-center mx-auto"
             initial={{ opacity: 0, y: 30 }}
@@ -212,53 +212,59 @@ const HomePage = () => {
             transition={{ duration: 0.6 }}
           >
             <motion.span 
-              className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs sm:text-sm font-medium mb-6 sm:mb-8"
+              className="inline-flex items-center px-3 xs:px-4 sm:px-6 py-2 sm:py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs sm:text-sm font-medium mb-4 xs:mb-6 sm:mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
+                marginBottom: 'clamp(1.5rem, 4vw, 2rem)'
+              }}
               <Zap className="h-4 w-4 mr-2" />
               Électricien certifié IRVE
             </motion.span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-6 sm:mb-8 text-white px-4 sm:px-0">
+            <h1 className="font-bold leading-tight text-white content-spacing">
               <span className="block">Solutions électriques</span>
               <span className="block bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
                 professionnelles
               </span>
-              <span className="block text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-normal mt-2 text-gray-200">
+              <span className="block font-normal mt-2 text-gray-200" style={{ fontSize: 'clamp(1rem, 2.5vw, 2rem)' }}>
                 à Lyon et partout en France
               </span>
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
+            <p className="text-gray-200 max-w-3xl mx-auto leading-relaxed content-spacing" style={{ fontSize: 'clamp(1rem, 1.5vw, 1.25rem)' }}>
               Installations électriques, bornes de recharge, réseaux et domotique par des experts qualifiés pour particuliers et professionnels.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center px-4 sm:px-0">
-              <Link to="/contact" className="btn bg-white text-primary-600 hover:bg-gray-100 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+            <div className="flex flex-col xs:flex-row gap-4 justify-center">
+              <Link to="/contact" className="btn bg-white text-primary-600 hover:bg-gray-100 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
                 Demander un devis
               </Link>
-              <Link to="/services" className="btn bg-transparent text-white hover:bg-white/10 border-2 border-white/30 hover:border-white/50 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl backdrop-blur-sm transition-all duration-300">
+              <Link to="/services" className="btn bg-transparent text-white hover:bg-white/10 border-2 border-white/30 hover:border-white/50 rounded-xl backdrop-blur-sm transition-all duration-300">
                 Découvrir nos services
               </Link>
             </div>
             
             {/* Stats Section */}
             <motion.div 
-              className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mt-12 sm:mt-16 pt-12 sm:pt-16 border-t border-white/20 px-4 sm:px-0"
+              className="responsive-grid grid-cols-1 sm:grid-cols-3 border-t border-white/20"
+              style={{
+                marginTop: 'clamp(3rem, 8vw, 4rem)',
+                paddingTop: 'clamp(3rem, 8vw, 4rem)'
+              }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.6 }}
             >
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">15+</div>
-                <div className="text-sm sm:text-base text-gray-300">Années d'expérience</div>
+                <div className="font-bold text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>15+</div>
+                <div className="text-gray-300" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>Années d'expérience</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">500+</div>
-                <div className="text-sm sm:text-base text-gray-300">Projets réalisés</div>
+                <div className="font-bold text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>500+</div>
+                <div className="text-gray-300" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>Projets réalisés</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">100%</div>
-                <div className="text-sm sm:text-base text-gray-300">Clients satisfaits</div>
+                <div className="font-bold text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>100%</div>
+                <div className="text-gray-300" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>Clients satisfaits</div>
               </div>
             </motion.div>
           </motion.div>
@@ -277,33 +283,37 @@ const HomePage = () => {
       </section>
 
       {/* Services section */}
-      <section className="py-12 sm:py-16 md:py-24 lg:py-32 bg-white relative">
+      <section className="section-padding bg-white relative">
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 to-white"></div>
         
         <div className="container">
           <motion.div 
-            className="text-center max-w-4xl mx-auto mb-12 sm:mb-16 lg:mb-20 px-4 sm:px-0"
+            className="text-center max-w-4xl mx-auto content-spacing"
             variants={fadeInUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-6">
+            <span className="inline-block bg-primary-100 text-primary-700 rounded-full font-semibold content-spacing"
+                  style={{
+                    padding: 'clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 2vw, 1.5rem)',
+                    fontSize: 'clamp(0.75rem, 1vw, 0.875rem)'
+                  }}>
               NOS EXPERTISES
             </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 text-gray-900">
+            <h2 className="font-bold text-gray-900 content-spacing">
               Services d'électricité <span className="text-primary-600">de qualité</span>
             </h2>
-            <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed">
+            <p className="text-gray-600 leading-relaxed">
               Découvrez notre gamme complète de services électriques assurés par des professionnels qualifiés et certifiés.
             </p>
           </motion.div>
 
           <div className="relative">
             <motion.div 
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8"
+              className="responsive-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
@@ -313,7 +323,8 @@ const HomePage = () => {
                 <motion.div 
                   key={index}
                   variants={fadeInUp}
-                  className="group relative bg-white rounded-2xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary-200 transform hover:-translate-y-2"
+                  className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary-200 transform hover:-translate-y-2"
+                  style={{ padding: 'clamp(1.5rem, 3vw, 2rem)' }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
                   
@@ -325,13 +336,14 @@ const HomePage = () => {
                         size="lg" 
                       />
                     </div>
-                    <h3 className="text-lg sm:text-xl font-bold mb-4 text-gray-900 group-hover:text-primary-700 transition-colors">
+                    <h3 className="font-bold mb-4 text-gray-900 group-hover:text-primary-700 transition-colors" style={{ fontSize: 'clamp(1.125rem, 1.5vw, 1.25rem)' }}>
                       {service.title}
                     </h3>
-                    <p className="text-sm sm:text-base text-gray-600 mb-6 leading-relaxed">{service.description}</p>
+                    <p className="text-gray-600 mb-6 leading-relaxed" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>{service.description}</p>
                     <Link
                       to="/contact"
-                      className="inline-flex items-center text-sm sm:text-base text-primary-600 font-semibold hover:text-primary-700 group-hover:gap-3 transition-all duration-300"
+                      className="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 group-hover:gap-3 transition-all duration-300 min-h-[44px]"
+                      style={{ fontSize: 'clamp(0.875rem, 1.1vw, 1rem)' }}
                     >
                       En savoir plus 
                       <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
@@ -345,7 +357,7 @@ const HomePage = () => {
       </section>
 
       {/* Trust indicators */}
-      <section className="py-12 sm:py-16 bg-gray-50">
+      <section className="section-padding bg-gray-50">
         <div className="container">
           <motion.div 
             className="text-center mb-12"
@@ -354,23 +366,23 @@ const HomePage = () => {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 sm:mb-8">Ils nous font confiance</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 items-center opacity-60">
+            <h3 className="font-bold text-gray-900 content-spacing" style={{ fontSize: 'clamp(1.25rem, 2vw, 1.5rem)' }}>Ils nous font confiance</h3>
+            <div className="responsive-grid grid-cols-2 md:grid-cols-4 items-center opacity-60">
               <div className="flex items-center justify-center">
-                <Shield className="h-8 sm:h-10 lg:h-12 w-8 sm:w-10 lg:w-12 text-gray-400" />
-                <span className="ml-2 font-semibold text-gray-500 text-sm sm:text-base">IRVE</span>
+                <Shield className="text-gray-400" style={{ width: 'clamp(2rem, 3vw, 3rem)', height: 'clamp(2rem, 3vw, 3rem)' }} />
+                <span className="ml-2 font-semibold text-gray-500" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>IRVE</span>
               </div>
               <div className="flex items-center justify-center">
-                <Award className="h-8 sm:h-10 lg:h-12 w-8 sm:w-10 lg:w-12 text-gray-400" />
-                <span className="ml-2 font-semibold text-gray-500 text-sm sm:text-base">Qualifelec</span>
+                <Award className="text-gray-400" style={{ width: 'clamp(2rem, 3vw, 3rem)', height: 'clamp(2rem, 3vw, 3rem)' }} />
+                <span className="ml-2 font-semibold text-gray-500" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>Qualifelec</span>
               </div>
               <div className="flex items-center justify-center">
-                <ShieldCheck className="h-8 sm:h-10 lg:h-12 w-8 sm:w-10 lg:w-12 text-gray-400" />
-                <span className="ml-2 font-semibold text-gray-500 text-sm sm:text-base">RGE</span>
+                <ShieldCheck className="text-gray-400" style={{ width: 'clamp(2rem, 3vw, 3rem)', height: 'clamp(2rem, 3vw, 3rem)' }} />
+                <span className="ml-2 font-semibold text-gray-500" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>RGE</span>
               </div>
               <div className="flex items-center justify-center">
-                <Clock className="h-8 sm:h-10 lg:h-12 w-8 sm:w-10 lg:w-12 text-gray-400" />
-                <span className="ml-2 font-semibold text-gray-500 text-sm sm:text-base">24/7</span>
+                <Clock className="text-gray-400" style={{ width: 'clamp(2rem, 3vw, 3rem)', height: 'clamp(2rem, 3vw, 3rem)' }} />
+                <span className="ml-2 font-semibold text-gray-500" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>24/7</span>
               </div>
             </div>
           </motion.div>
