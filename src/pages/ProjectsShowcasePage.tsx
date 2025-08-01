@@ -126,6 +126,9 @@ export default function ProjectsShowcasePage() {
   // Mode développement - édition possible uniquement dans Bolt
   const isDevelopmentMode = import.meta.env.DEV || window.location.hostname === 'localhost';
 
+  // Clé pour le localStorage
+  const PROJECTS_STORAGE_KEY = 'zdec_projects';
+
   // Demo data for when Firebase is not available
   const demoProjects: Project[] = [
     {
@@ -250,6 +253,26 @@ export default function ProjectsShowcasePage() {
     fetchProjects();
   }, []);
 
+  // Sauvegarder dans localStorage
+  const saveToLocalStorage = (projectsData: Project[]) => {
+    try {
+      localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(projectsData));
+    } catch (error) {
+      console.warn('Erreur lors de la sauvegarde localStorage:', error);
+    }
+  };
+
+  // Charger depuis localStorage
+  const loadFromLocalStorage = (): Project[] => {
+    try {
+      const stored = localStorage.getItem(PROJECTS_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      console.warn('Erreur lors du chargement localStorage:', error);
+      return [];
+    }
+  };
+
   useEffect(() => {
     filterProjects();
   }, [projects, selectedCategory, searchTerm]);
@@ -304,14 +327,27 @@ export default function ProjectsShowcasePage() {
         }
         
         setProjects(projectsData);
+        saveToLocalStorage(projectsData);
       } else {
-        setProjects(demoProjects);
-        setError('Mode démonstration - Connexion Firebase indisponible');
+        // Charger depuis localStorage ou utiliser les données de démo
+        const localProjects = loadFromLocalStorage();
+        if (localProjects.length > 0) {
+          setProjects(localProjects);
+        } else {
+          setProjects(demoProjects);
+          saveToLocalStorage(demoProjects);
+        }
       }
     } catch (err) {
       console.log('Erreur lors de la récupération des projets:', err);
-      setError('Mode démonstration - Erreur de connexion Firebase');
-      setProjects(demoProjects);
+      // En cas d'erreur, charger depuis localStorage
+      const localProjects = loadFromLocalStorage();
+      if (localProjects.length > 0) {
+        setProjects(localProjects);
+      } else {
+        setProjects(demoProjects);
+        saveToLocalStorage(demoProjects);
+      }
       setIsFirebaseAvailable(false);
     } finally {
       setLoading(false);
@@ -345,7 +381,9 @@ export default function ProjectsShowcasePage() {
         category: 'electrical',
         content: []
       };
-      setProjects([newProject, ...projects]);
+      const updatedProjects = [newProject, ...projects];
+      setProjects(updatedProjects);
+      saveToLocalStorage(updatedProjects);
       setEditingProject(newProject);
       setIsEditing(true);
       return;
@@ -384,7 +422,9 @@ export default function ProjectsShowcasePage() {
   const handleDeleteProject = async (projectId: string) => {
     try {
       if (!isFirebaseAvailable) {
-        setProjects(projects.filter(p => p.id !== projectId));
+        const updatedProjects = projects.filter(p => p.id !== projectId);
+        setProjects(updatedProjects);
+        saveToLocalStorage(updatedProjects);
         return;
       }
 
@@ -400,9 +440,11 @@ export default function ProjectsShowcasePage() {
     if (!editingProject) return;
 
     if (!isFirebaseAvailable) {
-      setProjects(projects.map(p => 
+      const updatedProjects = projects.map(p => 
         p.id === editingProject.id ? editingProject : p
-      ));
+      );
+      setProjects(updatedProjects);
+      saveToLocalStorage(updatedProjects);
       setIsEditing(false);
       setEditingProject(null);
       setNewContent(null);
@@ -460,10 +502,18 @@ export default function ProjectsShowcasePage() {
     if (!editingProject || !newContent) return;
 
     if (!isFirebaseAvailable) {
-      setEditingProject({
+      const updatedProject = {
         ...editingProject,
         content: [...editingProject.content, newContent]
-      });
+      };
+      setEditingProject(updatedProject);
+      
+      // Mettre à jour la liste des projets
+      const updatedProjects = projects.map(p => 
+        p.id === editingProject.id ? updatedProject : p
+      );
+      setProjects(updatedProjects);
+      saveToLocalStorage(updatedProjects);
       setNewContent(null);
       return;
     }
@@ -490,10 +540,18 @@ export default function ProjectsShowcasePage() {
     if (!editingProject) return;
 
     if (!isFirebaseAvailable) {
-      setEditingProject({
+      const updatedProject = {
         ...editingProject,
         content: editingProject.content.filter(c => c.id !== contentId)
-      });
+      };
+      setEditingProject(updatedProject);
+      
+      // Mettre à jour la liste des projets
+      const updatedProjects = projects.map(p => 
+        p.id === editingProject.id ? updatedProject : p
+      );
+      setProjects(updatedProjects);
+      saveToLocalStorage(updatedProjects);
       return;
     }
     
