@@ -279,11 +279,11 @@ export default function ProjectsShowcasePage() {
 
   const checkFirebaseConnection = async () => {
     try {
-      const testQuery = query(collection(db, 'projects'), orderBy('date', 'desc'));
+      const testQuery = query(collection(db, 'projects'));
       await getDocs(testQuery);
       return true;
     } catch (err) {
-      console.log('Erreur de connexion Firebase:', err);
+      console.warn('Firebase connection test failed:', err);
       return false;
     }
   };
@@ -291,12 +291,14 @@ export default function ProjectsShowcasePage() {
   const fetchProjects = async () => {
     try {
       setLoading(true);
+      setError(null);
       
       const isConnected = await checkFirebaseConnection();
       setIsFirebaseAvailable(isConnected);
 
       if (isConnected) {
-        const projectsQuery = query(collection(db, 'projects'), orderBy('date', 'desc'));
+        console.log('Firebase connected, fetching projects...');
+        const projectsQuery = query(collection(db, 'projects'));
         const projectsSnapshot = await getDocs(projectsQuery);
         
         const projectsData: Project[] = [];
@@ -304,42 +306,51 @@ export default function ProjectsShowcasePage() {
         for (const projectDoc of projectsSnapshot.docs) {
           const projectData = projectDoc.data();
           
-          const contentQuery = query(
-            collection(db, 'projects', projectDoc.id, 'content'),
-            orderBy('order', 'asc')
-          );
+          const contentQuery = query(collection(db, 'projects', projectDoc.id, 'content'));
           const contentSnapshot = await getDocs(contentQuery);
           
           const content = contentSnapshot.docs.map(contentDoc => ({
             id: contentDoc.id,
             type: contentDoc.data().type,
-            content: contentDoc.data().content
+            content: contentDoc.data().content,
+            order: contentDoc.data().order || 0
           }));
+          
+          // Trier le contenu par ordre
+          content.sort((a, b) => a.order - b.order);
           
           projectsData.push({
             id: projectDoc.id,
             title: projectData.title,
             description: projectData.description,
-            date: projectData.date,
+            date: projectData.date || new Date().toISOString().split('T')[0],
             category: projectData.category || 'electrical',
-            content
+            content: content.map(({ order, ...rest }) => rest)
           });
         }
         
+        // Trier les projets par date (plus récent en premier)
+        projectsData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        
         setProjects(projectsData);
         saveToLocalStorage(projectsData);
+        console.log(`Loaded ${projectsData.length} projects from Firebase`);
       } else {
         // Charger depuis localStorage ou utiliser les données de démo
+        console.log('Firebase not available, loading from localStorage...');
         const localProjects = loadFromLocalStorage();
         if (localProjects.length > 0) {
           setProjects(localProjects);
+          console.log(`Loaded ${localProjects.length} projects from localStorage`);
         } else {
           setProjects(demoProjects);
           saveToLocalStorage(demoProjects);
+          console.log('Using demo projects');
         }
       }
     } catch (err) {
-      console.log('Erreur lors de la récupération des projets:', err);
+      console.error('Error fetching projects:', err);
+      setError('Erreur lors du chargement des projets');
       // En cas d'erreur, charger depuis localStorage
       const localProjects = loadFromLocalStorage();
       if (localProjects.length > 0) {
@@ -372,6 +383,8 @@ export default function ProjectsShowcasePage() {
   };
 
   const handleAddProject = async () => {
+    setError(null);
+    
     if (!isFirebaseAvailable) {
       const newProject: Project = {
         id: `demo-${Date.now()}`,
@@ -397,6 +410,7 @@ export default function ProjectsShowcasePage() {
     };
 
     try {
+      console.log('Adding new project to Firebase...');
       const docRef = await addDoc(collection(db, 'projects'), newProjectData);
       
       const projectWithContent = { 
@@ -408,9 +422,10 @@ export default function ProjectsShowcasePage() {
       setProjects([projectWithContent, ...projects]);
       setEditingProject(projectWithContent);
       setIsEditing(true);
+      console.log('Project added successfully:', docRef.id);
     } catch (err) {
-      console.log('Erreur lors de l\'ajout du projet:', err);
-      setError('Error creating project');
+      console.error('Error adding project:', err);
+      setError('Erreur lors de la création du projet');
     }
   };
 
@@ -420,6 +435,8 @@ export default function ProjectsShowcasePage() {
   };
 
   const handleDeleteProject = async (projectId: string) => {
+    setError(null);
+    
     try {
       if (!isFirebaseAvailable) {
         const updatedProjects = projects.filter(p => p.id !== projectId);
@@ -428,16 +445,20 @@ export default function ProjectsShowcasePage() {
         return;
       }
 
+      console.log('Deleting project from Firebase:', projectId);
       await deleteDoc(doc(db, 'projects', projectId));
       setProjects(projects.filter(p => p.id !== projectId));
+      console.log('Project deleted successfully');
     } catch (err) {
-      setError('Error deleting project');
       console.error('Error deleting project:', err);
+      setError('Erreur lors de la suppression du projet');
     }
   };
 
   const handleSaveProject = async () => {
     if (!editingProject) return;
+    
+    setError(null);
 
     if (!isFirebaseAvailable) {
       const updatedProjects = projects.map(p => 
@@ -452,19 +473,23 @@ export default function ProjectsShowcasePage() {
     }
     
     try {
+      console.log('Saving project to Firebase:', editingProject.id);
       await updateDoc(doc(db, 'projects', editingProject.id), {
         title: editingProject.title,
         description: editingProject.description,
-        category: editingProject.category
+        category: editingProject.category,
+        date: editingProject.date
       });
 
       const contentCollection = collection(db, 'projects', editingProject.id, 'content');
       const contentSnapshot = await getDocs(contentCollection);
       
+      // Supprimer tout le contenu existant
       for (const contentDoc of contentSnapshot.docs) {
         await deleteDoc(contentDoc.ref);
       }
       
+      // Ajouter le nouveau contenu avec l'ordre
       for (let i = 0; i < editingProject.content.length; i++) {
         const content = editingProject.content[i];
         await addDoc(contentCollection, {
@@ -480,9 +505,10 @@ export default function ProjectsShowcasePage() {
       setIsEditing(false);
       setEditingProject(null);
       setNewContent(null);
+      console.log('Project saved successfully');
     } catch (err) {
-      setError('Error saving project');
-      console.error('Error updating project:', err);
+      console.error('Error saving project:', err);
+      setError('Erreur lors de la sauvegarde du projet');
     }
   };
 
@@ -500,6 +526,8 @@ export default function ProjectsShowcasePage() {
 
   const handleSaveContent = async () => {
     if (!editingProject || !newContent) return;
+    
+    setError(null);
 
     if (!isFirebaseAvailable) {
       const updatedProject = {
@@ -519,6 +547,7 @@ export default function ProjectsShowcasePage() {
     }
     
     try {
+      console.log('Adding content to Firebase project:', editingProject.id);
       await addDoc(collection(db, 'projects', editingProject.id, 'content'), {
         type: newContent.type,
         content: newContent.content,
@@ -530,14 +559,17 @@ export default function ProjectsShowcasePage() {
         content: [...editingProject.content, newContent]
       });
       setNewContent(null);
+      console.log('Content added successfully');
     } catch (err) {
-      setError('Error saving content');
-      console.error('Error saving content:', err);
+      console.error('Error adding content:', err);
+      setError('Erreur lors de l\'ajout du contenu');
     }
   };
 
   const handleDeleteContent = async (contentId: string) => {
     if (!editingProject) return;
+    
+    setError(null);
 
     if (!isFirebaseAvailable) {
       const updatedProject = {
@@ -556,15 +588,17 @@ export default function ProjectsShowcasePage() {
     }
     
     try {
+      console.log('Deleting content from Firebase:', contentId);
       await deleteDoc(doc(db, 'projects', editingProject.id, 'content', contentId));
 
       setEditingProject({
         ...editingProject,
         content: editingProject.content.filter(c => c.id !== contentId)
       });
+      console.log('Content deleted successfully');
     } catch (err) {
-      setError('Error deleting content');
       console.error('Error deleting content:', err);
+      setError('Erreur lors de la suppression du contenu');
     }
   };
 
