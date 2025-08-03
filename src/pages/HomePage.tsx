@@ -491,6 +491,121 @@ const HomePage = () => {
       {/* Add HomeTestimonials component */}
       <HomeTestimonials />
 
+      {/* Partners Section */}
+      <section className="py-12 sm:py-16 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-primary-500 rounded-full blur-3xl animate-pulse-slow"></div>
+          <div className="absolute bottom-10 right-10 w-40 h-40 bg-accent-500 rounded-full blur-3xl animate-pulse-slow"></div>
+        </div>
+        
+        <div className="container relative z-10">
+          <motion.div 
+            className="text-center max-w-3xl mx-auto mb-12 sm:mb-16"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary-100 to-accent-100 text-primary-700 text-sm font-medium mb-6">
+              <div className="w-2 h-2 bg-primary-500 rounded-full mr-2 animate-pulse"></div>
+              Nos Partenaires de Confiance
+            </div>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              Ils nous font confiance
+            </h2>
+            <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+              Découvrez les entreprises et organisations qui collaborent avec nous pour offrir des solutions électriques d'excellence.
+            </p>
+          </motion.div>
+
+          {/* Partners logos with modern design */}
+          <motion.div 
+            className="relative"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {/* Main partners image with modern frame */}
+            <motion.div 
+              variants={fadeInUp}
+              className="relative group"
+            >
+              <div className="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-gray-100 hover:shadow-3xl transition-all duration-700 transform hover:-translate-y-2">
+                {/* Gradient border effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-500 via-accent-500 to-primary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
+                <div className="relative bg-white m-1 rounded-2xl sm:rounded-3xl overflow-hidden">
+                  <img 
+                    src="/Capture d'écran 2025-07-30 103847.png" 
+                    alt="Nos partenaires - Logos des entreprises qui nous font confiance"
+                    className="w-full h-auto transition-all duration-700 group-hover:scale-105 filter brightness-100 contrast-110"
+                    style={{
+                      imageRendering: 'high-quality',
+                      backfaceVisibility: 'hidden',
+                      transform: 'translateZ(0)',
+                    }}
+                  />
+                  
+                  {/* Overlay with subtle animation */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  {/* Floating elements for modern effect */}
+                  <div className="absolute top-4 right-4 w-3 h-3 bg-primary-500 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 animate-ping"></div>
+                  <div className="absolute bottom-4 left-4 w-2 h-2 bg-accent-500 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-700 animate-pulse"></div>
+                </div>
+              </div>
+              
+              {/* Modern caption */}
+              <motion.div 
+                className="text-center mt-8"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+              >
+                <p className="text-sm sm:text-base text-gray-500 font-medium">
+                  Partenaires certifiés • Solutions professionnelles • Qualité garantie
+                </p>
+              </motion.div>
+            </motion.div>
+
+            {/* Animated trust indicators */}
+            <motion.div 
+              className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mt-12 sm:mt-16"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              {[
+                { number: "7+", label: "Partenaires actifs", color: "from-primary-500 to-primary-600" },
+                { number: "100%", label: "Certifiés", color: "from-accent-500 to-accent-600" },
+                { number: "5★", label: "Satisfaction", color: "from-green-500 to-green-600" },
+                { number: "24/7", label: "Support", color: "from-blue-500 to-blue-600" }
+              ].map((stat, index) => (
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  className="text-center group"
+                >
+                  <div className="relative">
+                    <div className={`inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br ${stat.color} text-white font-bold text-lg sm:text-xl shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-110`}>
+                      {stat.number}
+                    </div>
+                    <div className="absolute inset-0 rounded-2xl bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                  </div>
+                  <p className="text-xs sm:text-sm text-gray-600 font-medium mt-3 group-hover:text-gray-900 transition-colors">
+                    {stat.label}
+                  </p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Contact CTA */}
       <section className="py-12 sm:py-16 md:py-24">
         <div className="container text-center">
