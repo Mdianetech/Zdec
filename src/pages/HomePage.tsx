@@ -544,7 +544,7 @@ const HomePage = () => {
                 <div className="relative bg-white m-1 rounded-2xl sm:rounded-3xl overflow-hidden">
                   <div 
                     className="relative cursor-pointer"
-                    onClick={() => setSelectedLogo("/Capture d'écran 2025-07-30 103847.png")}
+                    onClick={() => setSelectedLogo("/image copy copy copy copy copy.png")}
                   >
                     {/* Zoom indicator */}
                     <div className="absolute top-4 right-4 z-10 bg-black/50 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
@@ -552,7 +552,7 @@ const HomePage = () => {
                     </div>
                     
                     <img 
-                    src="/Capture d'écran 2025-07-30 103847.png" 
+                    src="/image copy copy copy copy copy.png" 
                     alt="Nos partenaires - Logos des entreprises qui nous font confiance"
                     className="w-full h-auto transition-all duration-700 group-hover:scale-105 filter brightness-100 contrast-110"
                     style={{
