@@ -517,6 +517,30 @@ const HomePage = () => {
               <div className="w-2 h-2 bg-primary-500 rounded-full mr-2 animate-pulse"></div>
               Nos Partenaires de Confiance
             </div>
+            
+            {/* Logo ZDEC animé au-dessus */}
+            <div className="flex justify-center mb-8">
+              <div className="relative">
+                <img 
+                  src="/image.png"
+                  alt="ZDEC Logo"
+                  className="h-16 sm:h-20 md:h-24 w-auto"
+                  style={{
+                    animation: 'zdecLogoFloat 6s ease-in-out infinite',
+                    filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.1))',
+                  }}
+                />
+                {/* Effet de pulse en arrière-plan */}
+                <div 
+                  className="absolute inset-0 bg-primary-500 rounded-full opacity-20 -z-10"
+                  style={{
+                    animation: 'zdecLogoPulse 4s ease-in-out infinite',
+                    filter: 'blur(10px)',
+                  }}
+                />
+              </div>
+            </div>
+            
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
               Ils nous font confiance
             </h2>
@@ -562,6 +586,9 @@ const HomePage = () => {
                       imageRendering: 'high-quality',
                       backfaceVisibility: 'hidden',
                       transform: 'translateZ(0)',
+                      animation: index % 2 === 0 
+                        ? 'partnerLogoRotate 20s linear infinite' 
+                        : 'partnerLogoRotateReverse 25s linear infinite',
                     }}
                   />
                   
