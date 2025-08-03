@@ -14,7 +14,9 @@ import {
   Phone,
   ShieldCheck,
   Award,
-  Clock
+  Clock,
+  X,
+  ZoomIn
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import HomeTestimonials from '../components/testimonials/HomeTestimonials';
@@ -124,6 +126,8 @@ const staggerContainer = {
 };
 
 const HomePage = () => {
+  const [selectedLogo, setSelectedLogo] = useState<string | null>(null);
+
   return (
     <>
       {/* Hero Section */}
@@ -537,7 +541,16 @@ const HomePage = () => {
                 {/* Gradient border effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-primary-500 via-accent-500 to-primary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
                 <div className="relative bg-white m-1 rounded-2xl sm:rounded-3xl overflow-hidden">
-                  <img 
+                  <div 
+                    className="relative cursor-pointer"
+                    onClick={() => setSelectedLogo("/Capture d'écran 2025-07-30 103847.png")}
+                  >
+                    {/* Zoom indicator */}
+                    <div className="absolute top-4 right-4 z-10 bg-black/50 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
+                      <ZoomIn className="h-5 w-5 text-white" />
+                    </div>
+                    
+                    <img 
                     src="/Capture d'écran 2025-07-30 103847.png" 
                     alt="Nos partenaires - Logos des entreprises qui nous font confiance"
                     className="w-full h-auto transition-all duration-700 group-hover:scale-105 filter brightness-100 contrast-110"
@@ -547,6 +560,7 @@ const HomePage = () => {
                       transform: 'translateZ(0)',
                     }}
                   />
+                  </div>
                   
                   {/* Overlay with subtle animation */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -605,6 +619,75 @@ const HomePage = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Logo Zoom Modal */}
+      {selectedLogo && (
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedLogo(null)}
+        >
+          <motion.div 
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            className="relative max-w-6xl w-full bg-white rounded-2xl overflow-hidden shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="bg-gradient-to-r from-primary-600 to-accent-600 p-4 sm:p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">Nos Partenaires</h3>
+                  <p className="text-primary-100 text-sm sm:text-base">Entreprises et organisations qui nous font confiance</p>
+                </div>
+                <button
+                  onClick={() => setSelectedLogo(null)}
+                  className="p-2 sm:p-3 bg-white/20 text-white rounded-full hover:bg-white/30 transition-colors backdrop-blur-sm"
+                >
+                  <X className="h-5 w-5 sm:h-6 sm:w-6" />
+                </button>
+              </div>
+            </div>
+            
+            {/* Image */}
+            <div className="p-4 sm:p-6 bg-gray-50">
+              <img 
+                src={selectedLogo} 
+                alt="Logos de nos partenaires" 
+                className="w-full h-auto rounded-xl shadow-lg"
+                style={{ 
+                  maxHeight: '70vh', 
+                  objectFit: 'contain',
+                  imageRendering: 'high-quality',
+                  filter: 'contrast(1.05) saturate(1.1) brightness(1.02)',
+                }}
+              />
+            </div>
+            
+            {/* Footer */}
+            <div className="bg-white p-4 sm:p-6 border-t border-gray-200">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                <div>
+                  <div className="text-2xl font-bold text-primary-600 mb-1">7+</div>
+                  <div className="text-sm text-gray-600">Partenaires</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-accent-600 mb-1">100%</div>
+                  <div className="text-sm text-gray-600">Certifiés</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-green-600 mb-1">5★</div>
+                  <div className="text-sm text-gray-600">Satisfaction</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-blue-600 mb-1">24/7</div>
+                  <div className="text-sm text-gray-600">Support</div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       {/* Contact CTA */}
       <section className="py-12 sm:py-16 md:py-24">
