@@ -534,7 +534,7 @@ const HomePage = () => {
             viewport={{ once: true }}
           >
             {[
-              { number: "5+", label: "Partenaires actifs", color: "from-primary-500 to-primary-600" },
+              { src: "/LogoWhite-Green-BG.png", alt: "Logo ZDEC" },
               { src: "/capnord-cci.jpg.jpeg", alt: "Cap Nord CCI" },
               { src: "/capnord-rillieux-la-pape-association-pepiniere-entreprises-rillieux-la-pape_1.jpg.jpeg", alt: "Cap Nord Rillieux-la-Pape" },
               { src: "/capnord-perica.jpg.jpeg", alt: "Cap Nord Perica" },
