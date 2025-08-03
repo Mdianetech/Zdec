@@ -525,66 +525,68 @@ const HomePage = () => {
             </p>
           </motion.div>
 
-          {/* Partners logos with modern design */}
+          {/* Partners logos grid */}
           <motion.div 
-            className="relative"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 mb-12 sm:mb-16"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {/* Main partners image with modern frame */}
-            <motion.div 
-              variants={fadeInUp}
-              className="relative group"
-            >
-              <div className="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-gray-100 hover:shadow-3xl transition-all duration-700 transform hover:-translate-y-2">
+            {[
+              { number: "5+", label: "Partenaires actifs", color: "from-primary-500 to-primary-600" },
+              { src: "/capnord-cci.jpg.jpeg", alt: "Cap Nord CCI" },
+              { src: "/capnord-rillieux-la-pape-association-pepiniere-entreprises-rillieux-la-pape_1.jpg.jpeg", alt: "Cap Nord Rillieux-la-Pape" },
+              { src: "/capnord-perica.jpg.jpeg", alt: "Cap Nord Perica" },
+              { src: "/capnord-capservices.jpg.jpeg", alt: "Cap Nord Services" }
+            ].map((partner, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="group relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary-200 transform hover:-translate-y-2 cursor-pointer"
+                onClick={() => setSelectedLogo(partner.src)}
+              >
                 {/* Gradient border effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-primary-500 via-accent-500 to-primary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
-                <div className="relative bg-white m-1 rounded-2xl sm:rounded-3xl overflow-hidden">
-                  <div 
-                    className="relative cursor-pointer"
-                    onClick={() => setSelectedLogo("/image copy copy copy copy copy.png")}
-                  >
-                    {/* Zoom indicator */}
-                    <div className="absolute top-4 right-4 z-10 bg-black/50 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-                      <ZoomIn className="h-5 w-5 text-white" />
-                    </div>
-                    
-                    <img 
-                    src="/image copy copy copy copy copy.png" 
-                    alt="Nos partenaires - Logos des entreprises qui nous font confiance"
-                    className="w-full h-auto transition-all duration-700 group-hover:scale-105 filter brightness-100 contrast-110"
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-500 via-accent-500 to-primary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm rounded-2xl"></div>
+                <div className="relative bg-white m-1 rounded-xl overflow-hidden">
+                  {/* Zoom indicator */}
+                  <div className="absolute top-2 right-2 z-10 bg-black/50 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
+                    <ZoomIn className="h-4 w-4 text-white" />
+                  </div>
+                  
+                  <img 
+                    src={partner.src}
+                    alt={partner.alt}
+                    className="w-full h-20 sm:h-24 object-contain transition-all duration-700 group-hover:scale-110 filter brightness-100 contrast-110"
                     style={{
                       imageRendering: 'high-quality',
                       backfaceVisibility: 'hidden',
                       transform: 'translateZ(0)',
                     }}
                   />
-                  </div>
                   
                   {/* Overlay with subtle animation */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"></div>
                   
                   {/* Floating elements for modern effect */}
-                  <div className="absolute top-4 right-4 w-3 h-3 bg-primary-500 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 animate-ping"></div>
-                  <div className="absolute bottom-4 left-4 w-2 h-2 bg-accent-500 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-700 animate-pulse"></div>
+                  <div className="absolute top-1 right-1 w-2 h-2 bg-primary-500 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 animate-ping"></div>
                 </div>
-              </div>
-              
-              {/* Modern caption */}
-              <motion.div 
-                className="text-center mt-8"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-              >
-                <p className="text-sm sm:text-base text-gray-500 font-medium">
-                  Partenaires certifiés • Solutions professionnelles • Qualité garantie
-                </p>
               </motion.div>
-            </motion.div>
+            ))}
+          </motion.div>
+          
+          {/* Modern caption */}
+          <motion.div 
+            className="text-center mb-8"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
+            <p className="text-sm sm:text-base text-gray-500 font-medium">
+              Partenaires certifiés • Solutions professionnelles • Qualité garantie
+            </p>
+          </motion.div>
 
             {/* Animated trust indicators */}
             <motion.div 
@@ -617,7 +619,6 @@ const HomePage = () => {
                 </motion.div>
               ))}
             </motion.div>
-          </motion.div>
         </div>
       </section>
 
@@ -638,8 +639,8 @@ const HomePage = () => {
             <div className="bg-gradient-to-r from-primary-600 to-accent-600 p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">Nos Partenaires</h3>
-                  <p className="text-primary-100 text-sm sm:text-base">Entreprises et organisations qui nous font confiance</p>
+                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">Partenaire</h3>
+                  <p className="text-primary-100 text-sm sm:text-base">Logo de notre partenaire de confiance</p>
                 </div>
                 <button
                   onClick={() => setSelectedLogo(null)}
@@ -654,11 +655,9 @@ const HomePage = () => {
             <div className="p-4 sm:p-6 bg-gray-50">
               <img 
                 src={selectedLogo} 
-                alt="Logos de nos partenaires" 
-                className="w-full h-auto rounded-xl shadow-lg"
+                alt="Logo du partenaire" 
+                className="w-full h-auto rounded-xl shadow-lg max-h-96 object-contain mx-auto"
                 style={{ 
-                  maxHeight: '70vh', 
-                  objectFit: 'contain',
                   imageRendering: 'high-quality',
                   filter: 'contrast(1.05) saturate(1.1) brightness(1.02)',
                 }}
@@ -669,7 +668,7 @@ const HomePage = () => {
             <div className="bg-white p-4 sm:p-6 border-t border-gray-200">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
                 <div>
-                  <div className="text-2xl font-bold text-primary-600 mb-1">7+</div>
+                  <div className="text-2xl font-bold text-primary-600 mb-1">5+</div>
                   <div className="text-sm text-gray-600">Partenaires</div>
                 </div>
                 <div>
