@@ -5,12 +5,12 @@ import { getStorage } from 'firebase/storage';
 import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBy_SW66GyuLZwqs0DX4jPaKUHsGHTqjHE",
-  authDomain: "newbrain-7955f.firebaseapp.com",
-  projectId: "newbrain-7955f",
-  storageBucket: "newbrain-7955f.firebasestorage.app",
-  messagingSenderId: "331779110246",
-  appId: "1:331779110246:web:190d973de808b847ee44a7"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBy_SW66GyuLZwqs0DX4jPaKUHsGHTqjHE",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "newbrain-7955f.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "newbrain-7955f",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "newbrain-7955f.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "331779110246",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:331779110246:web:190d973de808b847ee44a7"
 };
 
 // Initialize Firebase
