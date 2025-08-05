@@ -161,6 +161,25 @@ export default function ProjectsShowcasePage() {
       ]
     },
     {
+      id: 'demo-instagram-1',
+      title: 'Installation électrique - Projet récent',
+      description: 'Découvrez notre dernière réalisation en installation électrique professionnelle',
+      date: '2024-12-20',
+      category: 'electrical',
+      content: [
+        {
+          id: 'demo-instagram-content-1',
+          type: 'text',
+          content: 'Nouvelle installation électrique réalisée par notre équipe. Travail professionnel et soigné.'
+        },
+        {
+          id: 'demo-instagram-content-2',
+          type: 'video',
+          content: 'https://www.instagram.com/p/DIfuklkRoCo/'
+        }
+      ]
+    },
+    {
       id: 'demo-2',
       title: 'Borne de recharge IRVE',
       description: 'Installation d\'une borne de recharge pour véhicule électrique',
@@ -620,23 +639,45 @@ export default function ProjectsShowcasePage() {
           </div>
         );
       case 'video':
-        return (
-          <div className="relative rounded-xl overflow-hidden shadow-lg bg-gray-900">
-            <video 
-              src={content.content}
-              controls
-              className="w-full h-64 object-cover rounded-xl"
-              preload="metadata"
-              poster=""
-            >
-              <source src={content.content} type="video/mp4" />
-              Votre navigateur ne supporte pas la lecture de vidéos.
-            </video>
-            <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full p-2">
-              <Video className="h-4 w-4 text-white" />
+        // Vérifier si c'est une URL Instagram
+        if (content.content.includes('instagram.com')) {
+          return (
+            <div className="relative rounded-xl overflow-hidden shadow-lg bg-gray-100">
+              <iframe
+                src={`${content.content}embed/`}
+                width="100%"
+                height="400"
+                frameBorder="0"
+                scrolling="no"
+                allowTransparency={true}
+                className="rounded-xl"
+                title="Publication Instagram"
+              />
+              <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full p-2">
+                <Video className="h-4 w-4 text-white" />
+              </div>
             </div>
-          </div>
-        );
+          );
+        } else {
+          // Vidéo normale (MP4, etc.)
+          return (
+            <div className="relative rounded-xl overflow-hidden shadow-lg bg-gray-900">
+              <video 
+                src={content.content}
+                controls
+                className="w-full h-64 object-cover rounded-xl"
+                preload="metadata"
+                poster=""
+              >
+                <source src={content.content} type="video/mp4" />
+                Votre navigateur ne supporte pas la lecture de vidéos.
+              </video>
+              <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full p-2">
+                <Video className="h-4 w-4 text-white" />
+              </div>
+            </div>
+          );
+        }
       case 'text':
         return (
           <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-xl border-l-4 border-primary-500">
@@ -694,27 +735,46 @@ export default function ProjectsShowcasePage() {
                 onClick={() => setSelectedImage(item.content)}
               />
             ) : item.type === 'video' ? (
-              <div className="relative w-full h-full bg-gray-900">
-                <video 
-                  src={item.content}
-                  className="w-full h-full object-cover"
-                  preload="metadata"
-                  muted
-                  loop
-                  onMouseEnter={(e) => e.currentTarget.play()}
-                  onMouseLeave={(e) => e.currentTarget.pause()}
-                >
-                  <source src={item.content} type="video/mp4" />
-                </video>
-                <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full p-2">
-                  <Video className="h-4 w-4 text-white" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 hover:opacity-100 transition-all duration-300 rounded-xl flex items-center justify-center">
-                  <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                    <Video className="text-white h-6 w-6" />
+              // Vérifier si c'est une URL Instagram
+              item.content.includes('instagram.com') ? (
+                <div className="relative w-full h-full bg-gray-100">
+                  <iframe
+                    src={`${item.content}embed/`}
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    scrolling="no"
+                    allowTransparency={true}
+                    className="rounded-xl"
+                    title="Publication Instagram"
+                  />
+                  <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full p-2">
+                    <Video className="h-4 w-4 text-white" />
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="relative w-full h-full bg-gray-900">
+                  <video 
+                    src={item.content}
+                    className="w-full h-full object-cover"
+                    preload="metadata"
+                    muted
+                    loop
+                    onMouseEnter={(e) => e.currentTarget.play()}
+                    onMouseLeave={(e) => e.currentTarget.pause()}
+                  >
+                    <source src={item.content} type="video/mp4" />
+                  </video>
+                  <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full p-2">
+                    <Video className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 hover:opacity-100 transition-all duration-300 rounded-xl flex items-center justify-center">
+                    <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                      <Video className="text-white h-6 w-6" />
+                    </div>
+                  </div>
+                </div>
+              )
             ) : null}
           </div>
         ))}
