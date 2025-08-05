@@ -648,6 +648,98 @@ export default function ProjectsShowcasePage() {
     }
   };
 
+  // Component pour le carrousel multimédia
+  const MediaCarousel = ({ items, title }: { items: ProjectContent[], title: string }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+      if (items.length <= 1) return;
+      
+      const interval = setInterval(() => {
+        setCurrentIndex((prevIndex) => 
+          prevIndex === items.length - 1 ? 0 : prevIndex + 1
+        );
+      }, 3000);
+
+      return () => clearInterval(interval);
+    }, [items.length]);
+
+    if (items.length === 0) return null;
+
+    return (
+      <div className="relative h-64 overflow-hidden bg-gray-100 rounded-xl">
+        {items.map((item, index) => (
+          <div
+            key={index}
+            className={cn(
+              "absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out",
+              index === currentIndex 
+                ? "opacity-100 scale-100" 
+                : "opacity-0 scale-105"
+            )}
+          >
+            {item.type === 'image' ? (
+              <img
+                src={item.content}
+                alt={`${title} - Image ${index + 1}`}
+                className="w-full h-full object-cover cursor-pointer hover:scale-105 select-none"
+                style={{
+                  imageRendering: 'high-quality',
+                  backfaceVisibility: 'hidden',
+                  transform: 'translateZ(0)',
+                  filter: 'contrast(1.05) saturate(1.1) brightness(1.02)',
+                }}
+                loading="lazy"
+                decoding="async"
+                onClick={() => setSelectedImage(item.content)}
+              />
+            ) : item.type === 'video' ? (
+              <div className="relative w-full h-full bg-gray-900">
+                <video 
+                  src={item.content}
+                  className="w-full h-full object-cover"
+                  preload="metadata"
+                  muted
+                  loop
+                  onMouseEnter={(e) => e.currentTarget.play()}
+                  onMouseLeave={(e) => e.currentTarget.pause()}
+                >
+                  <source src={item.content} type="video/mp4" />
+                </video>
+                <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full p-2">
+                  <Video className="h-4 w-4 text-white" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 hover:opacity-100 transition-all duration-300 rounded-xl flex items-center justify-center">
+                  <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                    <Video className="text-white h-6 w-6" />
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        ))}
+        
+        {/* Indicateurs de pagination */}
+        {items.length > 1 && (
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+            {items.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={cn(
+                  "w-3 h-3 rounded-full transition-all duration-300",
+                  index === currentIndex 
+                    ? "bg-white scale-125" 
+                    : "bg-white/50 hover:bg-white/75"
+                )}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   // Fonction pour regrouper les médias consécutifs (images et vidéos)
   const groupConsecutiveMedia = (content: ProjectContent[]) => {
     const grouped: (ProjectContent | ProjectContent[])[] = [];
@@ -685,19 +777,26 @@ export default function ProjectsShowcasePage() {
   const MediaCarousel = ({ items, title }: { items: ProjectContent[], title: string }) => {
         );
       } else {
-        // Contenu individuel
-      if (items.length <= 1) return;
-          <div key={item.id} className="relative">
-            {renderContent(item)}
-          </div>
           prevIndex === items.length - 1 ? 0 : prevIndex + 1
       }
     });
+          </div>
+        );
+      } else {
+        // Contenu individuel
+        return (
+          <div key={item.id} className="relative">
+            {renderContent(item)}
+          </div>
+        );
+      }
+    });
   };
+
   const getCategoryInfo = (categoryId: string) => {
-    }, [items.length]);
+    return categories.find(cat => cat.id === categoryId) || categories[1];
   };
-    if (items.length === 0) return null;
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
@@ -795,55 +894,24 @@ export default function ProjectsShowcasePage() {
             
             return (
               <button
-        {items.map((item, index) => (
-          <div
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
                 className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold transition-all duration-300 text-xs sm:text-sm md:text-base ${
+                  isActive 
+                    ? `${category.color} shadow-lg scale-105` 
                     : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg hover:scale-102'
-              "absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out",
+                }`}
               >
                 <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                 <span className="whitespace-nowrap">{category.name}</span>
                 {category.id !== 'all' && (
-          >
-            {item.type === 'image' ? (
-              <img
-                src={item.content}
-                alt={`${title} - Image ${index + 1}`}
-                className="w-full h-full object-cover cursor-pointer hover:scale-105 select-none"
-                style={{
-                  imageRendering: 'high-quality',
-                  backfaceVisibility: 'hidden',
-                  transform: 'translateZ(0)',
-                  filter: 'contrast(1.05) saturate(1.1) brightness(1.02)',
-                }}
-                loading="lazy"
-                decoding="async"
-                onClick={() => setSelectedImage(item.content)}
-              />
-            ) : item.type === 'video' ? (
-              <div className="relative w-full h-full bg-gray-900">
-                <video 
-                  src={item.content}
-                  className="w-full h-full object-cover"
-                  preload="metadata"
-                  muted
-                  loop
-                  onMouseEnter={(e) => e.currentTarget.play()}
-                  onMouseLeave={(e) => e.currentTarget.pause()}
-                >
-                  <source src={item.content} type="video/mp4" />
-                </video>
-                <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full p-2">
-                  <Video className="h-4 w-4 text-white" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 hover:opacity-100 transition-all duration-300 rounded-xl flex items-center justify-center">
-                  <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                    <Video className="text-white h-6 w-6" />
-                  </div>
-                </div>
-              </div>
-            ) : null}
-          </div>
+                  <span className="ml-1 px-2 py-0.5 bg-white/20 rounded-full text-xs font-bold">
+                    {filteredProjects.filter(p => p.category === category.id).length}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
         
         {/* Grille des projets */}
@@ -1110,9 +1178,9 @@ export default function ProjectsShowcasePage() {
               <img 
                 src={selectedImage} 
                 alt="" 
-        {items.length > 1 && (
+                className="w-full h-auto rounded-2xl shadow-2xl"
                 style={{ maxHeight: '90vh', objectFit: 'contain' }}
-            {items.map((_, index) => (
+              />
               <button
                 onClick={() => setSelectedImage(null)}
                 className="absolute top-2 sm:top-4 right-2 sm:right-4 p-2 sm:p-3 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors backdrop-blur-sm"
