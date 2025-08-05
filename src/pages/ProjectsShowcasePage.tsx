@@ -774,12 +774,6 @@ export default function ProjectsShowcasePage() {
         return (
           <div key={`carousel-${index}`} className="relative">
             <MediaCarousel items={item} title="Projet" />
-  const MediaCarousel = ({ items, title }: { items: ProjectContent[], title: string }) => {
-        );
-      } else {
-          prevIndex === items.length - 1 ? 0 : prevIndex + 1
-      }
-    });
           </div>
         );
       } else {
