@@ -237,8 +237,8 @@ export default function ProjectsShowcasePage() {
         },
         {
           id: 'demo-content-8b',
-          type: 'image',
-          content: 'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=1600'
+          type: 'video',
+          content: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4'
         },
         {
           id: 'demo-content-8c',
@@ -621,12 +621,20 @@ export default function ProjectsShowcasePage() {
         );
       case 'video':
         return (
-          <div className="relative rounded-xl overflow-hidden shadow-lg">
+          <div className="relative rounded-xl overflow-hidden shadow-lg bg-gray-900">
             <video 
               src={content.content}
               controls
-              className="w-full rounded-xl"
-            />
+              className="w-full h-64 object-cover rounded-xl"
+              preload="metadata"
+              poster=""
+            >
+              <source src={content.content} type="video/mp4" />
+              Votre navigateur ne supporte pas la lecture de vidéos.
+            </video>
+            <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full p-2">
+              <Video className="h-4 w-4 text-white" />
+            </div>
           </div>
         );
       case 'text':
@@ -640,25 +648,25 @@ export default function ProjectsShowcasePage() {
     }
   };
 
-  // Fonction pour regrouper les images consécutives
-  const groupConsecutiveImages = (content: ProjectContent[]) => {
+  // Fonction pour regrouper les médias consécutifs (images et vidéos)
+  const groupConsecutiveMedia = (content: ProjectContent[]) => {
     const grouped: (ProjectContent | ProjectContent[])[] = [];
-    let currentImageGroup: ProjectContent[] = [];
+    let currentMediaGroup: ProjectContent[] = [];
 
     content.forEach((item) => {
-      if (item.type === 'image') {
-        currentImageGroup.push(item);
+      if (item.type === 'image' || item.type === 'video') {
+        currentMediaGroup.push(item);
       } else {
-        if (currentImageGroup.length > 0) {
-          grouped.push(currentImageGroup.length === 1 ? currentImageGroup[0] : currentImageGroup);
-          currentImageGroup = [];
+        if (currentMediaGroup.length > 0) {
+          grouped.push(currentMediaGroup.length === 1 ? currentMediaGroup[0] : currentMediaGroup);
+          currentMediaGroup = [];
         }
         grouped.push(item);
       }
     });
 
-    if (currentImageGroup.length > 0) {
-      grouped.push(currentImageGroup.length === 1 ? currentImageGroup[0] : currentImageGroup);
+    if (currentMediaGroup.length > 0) {
+      grouped.push(currentMediaGroup.length === 1 ? currentMediaGroup[0] : currentMediaGroup);
     }
 
     return grouped;
@@ -666,31 +674,30 @@ export default function ProjectsShowcasePage() {
 
   // Fonction pour rendre le contenu avec carrousel
   const renderContentWithCarousel = (content: ProjectContent[]) => {
-    const groupedContent = groupConsecutiveImages(content);
+    const groupedContent = groupConsecutiveMedia(content);
 
     return groupedContent.map((item, index) => {
       if (Array.isArray(item)) {
-        // Groupe d'images - utiliser le carrousel
-        const images = item.map(img => img.content);
+        // Groupe de médias - utiliser le carrousel
         return (
           <div key={`carousel-${index}`} className="relative">
-            <ImageCarousel images={images} title="Projet" />
-          </div>
+            <MediaCarousel items={item} title="Projet" />
+  const MediaCarousel = ({ items, title }: { items: ProjectContent[], title: string }) => {
         );
       } else {
         // Contenu individuel
-        return (
+      if (items.length <= 1) return;
           <div key={item.id} className="relative">
             {renderContent(item)}
           </div>
-        );
+          prevIndex === items.length - 1 ? 0 : prevIndex + 1
       }
     });
   };
   const getCategoryInfo = (categoryId: string) => {
-    return categories.find(cat => cat.id === categoryId) || categories[0];
+    }, [items.length]);
   };
-
+    if (items.length === 0) return null;
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
@@ -788,26 +795,55 @@ export default function ProjectsShowcasePage() {
             
             return (
               <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
+        {items.map((item, index) => (
+          <div
                 className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold transition-all duration-300 text-xs sm:text-sm md:text-base ${
-                  isActive
-                    ? 'bg-primary-600 text-white shadow-lg scale-105'
                     : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg hover:scale-102'
-                }`}
+              "absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out",
               >
                 <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                 <span className="whitespace-nowrap">{category.name}</span>
                 {category.id !== 'all' && (
-                  <span className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-bold ${
-                    isActive ? 'bg-white/20' : 'bg-gray-200'
-                  }`}>
-                    {projects.filter(p => p.category === category.id).length}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+          >
+            {item.type === 'image' ? (
+              <img
+                src={item.content}
+                alt={`${title} - Image ${index + 1}`}
+                className="w-full h-full object-cover cursor-pointer hover:scale-105 select-none"
+                style={{
+                  imageRendering: 'high-quality',
+                  backfaceVisibility: 'hidden',
+                  transform: 'translateZ(0)',
+                  filter: 'contrast(1.05) saturate(1.1) brightness(1.02)',
+                }}
+                loading="lazy"
+                decoding="async"
+                onClick={() => setSelectedImage(item.content)}
+              />
+            ) : item.type === 'video' ? (
+              <div className="relative w-full h-full bg-gray-900">
+                <video 
+                  src={item.content}
+                  className="w-full h-full object-cover"
+                  preload="metadata"
+                  muted
+                  loop
+                  onMouseEnter={(e) => e.currentTarget.play()}
+                  onMouseLeave={(e) => e.currentTarget.pause()}
+                >
+                  <source src={item.content} type="video/mp4" />
+                </video>
+                <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm rounded-full p-2">
+                  <Video className="h-4 w-4 text-white" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 hover:opacity-100 transition-all duration-300 rounded-xl flex items-center justify-center">
+                  <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                    <Video className="text-white h-6 w-6" />
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
         </div>
         
         {/* Grille des projets */}
@@ -1074,9 +1110,9 @@ export default function ProjectsShowcasePage() {
               <img 
                 src={selectedImage} 
                 alt="" 
-                className="w-full h-auto rounded-lg sm:rounded-xl lg:rounded-2xl shadow-2xl"
+        {items.length > 1 && (
                 style={{ maxHeight: '90vh', objectFit: 'contain' }}
-              />
+            {items.map((_, index) => (
               <button
                 onClick={() => setSelectedImage(null)}
                 className="absolute top-2 sm:top-4 right-2 sm:right-4 p-2 sm:p-3 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors backdrop-blur-sm"
